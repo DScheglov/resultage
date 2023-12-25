@@ -1,5 +1,5 @@
-import { Result, err, ok } from 'ts-result/base';
-import { Do } from 'ts-result/do';
+import { Result, err, ok } from '@cardellini/ts-result/base';
+import { Do } from '@cardellini/ts-result/do';
 
 const div = (a: number, b: number): Result<number, 'ERR_DIV_BY_ZERO'> => (
   b === 0

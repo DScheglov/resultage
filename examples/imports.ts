@@ -50,7 +50,7 @@ import {
   collect as Index_collect,
   partition as Index_partition,
   sequence as Index_sequence,
-} from 'ts-result';
+} from '@cardellini/ts-result';
 
 import {
   ok as Base_ok,
@@ -65,7 +65,7 @@ import {
   expect as Base_expect,
   expectExists as Base_expectExists,
   okIfExists as Base_okIfExists,
-} from 'ts-result/base';
+} from '@cardellini/ts-result/base';
 
 import {
   assertNever as Fn_assertNever,
@@ -77,12 +77,12 @@ import {
   asConst as Fn_asConst,
   pipe as Fn_pipe,
   unreachable as Fn_unreachable,
-} from 'ts-result/fn';
+} from '@cardellini/ts-result/fn';
   
 import {
   Do as Do_Do,
   asyncDo as Do_asyncDo,
-} from 'ts-result/do';
+} from '@cardellini/ts-result/do';
   
 import {
   map as Methods_map,
@@ -99,14 +99,14 @@ import {
   match as Methods_match,
   tap as Methods_tap,
   tapErr as Methods_tapErr,
-} from 'ts-result/methods';
+} from '@cardellini/ts-result/methods';
 
 import {
   reduce as Lists_reduce,
   collect as Lists_collect,
   partition as Lists_partition,
   sequence as Lists_sequence,
-} from 'ts-result/lists';
+} from '@cardellini/ts-result/lists';
 
 import {
   ok as Sync_ok,
@@ -140,7 +140,7 @@ import {
   collect as Sync_collect,
   partition as Sync_partition,
   sequence as Sync_sequence,
-} from 'ts-result/sync';
+} from '@cardellini/ts-result/sync';
 
 import {
   asyncDo as Async_asyncDo,
@@ -163,11 +163,11 @@ import {
   flip as Async_flip,
   from as Async_from,
   thenUnpack as Async_thenUnpack,
-} from 'ts-result/async';
+} from '@cardellini/ts-result/async';
   
 import {
   asyncDo as AsyncDo_asyncDo,
-} from 'ts-result/async/do';
+} from '@cardellini/ts-result/async/do';
   
 import {
   thenMap as AsyncMethods_thenMap,
@@ -189,7 +189,7 @@ import {
   flip as AsyncMethods_flip,
   from as AsyncMethods_from,
   thenUnpack as AsyncMethods_thenUnpack,
-} from 'ts-result/async/methods';
+} from '@cardellini/ts-result/async/methods';
 
 
 console.log({

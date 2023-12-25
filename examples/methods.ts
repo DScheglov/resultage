@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Equal, Expect } from '@type-challenges/utils';
-import { Result, ok, err } from 'ts-result/base';
+import { Result, ok, err } from '@cardellini/ts-result/base';
 
 {
   const okResult = ok(42); // Result<number, never>

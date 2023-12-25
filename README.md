@@ -1,4 +1,4 @@
-# Result [![Coverage Status](https://coveralls.io/repos/github/DScheglov/ts-result/badge.svg?branch=master&service=github)](https://coveralls.io/github/DScheglov/ts-result?branch=master&service=github) [![npm version](https://img.shields.io/npm/v/ts-result.svg?style=flat-square)](https://www.npmjs.com/package/ts-result) [![npm downloads](https://img.shields.io/npm/dm/ts-result.svg?style=flat-square)](https://www.npmjs.com/package/ts-result) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/ts-result/blob/master/LICENSE)
+# Result [![Coverage Status](https://coveralls.io/repos/github/DScheglov/@cardellini/ts-result/badge.svg?branch=master&service=github)](https://coveralls.io/github/DScheglov/@cardellini/ts-result?branch=master&service=github) [![npm version](https://img.shields.io/npm/v/@cardellini/ts-result.svg?style=flat-square)](https://www.npmjs.com/package/@cardellini/ts-result) [![npm downloads](https://img.shields.io/npm/dm/@cardellini/ts-result.svg?style=flat-square)](https://www.npmjs.com/package/@cardellini/ts-result) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/@cardellini/ts-result/blob/master/LICENSE)
 
 Useful type to model success and failure, implemented with focus on type safety,
 developer experience and preserving flat learning curve.
@@ -6,13 +6,13 @@ developer experience and preserving flat learning curve.
 ## Installation
 
 ```bash
-npm install ts-result
+npm install @cardellini/ts-result
 ```
 
 ## Usage
 
 ```typescript
-import { Result, ok, err } from 'ts-result';
+import { Result, ok, err } from '@cardellini/ts-result';
 
 function divide(a: number, b: number): Result<number, 'ERR_DIV_BY_ZERO'> {
   if (b === 0) {

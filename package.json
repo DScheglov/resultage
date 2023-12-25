@@ -1,5 +1,5 @@
 {
-  "name": "result-ts",
+  "name": "@cardellini/ts-result",
   "version": "0.0.1",
   "description": "Useful type to model success and failure",
   "scripts": {

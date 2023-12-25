@@ -1,5 +1,5 @@
 /* eslint-disable max-len, object-curly-newline, func-names */
-import { Result, asyncDo, expectExists, collect, okIfExists } from 'ts-result';
+import { Result, asyncDo, expectExists, collect, okIfExists } from '@cardellini/ts-result';
 
 type Book = { id: string; title: string; authorIds: string[] };
 type Person = { id: string; name: string; };
