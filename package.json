@@ -10,6 +10,13 @@
   },
   "keywords": ["result", "either", "monad", "functor", "async", "io", "task", "rust"],
   "author": "Dmytro Shchehlov <dmitry.scheglov@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DScheglov/ts-result"
+  },
+  "bugs": {
+    "url": "https://github.com/DScheglov/ts-result/issues"
+  },
   "license": "MIT",
   "devDependencies": {
     "@type-challenges/utils": "^0.1.1",
