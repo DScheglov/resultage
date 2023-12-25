@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["**/*.test.ts", "examples/**/*"],
+  "compilerOptions": {
+    "sourceMap": false,
+    "rootDir": "./src",
+    "module": "commonjs",
+    "outDir": "./lib",
+    "target": "ESNext"
+  }
+}

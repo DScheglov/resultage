@@ -1,0 +1,84 @@
+import {
+  Result, Err, AsyncOk, SymbolOk, Ok as IOk,
+} from './types';
+
+export class Ok<T> implements IOk<T> {
+  private value!: T; // making field observable for js to allow comparison
+
+  declare readonly kind: typeof SymbolOk;
+
+  constructor(value: T) {
+    this.value = value;
+  }
+
+  isOk(): this is Ok<T> { // eslint-disable-line class-methods-use-this
+    return true;
+  }
+
+  isErr(): this is Err<never> { // eslint-disable-line class-methods-use-this
+    return false;
+  }
+
+  map<S>(fn: (value: T) => S): Result<S, never> {
+    return new Ok(fn(this.value));
+  }
+
+  mapErr(): Result<T, never> {
+    return this as Result<T, never>;
+  }
+
+  chain<S, F>(next: (value: T) => Result<S, F>): Result<S, F> {
+    return next(this.value);
+  }
+
+  chainErr(): Result<T, never> {
+    return this;
+  }
+
+  unwrap(): T {
+    return this.value;
+  }
+
+  unwrapOr(): T {
+    return this.value;
+  }
+
+  unwrapOrElse(): T {
+    return this.value;
+  }
+
+  unwrapErr(): never {
+    throw new TypeError('Cannot unpack an Ok result', { cause: this.value });
+  }
+
+  unwrapErrOr<F>(fallback: F): F { // eslint-disable-line class-methods-use-this
+    return fallback;
+  }
+
+  unwrapErrOrElse<F>(fallback: (value: T) => F): F {
+    return fallback(this.value);
+  }
+
+  unpack(): T {
+    return this.value;
+  }
+
+  match<TR>(okMatcher: (value: T) => TR): TR {
+    return okMatcher(this.value);
+  }
+
+  tap(fn: (value: T) => void): Result<T, never> {
+    fn(this.value);
+    return this;
+  }
+
+  tapErr(): Result<T, never> {
+    return this;
+  }
+}
+
+(Ok.prototype as any).kind = SymbolOk;
+
+export const ok = <T>(value: T): Result<T, never> => new Ok(value);
+export const asyncOk = async <T>(value: T | Promise<T>): AsyncOk<T> =>
+  ok(await value);
