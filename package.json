@@ -1,6 +1,6 @@
 {
   "name": "@cardellini/ts-result",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Useful type to model success and failure",
   "scripts": {
     "test": "jest",
@@ -8,7 +8,16 @@
     "compile": "rm -rf ./lib; npm run compile:cjs",
     "lint": "eslint . --ext .ts"
   },
-  "keywords": ["result", "either", "monad", "functor", "async", "io", "task", "rust"],
+  "keywords": [
+    "result",
+    "either",
+    "monad",
+    "functor",
+    "async",
+    "io",
+    "task",
+    "rust"
+  ],
   "author": "Dmytro Shchehlov <dmitry.scheglov@gmail.com>",
   "repository": {
     "type": "git",
@@ -86,18 +95,42 @@
   },
   "typesVersions": {
     "*": {
-      "base": ["./lib/base.d.ts"],
-      "fn": ["./lib/fn/index.d.ts"],
-      "do": ["./lib/do.d.ts"],
-      "methods": ["./lib/methods.d.ts"],
-      "lists": ["./lib/lists.d.ts"],
-      "sync": ["./lib/sync.d.ts"],
-      "sync/do": ["./lib/do-gen.d.ts"],
-      "sync/methods": ["./lib/sync-methods.d.ts"],
-      "async": ["./lib/async.d.ts"],
-      "async/do": ["./lib/async-do-gen.d.ts"],
-      "async/methods": ["./lib/async-methods.d.ts"],
-      "*": ["./lib/*"]
+      "base": [
+        "./lib/base.d.ts"
+      ],
+      "fn": [
+        "./lib/fn/index.d.ts"
+      ],
+      "do": [
+        "./lib/do.d.ts"
+      ],
+      "methods": [
+        "./lib/methods.d.ts"
+      ],
+      "lists": [
+        "./lib/lists.d.ts"
+      ],
+      "sync": [
+        "./lib/sync.d.ts"
+      ],
+      "sync/do": [
+        "./lib/do-gen.d.ts"
+      ],
+      "sync/methods": [
+        "./lib/sync-methods.d.ts"
+      ],
+      "async": [
+        "./lib/async.d.ts"
+      ],
+      "async/do": [
+        "./lib/async-do-gen.d.ts"
+      ],
+      "async/methods": [
+        "./lib/async-methods.d.ts"
+      ],
+      "*": [
+        "./lib/*"
+      ]
     }
   }
 }
