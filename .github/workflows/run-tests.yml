@@ -63,9 +63,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Check Version
-        run: ./version.sh
-
       - name: Compile
         run: npm run compile
 
