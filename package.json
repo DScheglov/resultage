@@ -1,5 +1,5 @@
 {
-  "name": "ts-result",
+  "name": "result-ts",
   "version": "0.0.1",
   "description": "Useful type to model success and failure",
   "scripts": {
