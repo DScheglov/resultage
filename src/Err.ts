@@ -1,8 +1,8 @@
 import {
-  Result, Ok, AsyncErr, SymbolErr, Err as IErr,
+  Result, AsyncErr, SymbolErr, Err,
 } from './types';
 
-export class Err<E> implements IErr<E> {
+export class ErrImpl<E> implements Err<E> {
   private error!: E; // making field observable for js to allow comparison in tests
 
   declare readonly kind: typeof SymbolErr;
@@ -11,11 +11,11 @@ export class Err<E> implements IErr<E> {
     this.error = error;
   }
 
-  isOk(): this is Ok<never> { // eslint-disable-line class-methods-use-this
+  isOk() { // eslint-disable-line class-methods-use-this
     return false;
   }
 
-  isErr(): this is Err<E> { // eslint-disable-line class-methods-use-this
+  isErr() { // eslint-disable-line class-methods-use-this
     return true;
   }
 
@@ -24,7 +24,7 @@ export class Err<E> implements IErr<E> {
   }
 
   mapErr<F>(fn: (error: E) => F): Result<never, F> {
-    return new Err(fn(this.error));
+    return new ErrImpl(fn(this.error));
   }
 
   chain(): Result<never, E> {
@@ -80,8 +80,8 @@ export class Err<E> implements IErr<E> {
   }
 }
 
-(Err.prototype as any).kind = SymbolErr;
+(ErrImpl.prototype as any).kind = SymbolErr;
 
-export const err = <E>(error: E): Result<never, E> => new Err(error);
+export const err = <E>(error: E): Result<never, E> => new ErrImpl(error);
 export const asyncErr = async <E>(error: E | Promise<E>): AsyncErr<E> =>
   err(await error);

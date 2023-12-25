@@ -22,5 +22,5 @@ export function Do<T, E>(job: Job<T, E>): Result<
   const { done, value } = job(unwrap).next();
   return (done
     ? ensureResult(value as any) // T could be Result as well
-    : value);
+    : value) as any;
 }

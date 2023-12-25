@@ -25,5 +25,5 @@ export const asyncDo =
     job(asyncUnwrap).next().then(
       ({ done, value }) => (done
         ? ensureResult(value as any) // T could be Result as well
-        : value),
+        : value) as any,
     );

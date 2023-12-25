@@ -1,8 +1,8 @@
 import {
-  Result, Err, AsyncOk, SymbolOk, Ok as IOk,
+  AsyncOk, ResultTrait, Result, SymbolOk,
 } from './types';
 
-export class Ok<T> implements IOk<T> {
+export class OkImpl<T> implements ResultTrait<T, never> {
   private value!: T; // making field observable for js to allow comparison
 
   declare readonly kind: typeof SymbolOk;
@@ -11,16 +11,16 @@ export class Ok<T> implements IOk<T> {
     this.value = value;
   }
 
-  isOk(): this is Ok<T> { // eslint-disable-line class-methods-use-this
+  isOk() { // eslint-disable-line class-methods-use-this
     return true;
   }
 
-  isErr(): this is Err<never> { // eslint-disable-line class-methods-use-this
+  isErr() { // eslint-disable-line class-methods-use-this
     return false;
   }
 
   map<S>(fn: (value: T) => S): Result<S, never> {
-    return new Ok(fn(this.value));
+    return new OkImpl(fn(this.value));
   }
 
   mapErr(): Result<T, never> {
@@ -77,8 +77,8 @@ export class Ok<T> implements IOk<T> {
   }
 }
 
-(Ok.prototype as any).kind = SymbolOk;
+(OkImpl.prototype as any).kind = SymbolOk;
 
-export const ok = <T>(value: T): Result<T, never> => new Ok(value);
+export const ok = <T>(value: T): Result<T, never> => new OkImpl(value);
 export const asyncOk = async <T>(value: T | Promise<T>): AsyncOk<T> =>
   ok(await value);

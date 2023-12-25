@@ -1,4 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
+import { Equal, Expect } from '@type-challenges/utils';
 import { Result, err, ok } from './base';
 import { Do } from './do-gen';
 
@@ -20,7 +21,7 @@ describe('resultDo', () => {
     ok(-b / a)
   );
 
-  const qer = (a: number, b: number, c: number): Result<[number] | [number, number], QeErrCode> =>
+  const qer = (a: number, b: number, c: number) =>
     Do(function* qerJob(_) {
       if (a === 0) return ler(b, c).map((x) => [x] as [number]);
 
@@ -29,8 +30,17 @@ describe('resultDo', () => {
 
       const a2 = 2 * a;
 
-      return [(-b + d) / a2, (-b - d) / a2];
+      return [(-b + d) / a2, (-b - d) / a2] as [number, number];
     });
+
+  it('allows to avoid explicit typing', () => {
+    const check: Expect<Equal<
+      typeof qer,
+      (a: number, b: number, c: number) => Result<[number] | [number, number], QeErrCode>
+    >> = true;
+
+    expect(check).toBe(true);
+  });
 
   it('returns Ok([1, -1]) for qer(1, 0, -1)', () => {
     expect(qer(1, 0, -1)).toEqual(ok([1, -1]));

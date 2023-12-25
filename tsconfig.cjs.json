@@ -6,6 +6,6 @@
     "rootDir": "./src",
     "module": "commonjs",
     "outDir": "./lib",
-    "target": "ESNext"
+    "target": "ES2017"
   }
 }

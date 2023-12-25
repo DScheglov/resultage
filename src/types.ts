@@ -1,13 +1,19 @@
 export const SymbolOk = Symbol('Result::Kind::Ok');
 export const SymbolErr = Symbol('Result::Kind::Err');
 
-export type Ok<T> = Result<T, never> & { readonly kind: typeof SymbolOk };
-export type Err<E> = Result<never, E> & { readonly kind: typeof SymbolErr };
+export type Ok<T> =
+  & ResultTrait<T, never>
+  & { readonly kind: typeof SymbolOk };
 
-export interface Result<T, E> {
-  readonly kind: typeof SymbolOk | typeof SymbolErr;
-  isOk(): this is Ok<T>;
-  isErr(): this is Err<E>;
+export type Err<E> =
+  & ResultTrait<never, E>
+  & { readonly kind: typeof SymbolErr };
+
+export type Result<T, E> = Ok<T> | Err<E>;
+
+export interface ResultTrait<T, E> {
+  isOk(): this is (T extends never ? never : Ok<T>);
+  isErr(): this is (E extends never ? never : Err<E>);
   map<S>(fn: (data: T) => S): Result<S, E>;
   mapErr<F>(fn: (error: E) => F): Result<T, F>;
   chain<S, F>(next: (data: T) => Result<S, F>): Result<S, F | E>;
@@ -28,8 +34,8 @@ export interface Result<T, E> {
 }
 
 export type NotResultOf<T> = T extends Result<any, any> ? never : T;
-export type ErrTypeOf<T> = T extends Result<any, infer E> ? E : never;
-export type OkTypeOf<T> = T extends Result<infer R, any> ? R : NotResultOf<T>;
+export type ErrTypeOf<T> = T extends Err<infer E> ? E : never;
+export type OkTypeOf<T> = T extends Ok<infer R> ? R : NotResultOf<T>;
 
 export type AsyncResult<T, E> = Promise<Result<T, E>>;
 export type AsyncOk<T> = AsyncResult<T, never>;

@@ -29,7 +29,7 @@ const quadraticEquation = (a: number, b: number, c: number): QuadraticEquationRe
     }
 
     const d = yield* unwrap(
-      sqrt(b * b - 4 * a * c).mapErr(() => 'ERR_NO_REAL_ROOTS'),
+      sqrt(b * b - 4 * a * c).mapErr(() => 'ERR_NO_REAL_ROOTS' as const),
     );
 
     const a2 = 2 * a;

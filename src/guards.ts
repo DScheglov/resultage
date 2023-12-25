@@ -1,10 +1,10 @@
-import { Result } from './types';
-import { Ok, ok } from './Ok';
-import { Err } from './Err';
+import { Err, Ok, Result } from './types';
+import { OkImpl, ok } from './Ok';
+import { ErrImpl } from './Err';
 
 export const isResult =
   (value: unknown): value is Result<unknown, unknown> =>
-    value instanceof Ok || value instanceof Err;
+    value instanceof OkImpl || value instanceof ErrImpl;
 
 export const isOk =
   <T>(value: Result<T, unknown>): value is Ok<T> =>

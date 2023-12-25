@@ -5,12 +5,12 @@ import { Equal, Expect } from '@type-challenges/utils';
 import { pipe } from './fn/pipe';
 import { identity } from './fn/identity';
 import { compose2 } from './fn/compose';
-import { Result } from './types';
+import { Err, Ok, Result } from './types';
 import * as R from './sync-methods';
 import * as okIf from './conditional';
 import * as Guards from './guards';
-import { ok, Ok } from './Ok';
-import { err, Err } from './Err';
+import { ok } from './Ok';
+import { err } from './Err';
 
 describe('Result', () => {
   describe('isResult', () => {
@@ -70,6 +70,27 @@ describe('Result', () => {
         type Check = Expect<Equal<typeof result, Ok<'foo'>>>;
         const check: Check = true;
         expect(check).toBe(true);
+      } else {
+        const check: Expect<Equal<typeof result, Err<string>>> = true;
+        expect(check).toBe(true);
+      }
+    });
+
+    it('(as method) should narrow type in if statement', () => {
+      expect.assertions(2); // ensure that both if and else branches are executed
+      const result: Result<'foo', string> = ok('foo');
+
+      type FirstCheck = Expect<Equal<typeof result, Result<'foo', string>>>;
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (result.isOk()) {
+        type Check = Expect<Equal<typeof result, Ok<'foo'>>>;
+        const check: Check = true;
+        expect(check).toBe(true);
+      } else {
+        const check: Expect<Equal<typeof result, Err<string>>> = true;
+        expect(check).toBe(true);
       }
     });
   });
@@ -95,6 +116,28 @@ describe('Result', () => {
       if (Guards.isErr(result)) {
         type Check = Expect<Equal<typeof result, Err<'foo'>>>;
         const check: Check = true;
+        expect(check).toBe(true);
+      } else {
+        const check: Expect<Equal<typeof result, Ok<string>>> = true;
+        expect(check).toBe(true);
+      }
+    });
+
+    it('(as method) should narrow type in if statement', () => {
+      expect.assertions(2); // ensure that both if and else branches are executed
+      const result: Result<string, 'foo'> = err('foo');
+
+      type FirstCheck = Expect<Equal<typeof result, Result<string, 'foo'>>>;
+
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (result.isErr()) {
+        type Check = Expect<Equal<typeof result, Err<'foo'>>>;
+        const check: Check = true;
+        expect(check).toBe(true);
+      } else {
+        const check: Expect<Equal<typeof result, Ok<string>>> = true;
         expect(check).toBe(true);
       }
     });
