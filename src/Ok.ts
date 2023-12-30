@@ -1,8 +1,8 @@
 import {
-  AsyncOk, ResultTrait, Result, SymbolOk,
+  AsyncOk, Ok, Result, SymbolOk,
 } from './types';
 
-export class OkImpl<T> implements ResultTrait<T, never> {
+export class OkImpl<T> implements Result<T, never> {
   private value!: T; // making field observable for js to allow comparison
 
   declare readonly kind: typeof SymbolOk;
@@ -75,10 +75,19 @@ export class OkImpl<T> implements ResultTrait<T, never> {
   tapErr(): Result<T, never> {
     return this;
   }
+
+  apply<S, F>(result: Result<(data: T) => S, F>): Result<S, F> {
+    return result.map((fn) => fn(this.value));
+  }
 }
 
 (OkImpl.prototype as any).kind = SymbolOk;
+Object.defineProperty(
+  OkImpl.prototype.constructor,
+  'name',
+  { enumerable: false, value: 'Ok' },
+);
 
-export const ok = <T>(value: T): Result<T, never> => new OkImpl(value);
+export const ok = <T>(value: T): Ok<T> => new OkImpl(value);
 export const asyncOk = async <T>(value: T | Promise<T>): AsyncOk<T> =>
   ok(await value);

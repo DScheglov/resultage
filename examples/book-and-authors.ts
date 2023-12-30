@@ -1,5 +1,5 @@
 /* eslint-disable max-len, object-curly-newline, func-names */
-import { Result, asyncDo, expectExists, collect, okIfExists } from '@cardellini/ts-result';
+import { Result, asyncDo, expectExists, collect, okIfExists, collectAsync } from '@cardellini/ts-result';
 
 type Book = { id: string; title: string; authorIds: string[] };
 type Person = { id: string; name: string; };
@@ -7,7 +7,7 @@ type Person = { id: string; name: string; };
 type GetBookWithAuthorsRes = Result<
   Book & { authors: Person[] },
   'ERR_BOOK_NOT_FOUND' | 'ERR_PERSON_NOT_FOUND'
->
+>;
 
 const getBookWithAuthors = (bookId: string): Promise<GetBookWithAuthorsRes> =>
   asyncDo(async function* (_) {
@@ -18,7 +18,7 @@ const getBookWithAuthors = (bookId: string): Promise<GetBookWithAuthorsRes> =>
     const persons = await fetchPersons(book.authorIds);
 
     const authors = yield* _(collect(
-      persons.map(person => okIfExists(person, 'ERR_PERSON_NOT_FOUND'))
+      persons.map(person => okIfExists(person, 'ERR_PERSON_NOT_FOUND' as const))
     ));
 
     return { ...book, authors };

@@ -70,9 +70,6 @@ describe('Result', () => {
         type Check = Expect<Equal<typeof result, Ok<'foo'>>>;
         const check: Check = true;
         expect(check).toBe(true);
-      } else {
-        const check: Expect<Equal<typeof result, Err<string>>> = true;
-        expect(check).toBe(true);
       }
     });
 
@@ -87,9 +84,6 @@ describe('Result', () => {
       if (result.isOk()) {
         type Check = Expect<Equal<typeof result, Ok<'foo'>>>;
         const check: Check = true;
-        expect(check).toBe(true);
-      } else {
-        const check: Expect<Equal<typeof result, Err<string>>> = true;
         expect(check).toBe(true);
       }
     });
@@ -117,9 +111,6 @@ describe('Result', () => {
         type Check = Expect<Equal<typeof result, Err<'foo'>>>;
         const check: Check = true;
         expect(check).toBe(true);
-      } else {
-        const check: Expect<Equal<typeof result, Ok<string>>> = true;
-        expect(check).toBe(true);
       }
     });
 
@@ -135,9 +126,6 @@ describe('Result', () => {
       if (result.isErr()) {
         type Check = Expect<Equal<typeof result, Err<'foo'>>>;
         const check: Check = true;
-        expect(check).toBe(true);
-      } else {
-        const check: Expect<Equal<typeof result, Ok<string>>> = true;
         expect(check).toBe(true);
       }
     });
@@ -727,6 +715,62 @@ describe('Result', () => {
 
       expect(check).toBe(true);
       expect(result).toEqual(err('ERR_NOT_HELLO'));
+    });
+  });
+
+  describe('apply', () => {
+    it('should apply an Ok result', () => {
+      expect(
+        pipe(
+          'foo',
+          ok,
+          R.apply(ok((s: string) => s.length)),
+        ),
+      ).toEqual(ok(3));
+    });
+
+    it('should not apply an Err result', () => {
+      expect(
+        pipe(
+          'foo',
+          err,
+          R.apply(ok((s: string) => s.length)),
+        ),
+      ).toEqual(err('foo'));
+    });
+
+    it('should apply Ok with f and g with the same result as apply Ok with result f applied to result g', () => {
+      const len = (s: string) => s.length;
+      const mul = (n: number) => (m: number) => n * m;
+      /*
+      v.apply(
+        u.apply(
+          a.map(
+            f => g => x => f(g(x))
+          )
+        )
+      ) is equivalent to v.apply(u).apply(a)
+      */
+
+      const v = ok('foo');
+      const u = ok(len);
+      const a = ok(mul(2));
+
+      expect(
+        pipe(
+          v,
+          R.apply(u),
+          R.apply(a),
+        ),
+      ).toEqual(
+        v.apply(
+          u.apply(
+            a.map(
+              (f) => (g) => (x) => f(g(x)),
+            ),
+          ),
+        ),
+      );
     });
   });
 });

@@ -2,18 +2,17 @@ export const SymbolOk = Symbol('Result::Kind::Ok');
 export const SymbolErr = Symbol('Result::Kind::Err');
 
 export type Ok<T> =
-  & ResultTrait<T, never>
+  & Result<T, never>
   & { readonly kind: typeof SymbolOk };
 
 export type Err<E> =
-  & ResultTrait<never, E>
+  & Result<never, E>
   & { readonly kind: typeof SymbolErr };
 
-export type Result<T, E> = Ok<T> | Err<E>;
-
-export interface ResultTrait<T, E> {
-  isOk(): this is (T extends never ? never : Ok<T>);
-  isErr(): this is (E extends never ? never : Err<E>);
+export interface Result<T, E> {
+  readonly kind: typeof SymbolOk | typeof SymbolErr;
+  isOk(): this is Ok<T>;
+  isErr(): this is Err<E>;
   map<S>(fn: (data: T) => S): Result<S, E>;
   mapErr<F>(fn: (error: E) => F): Result<T, F>;
   chain<S, F>(next: (data: T) => Result<S, F>): Result<S, F | E>;
@@ -31,11 +30,12 @@ export interface ResultTrait<T, E> {
   ): ER | TR;
   tap(fn: (data: T) => void): Result<T, E>;
   tapErr(fn: (error: E) => void): Result<T, E>;
+  apply<S, F>(result: Result<(data: T) => S, F>): Result<S, E | F>;
 }
 
 export type NotResultOf<T> = T extends Result<any, any> ? never : T;
-export type ErrTypeOf<T> = T extends Err<infer E> ? E : never;
-export type OkTypeOf<T> = T extends Ok<infer R> ? R : NotResultOf<T>;
+export type ErrTypeOf<T> = T extends Result<unknown, infer E> ? E : never;
+export type OkTypeOf<T> = T extends Result<infer R, unknown> ? R : never;
 
 export type AsyncResult<T, E> = Promise<Result<T, E>>;
 export type AsyncOk<T> = AsyncResult<T, never>;
@@ -44,3 +44,19 @@ export type MaybeAsync<T> = T | Promise<T>;
 export type MaybeAsyncResult<T, E> = Result<T, E> | AsyncResult<T, E>;
 
 export type Fallback<E> = E | (() => E);
+
+export type Collected<R extends readonly unknown[] | []> = {
+  -readonly [K in keyof R]: OkTypeOf<R[K]>;
+};
+
+export type CollectedErr<R extends readonly unknown[] | []> = {
+  -readonly [K in keyof R]: ErrTypeOf<R[K]>;
+};
+
+export type AsyncCollected<T extends readonly unknown[] | []> = {
+  -readonly [K in keyof T]: OkTypeOf<Awaited<T[K]>>;
+};
+
+export type AsyncCollectedErr<T extends readonly unknown[] | []> = {
+  -readonly [K in keyof T]: ErrTypeOf<Awaited<T[K]>>;
+};

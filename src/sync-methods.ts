@@ -1,8 +1,8 @@
 import { Result } from './types';
 
 export const map =
-  <E, T, S>(fn: (data: T) => S) =>
-    (result: Result<T, E>): Result<S, E> => result.map(fn);
+  <T, S>(fn: (data: T) => S) =>
+    <E>(result: Result<T, E>): Result<S, E> => result.map(fn);
 
 export const mapErr =
   <E, T, F>(fn: (error: E) => F) =>
@@ -47,3 +47,7 @@ export const tap =
 export const tapErr =
   <E, T>(fn: (error: E) => void) =>
     (result: Result<T, E>): Result<T, E> => result.tapErr(fn);
+
+export const apply =
+  <T, F, S>(result: Result<(data: T) => S, F>) =>
+    <E>(value: Result<T, E>): Result<S, E | F> => value.apply(result);

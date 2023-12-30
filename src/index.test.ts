@@ -4,7 +4,7 @@ import * as index from './index';
 describe('index exports', () => {
   it.each([
     index.asyncDo,
-    index.sequence,
+    index.sequenceAsync,
     index.thenMap,
     index.thenMapErr,
     index.thenChain,

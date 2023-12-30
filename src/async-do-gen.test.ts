@@ -1,7 +1,8 @@
 import { describe, it, expect } from '@jest/globals';
+import { Equal, Expect } from '@type-challenges/utils';
 import { ok } from './Ok';
 import { err } from './Err';
-import { Result } from './types';
+import { AsyncResult, Result } from './types';
 import { collect } from './lists';
 import { asyncDo } from './async-do-gen';
 import { okIfExists } from './conditional';
@@ -77,5 +78,28 @@ describe('AsyncDo', () => {
   it('returns err(ERR_PERSON_NOT_FOUND) for non-existent author', async () => {
     const result = await getBookWithAuthors('2');
     expect(result).toEqual(err('ERR_PERSON_NOT_FOUND'));
+  });
+
+  it('works with several returns', async () => {
+    const getA = async (x: number): AsyncResult<[number], 'ERR_A'> => (
+      x > 0 ? ok([x]) : err('ERR_A')
+    );
+    const getB = async (x: number): AsyncResult<{ x: number }, 'ERR_B'> => (
+      x < 0 ? ok({ x }) : err('ERR_B')
+    );
+
+    const getC = (x: number): Promise<Result<number | [number], 'ERR_A' | 'ERR_B'>> =>
+      asyncDo(async function* getCJob(_) {
+        if (Math.abs(x) % 3 === 0) return getA(x);
+        const b = yield* _(getB(x));
+        return b.x;
+      });
+
+    const check: Expect<Equal<
+      typeof getC,
+      (x: number) => Promise<Result<number | [number], 'ERR_A' | 'ERR_B'>>
+    >> = true;
+
+    expect(check).toBe(true);
   });
 });
