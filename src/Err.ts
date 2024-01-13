@@ -82,6 +82,19 @@ export class ErrImpl<E> implements Err<E> {
   apply() {
     return this;
   }
+
+  unwrapGen(): Generator<E, never> {
+    function* errGenerator(this: ErrImpl<E>): Generator<E, never> {
+      yield this.error;
+      throw new TypeError('Cannot yield Err twice');
+    }
+    return errGenerator.call(this);
+  }
+
+  unwrapOrThrow(): never {
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+    throw this.error;
+  }
 }
 
 (ErrImpl.prototype as any).kind = SymbolErr;

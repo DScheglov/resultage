@@ -23,6 +23,8 @@ export interface Result<T, E> {
   unwrapErr(): E;
   unwrapErrOr<F>(fallback: F): E | F;
   unwrapErrOrElse<F>(fallback: (data: T) => F): E | F;
+  unwrapGen(): Generator<E, T>;
+  unwrapOrThrow(): T;
   unpack(): T | E;
   match<ER, TR>(
     okMatcher: (data: T) => TR,
@@ -60,3 +62,8 @@ export type AsyncCollected<T extends readonly unknown[] | []> = {
 export type AsyncCollectedErr<T extends readonly unknown[] | []> = {
   -readonly [K in keyof T]: ErrTypeOf<Awaited<T[K]>>;
 };
+
+export type ResultOf<T extends (...args: any[]) => Result<any, any>> = Result<
+  OkTypeOf<ReturnType<T>>,
+  ErrTypeOf<ReturnType<T>>
+>;

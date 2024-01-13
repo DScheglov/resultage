@@ -88,3 +88,22 @@ console.log(okIfPerson(undefined));
 // Err { error: { path: [], code: 'ERR_NOT_AN_OBJECT' } }
 
 
+const okIfPerson2 = (
+  value: unknown,
+  path: string[] = ['person'],
+): Result<Person, PersonValidationError> =>
+  Do(function* okIfPersonJob(_) {
+    const obj = yield* _(okIfObject(value)
+      .mapErr(error => validationError(path, error))
+    );
+
+    const name = yield* _(okIfNotEmptyStr(obj.name)
+      .mapErr(error => validationError([...path, 'name'], error))
+    );
+
+    const age = yield* _(okIfInt(obj.age).chain(okIfPositive)
+      .mapErr(error => validationError([...path, 'age'], error))
+    );
+
+    return { name, age };
+  });

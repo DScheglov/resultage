@@ -18,8 +18,14 @@ export const chainErr =
 
 export const unwrap = <E, T>(result: Result<T, E>): T => result.unwrap();
 
+export const unwrapGen = <E, T>(result: Result<T, E>): Generator<E, T> =>
+  result.unwrapGen();
+
 export const unwrapOr = <E, T, S>(fallback: S) =>
   (result: Result<T, E>): T | S => result.unwrapOr(fallback);
+
+export const unwrapOrThrow = <E, T>(result: Result<T, E>) =>
+  result.unwrapOrThrow();
 
 export const unwrapOrElse =
 <E, T, S>(fallback: (error: E) => S) =>

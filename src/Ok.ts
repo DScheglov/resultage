@@ -79,6 +79,17 @@ export class OkImpl<T> implements Result<T, never> {
   apply<S, F>(result: Result<(data: T) => S, F>): Result<S, F> {
     return result.map((fn) => fn(this.value));
   }
+
+  unwrapGen(): Generator<never, T> {
+    function* okGenerator(this: OkImpl<T>) { // eslint-disable-line require-yield
+      return this.value;
+    }
+    return okGenerator.call(this);
+  }
+
+  unwrapOrThrow(): T {
+    return this.value;
+  }
 }
 
 (OkImpl.prototype as any).kind = SymbolOk;

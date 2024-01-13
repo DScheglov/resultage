@@ -439,6 +439,29 @@ describe('Result', () => {
     });
   });
 
+  describe('unwrapOrThrow', () => {
+    it('should unpack an Ok result', () => {
+      expect(
+        pipe('foo', ok, R.unwrapOrThrow),
+      ).toBe('foo');
+    });
+
+    it('throw an error with cause equals error in attempt to unpack an Err result', () => {
+      expect(
+        () => pipe('foo', err, R.unwrapOrThrow),
+      ).toThrowError('foo');
+    });
+
+    it('throw an error with cause equals error in attempt to unpack an Err result', () => {
+      expect.assertions(1);
+      try {
+        pipe('foo', err, R.unwrapOrThrow);
+      } catch (err) {
+        expect(err).toBe('foo');
+      }
+    });
+  });
+
   describe('unwrapOrElse', () => {
     it('should unpack an Ok result', () => {
       expect(

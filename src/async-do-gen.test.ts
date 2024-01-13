@@ -6,6 +6,7 @@ import { AsyncResult, Result } from './types';
 import { collect } from './lists';
 import { asyncDo } from './async-do-gen';
 import { okIfExists } from './conditional';
+import { mapErr, unwrapGen } from './sync-methods';
 
 describe('AsyncDo', () => {
   type Book = { id: string; title: string; authorIds: string[] };
@@ -33,6 +34,15 @@ describe('AsyncDo', () => {
       return okIfExists(book, () => 'ERR_BOOK_NOT_FOUND' as const);
     });
 
+  const getBook2 = (bookId: string): Promise<Result<Book, 'ERR_NOT_FOUND'>> =>
+    asyncDo(async function* getBookJob(_) {
+      const books = yield* _(getAllBooks());
+      const book = books.find(({ id }) => id === bookId);
+      // if (book == null) return err('ERR_BOOK_NOT_FOUND' as const);
+
+      return okIfExists(book, () => 'ERR_NOT_FOUND' as const);
+    });
+
   const findAuthorAmong = (
     authors: Person[],
   ) => {
@@ -57,8 +67,37 @@ describe('AsyncDo', () => {
       return { ...book, authors: bookAuthors };
     });
 
+  const getBookWithAuthors2 = (
+    bookId: string,
+  ): Promise<Result<BookWithAuthors, 'ERR_BOOK_NOT_FOUND' | 'ERR_PERSON_NOT_FOUND'>> =>
+    asyncDo(async function* getBookAuthorsJob(unwrap) {
+      const book = yield* await getBook2(bookId)
+        .then(mapErr(() => 'ERR_BOOK_NOT_FOUND' as const))
+        .then(unwrapGen);
+
+      const authors = yield* unwrap(getAllAuthors());
+      const bookAuthors = yield* collect(
+        book.authorIds.map(findAuthorAmong(authors)),
+      ).unwrapGen();
+
+      return { ...book, authors: bookAuthors };
+    });
+
   it('returns Lord of the Rings with list of authors', async () => {
     const result = await getBookWithAuthors('1');
+    expect(result).toEqual(ok({
+      id: '1',
+      title: 'The Lord of the Rings',
+      authorIds: ['1', '2'],
+      authors: [
+        { id: '1', name: 'J. R. R. Tolkien' },
+        { id: '2', name: 'Christopher Tolkien' },
+      ],
+    }));
+  });
+
+  it('returns Lord of the Rings with list of authors - v2', async () => {
+    const result = await getBookWithAuthors2('1');
     expect(result).toEqual(ok({
       id: '1',
       title: 'The Lord of the Rings',
@@ -75,8 +114,18 @@ describe('AsyncDo', () => {
     expect(result).toEqual(err('ERR_BOOK_NOT_FOUND'));
   });
 
+  it('returns err(ERR_BOOK_NOT_FOUND) for non-existent book - v2', async () => {
+    const result = await getBookWithAuthors2('3');
+    expect(result).toEqual(err('ERR_BOOK_NOT_FOUND'));
+  });
+
   it('returns err(ERR_PERSON_NOT_FOUND) for non-existent author', async () => {
     const result = await getBookWithAuthors('2');
+    expect(result).toEqual(err('ERR_PERSON_NOT_FOUND'));
+  });
+
+  it('returns err(ERR_PERSON_NOT_FOUND) for non-existent author - v2', async () => {
+    const result = await getBookWithAuthors2('2');
     expect(result).toEqual(err('ERR_PERSON_NOT_FOUND'));
   });
 

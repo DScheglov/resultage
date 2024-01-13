@@ -1,43 +1,26 @@
-/* eslint-disable max-len, object-curly-newline, func-names */
-import { Result, asyncDo, expectExists, collect, okIfExists, collectAsync } from '@cardellini/ts-result';
+import { asyncDo, collect, err, ok } from '@cardellini/ts-result';
 
-type Book = { id: string; title: string; authorIds: string[] };
-type Person = { id: string; name: string; };
-
-type GetBookWithAuthorsRes = Result<
-  Book & { authors: Person[] },
-  'ERR_BOOK_NOT_FOUND' | 'ERR_PERSON_NOT_FOUND'
->;
-
-const getBookWithAuthors = (bookId: string): Promise<GetBookWithAuthorsRes> =>
-  asyncDo(async function* (_) {
-    const book = yield* _(fetchBook(bookId).then(
-      expectExists('ERR_BOOK_NOT_FOUND')
-    ));
-
-    const persons = await fetchPersons(book.authorIds);
-
-    const authors = yield* _(collect(
-      persons.map(person => okIfExists(person, 'ERR_PERSON_NOT_FOUND' as const))
-    ));
+const getBookWithAuthors = (bookId: string) =>
+  asyncDo(async function* (unwrap) {
+    const book = yield* unwrap(fetchBook(bookId));
+    const authors = yield* unwrap(fetchPersons(book.authorIds));
 
     return { ...book, authors };
   });
 
-// emulating an api call
-const fetchBook = async (id: string): Promise<Book | null> => (
-  id === '1' ? { id, title: 'The Lord of the Rings', authorIds: ['1', '2'] } :
-  id === '2' ? { id, title: 'The Silmarillion', authorIds: ['1', '3'] } :
-  null
+const fetchBook = async (id: string) => (
+  id === '1' ? ok({ id, title: 'The Lord of the Rings', authorIds: ['1', '2'] }) :
+  id === '2' ? ok({ id, title: 'The Silmarillion', authorIds: ['1', '3'] }) :
+  err('ERR_BOOK_NOT_FOUND' as const)
 );
 
-// emulating a bulk fetch to avoid N+1 queries
-const fetchPersons = async (ids: string[]): Promise<(Person | null)[]> =>
+const fetchPersons = async (ids: string[]) => collect(
   ids.map(id => (
-    id === '1' ? { id, name: 'J. R. R. Tolkien' } :
-    id === '2' ? { id, name: 'Christopher Tolkien' } :
-    null
-  ));
+    id === '1' ? ok({ id, name: 'J. R. R. Tolkien' }) :
+    id === '2' ? ok({ id, name: 'Christopher Tolkien' }) :
+    err("ERR_PERSON_NOT_FOUND" as const)
+  ))
+);
 
 async function run() {
   const LordOfTheRings = await getBookWithAuthors('1');
