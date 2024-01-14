@@ -67,6 +67,34 @@ const okIfPerson = (value: unknown) =>
   });
 ```
 
+### Composing with chain
+
+```typescript
+const okIfPerson =
+  (value: unknown) => okIfObject(value).chain(
+  (obj)            => okIfString(obj.name).chain(
+  (name)           => okIfInt(obj.age).chain(
+  (age)            => ok({ name, age })
+)));
+```
+
+or the same with `map` on the last step:
+
+```typescript
+const okIfPerson =
+  (value: unknown) => okIfObject(value).chain(
+  (obj)            => okIfString(obj.name).chain(
+  (name)           => okIfInt(obj.age).map(
+  (age)            => ({ name, age })
+)));
+```
+
+> Note: from the performance perspective, using `chain` is preferable to `Do`-notation,
+> because `chain` doesn't create and run generators.
+> However, `Do`-notation is more readable and easier to use.
+> Additionally, the formatting of the code in this section requires specific
+> linters and formatters configuration.
+
 ### Collecting Ok-s from a Result Array
 
 ```typescript

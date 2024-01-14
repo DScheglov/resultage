@@ -48,7 +48,7 @@ export class OkImpl<T> implements Result<T, never> {
   }
 
   unwrapErr(): never {
-    throw new TypeError('Cannot unpack an Ok result', { cause: this.value });
+    throw new TypeError('Result is not an Err', { cause: this });
   }
 
   unwrapErrOr<F>(fallback: F): F { // eslint-disable-line class-methods-use-this

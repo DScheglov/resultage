@@ -36,7 +36,7 @@ export class ErrImpl<E> implements Err<E> {
   }
 
   unwrap(): never {
-    throw new TypeError('Cannot unpack an Err result', { cause: this.error });
+    throw new TypeError('Result is not an Ok', { cause: this });
   }
 
   unwrapOr<S>(fallback: S): S { // eslint-disable-line class-methods-use-this

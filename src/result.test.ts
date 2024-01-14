@@ -421,7 +421,7 @@ describe('Result', () => {
     it('throw a TypeError with cause equals error in attempt to unpack an Err result', () => {
       expect(
         () => pipe('foo', err, R.unwrap),
-      ).toThrowError(new TypeError('Cannot unpack an Err result', { cause: 'foo' }));
+      ).toThrowError(new TypeError('Result is not an Ok', { cause: err('foo') }));
     });
   });
 
@@ -486,7 +486,7 @@ describe('Result', () => {
     it('throw a TypeError with cause equals data in attempt to unpack an Ok result', () => {
       expect(
         () => pipe('foo', ok, R.unwrapErr),
-      ).toThrowError(new TypeError('Cannot unpack an Ok result', { cause: 'foo' }));
+      ).toThrowError(new TypeError('Result is not an Err', { cause: ok('foo') }));
     });
   });
 
