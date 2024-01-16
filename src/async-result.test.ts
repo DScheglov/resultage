@@ -596,7 +596,7 @@ describe('AsyncResult', () => {
       1,
       asyncErr,
       M.thenUnwrap,
-    )).rejects.toEqual(new TypeError('Cannot unpack an Err result', { cause: 1 })));
+    )).rejects.toEqual(new TypeError('Result is not an Ok', { cause: err(1) })));
   });
 
   describe('unwrapOr', () => {
@@ -652,7 +652,7 @@ describe('AsyncResult', () => {
       1,
       asyncOk,
       M.thenUnwrapErr,
-    )).rejects.toEqual(new TypeError('Cannot unpack an Ok result', { cause: 1 })));
+    )).rejects.toEqual(new TypeError('Result is not an Err', { cause: ok(1) })));
   });
 
   describe('unwrapErrOr', () => {
