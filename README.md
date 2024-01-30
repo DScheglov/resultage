@@ -255,7 +255,7 @@ chainErr<S, F>(next: (error: E) => Result<S, F>): Result<T | S, E | F>
 
 ### unwrap()
 
-Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` throws a `TypeError` where `cause` is the error wrapped in the `Err<E>`.
+Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` throws a `TypeError` where `cause` is the `Err<E>`.
 
 Signature:
 
@@ -309,7 +309,7 @@ unwrapOrElse<S>(fallbackFn: (error: E) => S): T | S
 
 ### unwrapErr
 
-Returns the value of `Err<E>`. If the `Result<T, E>` is `Ok<T>` throws a `TypeError` where `cause` is the value wrapped in the `Ok<T>`.
+Returns the value of `Err<E>`. If the `Result<T, E>` is `Ok<T>` throws a `TypeError` where `cause` is the `Ok<T>`.
 
 Signature:
 

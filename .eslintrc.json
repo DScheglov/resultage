@@ -56,7 +56,8 @@
         "parameters": 1,
         "body": 1
       }
-    }]
+    }],
+    "no-plusplus": "off"
   },
   "ignorePatterns": [
     "examples/**/*",

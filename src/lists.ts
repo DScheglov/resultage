@@ -7,13 +7,16 @@ import { err } from './Err';
 
 export const reduce = <T, S, E>(
   results: readonly Result<T, E>[],
-  reducer: (acc: S, result: T) => S,
+  reducer: (acc: S,
+    result: T, index: number, list: readonly Result<T, E>[]
+  ) => S,
   initial: S,
 ): Result<S, E> => {
   let acc = initial;
+  let index = 0;
   for (const result of results) {
     if (result.isErr()) return result;
-    acc = reducer(acc, result.unwrap());
+    acc = reducer(acc, result.unwrap(), index++, results);
   }
 
   return ok(acc);
