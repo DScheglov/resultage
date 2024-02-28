@@ -24,11 +24,13 @@ type Person = {
 
 const okIfPerson = (value: unknown) =>
   Do(function*() {
-    const obj = yield* okIfObject(value).unwrapGen();
-    const name = yield* okIfString(obj.name).unwrapGen();
-    const age = yield* okIfInt(obj.age).unwrapGen();
+    const obj = yield* okIfObject(value);
+    const name = yield* okIfString(obj.name);
+    const age = yield* okIfInt(obj.age);
 
     return { name, age };
   });
 
 const person: Person = okIfPerson({ name: 'John', age: 42 }).unwrap();
+
+console.log(person);

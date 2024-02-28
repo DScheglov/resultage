@@ -19,7 +19,7 @@ import { Result, ok, err } from '@cardellini/ts-result';
 type JsonObject = Record<string, unknown>;
 
 const okIfObject = (value: unknown): Result<JsonObject, 'ERR_NOT_AN_OBJECT'> =>
-  typeof value === 'object' && value !== null
+  typeof value === 'object' && value !== null && !Array.isArray(value)
     ? ok(value as JsonObject)
     : err('ERR_NOT_AN_OBJECT');
 
@@ -42,14 +42,14 @@ type Person = {
   age: number;
 }
 
-const okIfPerson = (value: unknown) =>
+const okIfPerson = (value: unknown): Result<Person, 'ERR_NOT_A_PERSON'> =>
   Do(function*() {
     const obj = yield* okIfObject(value).unwrapGen();
     const name = yield* okIfString(obj.name).unwrapGen();
     const age = yield* okIfInt(obj.age).unwrapGen();
 
     return { name, age };
-  });
+  }).mapErr(() => 'ERR_NOT_A_PERSON');
 
 const person: Person = okIfPerson({ name: 'John', age: 42 }).unwrap();
 ```

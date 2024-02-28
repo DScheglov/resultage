@@ -80,14 +80,15 @@ export class OkImpl<T> implements Result<T, never> {
     return result.map((fn) => fn(this.value));
   }
 
-  unwrapGen(): Generator<never, T> {
-    function* okGenerator(this: OkImpl<T>) { // eslint-disable-line require-yield
-      return this.value;
-    }
-    return okGenerator.call(this);
+  * unwrapGen(): Generator<never, T> { // eslint-disable-line require-yield
+    return this.value;
   }
 
   unwrapOrThrow(): T {
+    return this.value;
+  }
+
+  * [Symbol.iterator](): Generator<never, T> { // eslint-disable-line require-yield
     return this.value;
   }
 }
@@ -99,6 +100,6 @@ Object.defineProperty(
   { enumerable: false, value: 'Ok' },
 );
 
-export const ok = <T>(value: T): Ok<T> => new OkImpl(value);
+export const ok = <T>(value: T): Result<T, never> => new OkImpl(value);
 export const asyncOk = async <T>(value: T | Promise<T>): AsyncOk<T> =>
   ok(await value);

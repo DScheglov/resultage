@@ -1,9 +1,9 @@
 import { asyncDo, collect, err, ok } from '@cardellini/ts-result';
 
 const getBookWithAuthors = (bookId: string) =>
-  asyncDo(async function* (unwrap) {
-    const book = yield* unwrap(fetchBook(bookId));
-    const authors = yield* unwrap(fetchPersons(book.authorIds));
+  asyncDo(async function* () {
+    const book = yield* await fetchBook(bookId);
+    const authors = yield* await fetchPersons(book.authorIds);
 
     return { ...book, authors };
   });

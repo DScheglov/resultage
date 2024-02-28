@@ -43,18 +43,18 @@ type PersonValidationError = ValidationError<
 >;
 
 const okIfPerson = (value: unknown): Result<Person, PersonValidationError> =>
-  Do(function* (unwrap) {
-    const object = yield* unwrap(okIfObject(value).mapErr(
-      error => validationError([], error)
-    ));
+  Do(function* () {
+    const object = yield* okIfObject(value).mapErr(
+      error => validationError([], error) 
+    );
 
-    const name = yield* unwrap(okIfNotEmptyStr(object.name).mapErr(
+    const name = yield* okIfNotEmptyStr(object.name).mapErr(
       error => validationError(['name'], error)
-    ));
+    );
 
-    const age = yield* unwrap(okIfInt(object.age).chain(okIfPositive).mapErr(
+    const age = yield* okIfInt(object.age).chain(okIfPositive).mapErr(
       error => validationError(['age'], error)
-    ));
+    );
 
     return { name, age };
   });
@@ -92,18 +92,15 @@ const okIfPerson2 = (
   value: unknown,
   path: string[] = ['person'],
 ): Result<Person, PersonValidationError> =>
-  Do(function* okIfPersonJob(_) {
-    const obj = yield* _(okIfObject(value)
-      .mapErr(error => validationError(path, error))
-    );
+  Do(function* okIfPersonJob() {
+    const obj = yield* okIfObject(value)
+      .mapErr(error => validationError(path, error));
 
-    const name = yield* _(okIfNotEmptyStr(obj.name)
-      .mapErr(error => validationError([...path, 'name'], error))
-    );
+    const name = yield* okIfNotEmptyStr(obj.name)
+      .mapErr(error => validationError([...path, 'name'], error));
 
-    const age = yield* _(okIfInt(obj.age).chain(okIfPositive)
-      .mapErr(error => validationError([...path, 'age'], error))
-    );
+    const age = yield* okIfInt(obj.age).chain(okIfPositive)
+      .mapErr(error => validationError([...path, 'age'], error));
 
     return { name, age };
   });

@@ -24,6 +24,7 @@ export interface Result<T, E> {
   unwrapErrOr<F>(fallback: F): E | F;
   unwrapErrOrElse<F>(fallback: (data: T) => F): E | F;
   unwrapGen(): Generator<E, T>;
+  [Symbol.iterator](): Generator<E, T>;
   unwrapOrThrow(): T;
   unpack(): T | E;
   match<ER, TR>(

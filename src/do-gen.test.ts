@@ -23,14 +23,15 @@ describe('resultDo', () => {
     );
 
     const qer = (a: number, b: number, c: number) =>
-      Do(function* qerJob(_) {
+      Do(function* qerJob() {
         if (a === 0) return ler(b, c).map((x) => [x] as [number]);
 
-        const d = yield* _(sqrt(b * b - 4 * a * c)
-          .mapErr(() => 'ERR_NO_REAL_ROOTS' as const));
+        const d = yield* sqrt(b * b - 4 * a * c)
+          .mapErr(() => 'ERR_NO_REAL_ROOTS' as const);
 
         const a2 = 2 * a;
 
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         return [(-b + d) / a2, (-b - d) / a2] as [number, number];
       });
 
@@ -108,29 +109,29 @@ describe('resultDo', () => {
     >;
 
     const okIfPerson = (value: unknown): Result<Person, PersonValidationError> =>
-      Do(function* (_) { // eslint-disable-line func-names
-        const object = yield* _(okIfObject(value)
-          .mapErr((error) => validationError([], error)));
+      Do(function* () { // eslint-disable-line func-names
+        const object: JsonObject = yield* okIfObject(value)
+          .mapErr((error) => validationError([], error));
 
-        const name = yield* _(okIfNotEmptyStr(object.name)
-          .mapErr((error) => validationError(['name'], error)));
+        const name = yield* okIfNotEmptyStr(object.name)
+          .mapErr((error) => validationError(['name'], error));
 
-        const age = yield* _(okIfInt(object.age)
+        const age = yield* (okIfInt(object.age)
           .chain(okIfPositive)
           .mapErr((error) => validationError(['age'], error)));
 
         return { name, age };
       });
 
-    const okIfPerson2 = (value: unknown): Result<Person, 'ERR_NOT_A_PERSON'> =>
-      Do(function* okIfPersonJob(unwrap) {
-        const obj = yield* unwrap(okIfObject(value));
-        const name = yield* unwrap(okIfNotEmptyStr(obj.name));
-        const someInt = yield* unwrap(okIfInt(obj.age));
-        const age = yield* unwrap(okIfPositive(someInt));
+    // const okIfPerson2 = (value: unknown): Result<Person, 'ERR_NOT_A_PERSON'> =>
+    //   Do(function* okIfPersonJob() {
+    //     const obj = yield* okIfObject(value);
+    //     const name = yield* okIfNotEmptyStr(obj.name);
+    //     const someInt = yield* okIfInt(obj.age);
+    //     const age = yield* okIfPositive(someInt);
 
-        return { name, age };
-      }).mapErr(() => 'ERR_NOT_A_PERSON');
+    //     return { name, age };
+    //   }).mapErr(() => 'ERR_NOT_A_PERSON');
 
     const okIfPerson3 = (value: unknown): Result<Person, PersonValidationError> =>
       Do(function* () { // eslint-disable-line func-names

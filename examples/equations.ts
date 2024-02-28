@@ -23,14 +23,13 @@ type QuadraticEquationRes = Result<
 >;
 
 const quadraticEquation = (a: number, b: number, c: number): QuadraticEquationRes =>
-  Do(function* (unwrap) {
+  Do(function* () {
     if (a === 0) {
       return linierEquation(b, c).map((x) => [x] as [number]);
     }
 
-    const d = yield* unwrap(
-      sqrt(b * b - 4 * a * c).mapErr(() => 'ERR_NO_REAL_ROOTS' as const),
-    );
+    const d = yield* sqrt(b * b - 4 * a * c)
+      .mapErr(() => 'ERR_NO_REAL_ROOTS' as const);
 
     const a2 = 2 * a;
 

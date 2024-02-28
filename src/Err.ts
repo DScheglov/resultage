@@ -83,12 +83,14 @@ export class ErrImpl<E> implements Err<E> {
     return this;
   }
 
-  unwrapGen(): Generator<E, never> {
-    function* errGenerator(this: ErrImpl<E>): Generator<E, never> {
-      yield this.error;
-      throw new TypeError('Cannot yield Err twice');
-    }
-    return errGenerator.call(this);
+  * unwrapGen(): Generator<E, never> {
+    yield this.error;
+    return undefined as any as never;
+  }
+
+  * [Symbol.iterator](): Generator<E, never> {
+    yield this.error;
+    return undefined as any as never;
   }
 
   unwrapOrThrow(): never {
@@ -104,6 +106,6 @@ Object.defineProperty(
   { enumerable: false, value: 'Err' },
 );
 
-export const err = <E>(error: E): Err<E> => new ErrImpl(error);
+export const err = <E>(error: E): Result<never, E> => new ErrImpl(error);
 export const asyncErr = async <E>(error: E | Promise<E>): AsyncErr<E> =>
   err(await error);

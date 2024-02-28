@@ -4,19 +4,13 @@ import {
   ErrTypeOf, NotResultOf, OkTypeOf, Result,
 } from './types';
 
-type Unwrap = <T, E>(result: Result<T, E>) => Generator<E, T>;
-type Job<out T, out E> = (unpack: Unwrap) => Generator<E, T>;
-
-function* unwrap<T, E>(result: Result<T, E>): Generator<E, T> {
-  if (result.isErr()) yield result.unwrapErr();
-  return result.unwrap();
-}
+type Job<out T, out E> = () => Generator<E, T>;
 
 export function Do<T, E>(job: Job<T, E>): Result<
   OkTypeOf<T> | NotResultOf<T>,
   E | ErrTypeOf<T>
 > {
-  const { done, value } = job(unwrap).next();
+  const { done, value } = job().next();
   return (done
     ? ensureResult(value as any) // T could be Result as well
     : err(value));

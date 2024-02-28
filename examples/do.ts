@@ -16,14 +16,10 @@ const sqrt = (x: number): Result<number, 'ERR_NEGATIVE'> => (
 const quadraticEquation = (a: number, b: number, c: number): Result<
   { x1: number; x2: number },
   'ERR_NEGATIVE' | 'ERR_DIV_BY_ZERO'
-> => Do(function* (unwrap) {
-  const d = yield* unwrap(
-    sqrt(b * b - 4 * a * c),
-  );
+> => Do(function* () {
+  const d = yield* sqrt(b * b - 4 * a * c);
 
-  const reciprocalA2 = yield* unwrap(
-    div(1, a * 2),
-  );
+  const reciprocalA2 = yield* div(1, a * 2);
 
   return {
     x1: (-b + d) * reciprocalA2,
