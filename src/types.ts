@@ -9,6 +9,12 @@ export type Err<E> =
   & Result<never, E>
   & { readonly kind: typeof SymbolErr };
 
+/**
+ * Represents a result that can either be successful (`Ok`) or contain an error (`Err`).
+ *
+ * @template T The type of the successful result.
+ * @template E The type of the error.
+ */
 export interface Result<T, E> {
   readonly kind: typeof SymbolOk | typeof SymbolErr;
   isOk(): this is Ok<T>;

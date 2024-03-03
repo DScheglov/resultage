@@ -6,6 +6,7 @@
     "rootDir": "./src",
     "module": "commonjs",
     "outDir": "./lib",
-    "target": "ES2017"
+    "target": "ES2017",
+    "noEmit": false
   }
 }

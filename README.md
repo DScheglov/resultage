@@ -170,90 +170,172 @@ which is implemented by `Ok<T>` and `Err<E>` classes.
 
 Returns `true` if Result is `Ok<T>`, `false` otherwise. Narrows the `Result<T, E>` to `Ok<T>`.
 
-Signature:
+Method Signature:
 
 ```typescript
-isOk(): this is Ok<T>
+interface Result<T, E> {
+  isOk(): this is Ok<T>
+}
+```
+
+Function Signature:
+
+```typescript
+const isOk: <T, E>(result: Result<T, E>) => result is Ok<T>
 ```
 
 ### isErr()
 
 Returns `true` if Result is `Err<E>`, `false` otherwise. Narrows the `Result<T, E>` to `Err<E>`.
 
-Signature:
+Method Signature:
 
 ```typescript
-isErr(): this is Err<E>
+interface Result<T, E> {
+  isErr(): this is Err<E>
+}
+```
+
+Function Signature:
+
+```typescript
+const  isErr: <T, E>(result: Result<T, E>): result is Err<E>
 ```
 
 ### map(fn)
 
 Applies `fn` to the value of `Ok<T>` and returns the value wrapped in `Ok<S>`. If `Result<T, E>` is `Err<E>` returns itself without applying `fn`.
 
-Signature:
+Method Signature:
 
 ```typescript
-map<S>(fn: (data: T) => S): Result<S, E>
+interface Result<T, E> {
+  map<S>(fn: (data: T) => S): Result<S, E>
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const map:
+  <T, S>(fn: (data: T) => S) =>
+  <E>(result: Result<T, E>) => Result<S, E>
 ```
 
 ### mapErr(fn)
 
 Applies `fn` to the value of `Err<E>` and returns the value wrapped in `Err<F>`. If `Result<T, E>` is `Ok<T>` returns itself without applying `fn`.
 
-Signature:
+Method Signature:
 
 ```typescript
-mapErr<F>(fn: (error: E) => F): Result<T, F>
+interface Result<T, E> {
+  mapErr<F>(fn: (error: E) => F): Result<T, F>
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const mapErr:
+  <E, F>(fn: (error: E) => F) =>
+  <T>(result: Result<T, E>) => Result<T, F>
 ```
 
 ### chain(next)
 
 Applies `next` to the value of `Ok<T>` and returns the result of `next`. If the `Result<T, E>` is `Err<E>`, returns itself without applying `next`.
 
-Signature:
+Method Signature:
 
 ```typescript
-chain<S, F>(next: (data: T) => Result<S, F>): Result<T | S, E | F>
+interface Result<T, E> {
+  chain<S, F>(next: (data: T) => Result<S, F>): Result<T | S, E | F>
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const chain:
+  <T, S, E, F>(next: (data: T) => Result<S, F>) =>
+  (result: Result<T, E>) => Result<T | S, E | F>
 ```
 
 ### chainErr(next)
 
 Applies `next` to the value of `Err<E>` and returns the result of `next`. If the `Result<T, E>` is `Ok<T>`, returns itself without applying `next`.
 
-Signature:
+Method Signature:
 
 ```typescript
-chainErr<S, F>(next: (error: E) => Result<S, F>): Result<T | S, E | F>
+interface Result<T, E> {
+  chainErr<S, F>(next: (error: E) => Result<S, F>): Result<T | S, E | F>
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const chainErr:
+  <S, E, F>(next: (error: E) => Result<S, F>) =>
+  <T>(result: Result<T, E>) => Result<T | S, E | F>
 ```
 
 ### unwrap()
 
 Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` throws a `TypeError` where `cause` is the `Err<E>`.
 
-Signature:
+Method Signature:
 
 ```typescript
-unwrap(): T
+interface Result<T, E> {
+  unwrap(): T
+}
+```
+
+Function Signature:
+
+```typescript
+const unwrap: <T>(result: Result<T, unknown>) => T
 ```
 
 ### unwrapGen()
 
 Returns a generator function that yields the value of `Err<E>` or returns the value of `Ok<T>`.
 
-Signature:
+Method Signature:
 
 ```typescript
-unwrapGen(): Generator<E, T, unknown>
+interface Result<T, E> {
+  unwrapGen(): Generator<E, T, unknown>
+}
+```
+
+Function Signature:
+
+```typescript
+const unwrapGen: <T, E>(result: Result<T, E>) => Generator<E, T, unknown>
 ```
 
 ### unwrapOr(fallback)
 
 Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` returns `fallback`.
 
-Signature:
+Method Signature:
 
 ```typescript
-unwrapOr<S>(fallback: S): T | S
+interface Result<T, E> {
+  unwrapOr<S>(fallback: S): T | S
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const unwrapOr:
+  <T, S>(fallback: S) =>
+  (result: Result<T, unknown>) => T | S
 ```
 
 ### unwrapOrThrow()
@@ -264,98 +346,205 @@ type `E`.
 `unwrapOrThrow` doesn't check if `E` is an instance of `Error` or not, so it is
 possible to throw a non-error literal.
 
-Signature:
+Method Signature:
 
 ```typescript
-unwrapOrThrow(): T
+interface Result<T, E> {
+  unwrapOrThrow(): T
+}
+```
+
+Function Signature:
+
+```typescript
+const unwrapOrThrow: <T>(result: Result<T, unknown>) => T
 ```
 
 ### unwrapOrElse
 
 Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` returns the result of `fallbackFn`.
 
-Signature:
+Method Signature:
 
 ```typescript
-unwrapOrElse<S>(fallbackFn: (error: E) => S): T | S
+interface Result<T, E> {
+  unwrapOrElse<S>(fallbackFn: (error: E) => S): T | S
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const unwrapOrElse:
+  <T, S>(fallbackFn: (error: unknown) => S) =>
+  (result: Result<T, unknown>) => T | S
 ```
 
 ### unwrapErr
 
 Returns the value of `Err<E>`. If the `Result<T, E>` is `Ok<T>` throws a `TypeError` where `cause` is the `Ok<T>`.
 
-Signature:
+Method Signature:
 
 ```typescript
-unwrapErr(): E
+interface Result<T, E> {
+  unwrapErr(): E
+}
+```
+
+Function Signature:
+
+```typescript
+const unwrapErr: <E>(result: Result<unknown, E>) => E
 ```
 
 ### unwrapErrOr(fallback)
 
 Returns the value of `Err<E>`. If the `Result<T, E>` is `Ok<T>` returns `fallback`.
 
-Signature:
+Method Signature:
 
 ```typescript
-unwrapErrOr<F>(fallback: F): E | F
+interface Result<T, E> {
+  unwrapErrOr<F>(fallback: F): E | F
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const unwrapErrOr:
+  <F>(fallback: F) =>
+  <T, E>(result: Result<T, E>) => E | F
 ```
 
 ### unwrapErrOrElse(fallbackFn)
 
 Returns the value of `Err<E>`. If the `Result<T, E>` is `Ok<T>` returns the result of `fallback`.
 
-Signature:
+Method Signature:
 
 ```typescript
-unwrapErrOrElse<F>(fallbackFn: (data: T) => F): E | F
+interface Result<T, E> {
+  unwrapErrOrElse<F>(fallbackFn: (data: T) => F): E | F
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const unwrapErrOrElse:
+  <F, T>(fallbackFn: (data: T) => F) =>
+  <E>(result: Result<T, E>) => E | F
 ```
 
 ### unpack()
 
 Returns the value of `Ok<T>` or `Err<E>`.
 
-Signature:
+Method Signature:
 
 ```typescript
-unpack(): T | E
+interface Result<T, E> {
+  unpack(): T | E
+}
+```
+
+Function Signature:
+
+```typescript
+const unpack: <T, E>(result: Result<T, E>) => T | E
 ```
 
 ### match(okMatcher, errMatcher)
 
 Applies `okMatcher` to the value of `Ok<T>` and returns the result. Applies `errMatcher` to the value of `Err<E>` and returns the result.
 
-Signature:
+Method Signature:
 
 ```typescript
-match<S, F>(okMatcher: (data: T) => S, errMatcher: (error: E) => F): S | F
+interface Result<T, E> {
+  match<S, F>(okMatcher: (data: T) => S, errMatcher: (error: E) => F): S | F
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const match:
+  <T, S, E, F>(okMatcher: (data: T) => S, errMatcher: (error: E) => F) =>
+  (result: Result<T, E>) => S | F
 ```
 
 ### tap(fn)
 
 Applies `fn` to the value of `Ok<T>` and returns the original result. If the `Result<T, E>` is `Err<E>` doesn't apply `fn`.
 
-Signature:
+Method Signature:
 
 ```typescript
-tap(fn: (data: T) => void): Result<T, E>
+interface Result<T, E> {
+  tap(fn: (data: T) => void): Result<T, E>
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const tap:
+  <T>(fn: (data: T) => void) =>
+  <E>(result: Result<T, E>) => Result<T, E>
 ```
 
 ### tapErr(fn)
 
 Applies `fn` to the value of `Err<E>` and returns the original result. If the `Result<T, E>` is `Ok<T>` doesn't apply `fn`.
 
-Signature:
+Method Signature:
 
 ```typescript
-tapErr(fn: (error: E) => void): Result<T, E>
+interface Result<T, E> {
+  tapErr(fn: (error: E) => void): Result<T, E>
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const tapErr:
+  <E>(fn: (error: E) => void) =>
+  <T>(result: Result<T, E>) => Result<T, E>
 ```
 
 ### apply(fnResult)
 
 Applies the function wrapped in `Ok<(data: T) => S>` of argument `fnResult` to the value of `Ok<T>` and returns the result of the application wrapped into `Ok<S>`. If the `Result<T, E>` is `Err<E>` or `fnResult` is `Err<F>`, returns itself without applying the function.
 
-Signature:
+Method Signature:
 
 ```typescript
-apply<S, F>(fnResult: Result<(data: T) => S, F>): Result<S, E | F>
+interface Result<T, E> {
+  apply<S, F>(fnResult: Result<(data: T) => S, F>): Result<S, E | F>
+}
+```
+
+Curried Function Signature:
+
+```typescript
+const apply: 
+  <T, S, F>(fnResult: Result<(data: T) => S, F>) =>
+  <E>(result: Result<T, E>) => Result<S, E | F>
+```
+
+## Operating on Multiple Results
+
+### collect(results)
+
+Collects `Ok<T>` values from an array of `Result<T, E>` and returns a `Result<T[], E>`.
+
+Function Signature:
+
+```typescript
+const collect:
+  <R extends readonly Result<any, any>[]>(results: R) => Result<Collected<R>, ErrTypeOf<R[number]>>
 ```

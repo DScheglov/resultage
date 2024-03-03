@@ -5,16 +5,16 @@ export const map =
     <E>(result: Result<T, E>): Result<S, E> => result.map(fn);
 
 export const mapErr =
-  <E, T, F>(fn: (error: E) => F) =>
-    (result: Result<T, E>): Result<T, F> => result.mapErr(fn);
+  <E, F>(fn: (error: E) => F) =>
+    <T>(result: Result<T, E>): Result<T, F> => result.mapErr(fn);
 
 export const chain =
-  <E, T, F, S>(next: (data: T) => Result<S, F>) =>
-    (result: Result<T, E>): Result<S, F | E> => result.chain(next);
+  <T, F, S>(next: (data: T) => Result<S, F>) =>
+    <E>(result: Result<T, E>): Result<S, F | E> => result.chain(next);
 
 export const chainErr =
-  <E, T, F, S>(next: (error: E) => Result<S, F>) =>
-    (result: Result<T, E>): Result<T | S, F> => result.chainErr(next);
+  <E, F, S>(next: (error: E) => Result<S, F>) =>
+    <T>(result: Result<T, E>): Result<T | S, F> => result.chainErr(next);
 
 export const unwrap = <E, T>(result: Result<T, E>): T => result.unwrap();
 
