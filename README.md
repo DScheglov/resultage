@@ -44,27 +44,14 @@ type Person = {
 
 const okIfPerson = (value: unknown): Result<Person, 'ERR_NOT_A_PERSON'> =>
   Do(function*() {
-    const obj = yield* okIfObject(value).unwrapGen();
-    const name = yield* okIfString(obj.name).unwrapGen();
-    const age = yield* okIfInt(obj.age).unwrapGen();
+    const obj = yield* okIfObject(value);
+    const name = yield* okIfString(obj.name);
+    const age = yield* okIfInt(obj.age);
 
     return { name, age };
   }).mapErr(() => 'ERR_NOT_A_PERSON');
 
 const person: Person = okIfPerson({ name: 'John', age: 42 }).unwrap();
-```
-
-or the same but with using `unwrap` function passed as a parameter to `Do`:
-
-```typescript
-const okIfPerson = (value: unknown) =>
-  Do(function*(unwrap) {
-    const obj = yield* unwrap(okIfObject(value));
-    const name = yield* unwrap(okIfString(obj.name));
-    const age = yield* unwrap(okIfInt(obj.age));
-
-    return { name, age };
-  });
 ```
 
 ### Composing with chain
@@ -125,9 +112,9 @@ console.log(silmarillionAuthors.unwrapErr());
 import { asyncDo, collect, err, ok } from '@cardellini/ts-result';
 
 const getBookWithAuthors = (bookId: string) =>
-  asyncDo(async function* (unwrap) {
-    const book = yield* unwrap(fetchBook(bookId));
-    const authors = yield* unwrap(fetchPersons(book.authorIds));
+  asyncDo(async function* () {
+    const book = yield* await fetchBook(bookId);
+    const authors = yield* await fetchPersons(book.authorIds);
 
     return { ...book, authors };
   });
@@ -161,20 +148,6 @@ async function run() {
 }
 
 run().catch(console.error);
-```
-
-### Working with Async Results in a Promise Chain
-
-```typescript
-import { asyncDo, unwrapGen } from '@cardellini/ts-result';
-
-const getBookWithAuthors = (bookId: string) =>
-  asyncDo(async function* () {
-    const book = yield* await fetchBook(bookId).then(unwrapGen);
-    const authors = yield* await fetchPersons(book.authorIds).then(unwrapGen);
-
-    return { ...book, authors };
-  });
 ```
 
 ## Documentation

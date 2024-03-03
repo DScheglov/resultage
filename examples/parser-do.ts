@@ -44,7 +44,7 @@ type PersonValidationError = ValidationError<
 
 const okIfPerson = (value: unknown): Result<Person, PersonValidationError> =>
   Do(function* () {
-    const object = yield* okIfObject(value).mapErr(
+    const object: JsonObject = yield* okIfObject(value).mapErr(
       error => validationError([], error) 
     );
 
@@ -93,7 +93,7 @@ const okIfPerson2 = (
   path: string[] = ['person'],
 ): Result<Person, PersonValidationError> =>
   Do(function* okIfPersonJob() {
-    const obj = yield* okIfObject(value)
+    const obj: JsonObject = yield* okIfObject(value)
       .mapErr(error => validationError(path, error));
 
     const name = yield* okIfNotEmptyStr(obj.name)
