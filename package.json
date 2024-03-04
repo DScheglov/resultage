@@ -6,7 +6,7 @@
     "test": "jest",
     "build": "webpack",
     "compile:cjs": "tsc --project tsconfig.cjs.json",
-    "compile": "rm -rf ./lib; npm run compile:cjs && npm run build",
+    "compile": "rm -rf ./lib; npm run compile:cjs && npm run build && ./bundle-types.sh",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [
