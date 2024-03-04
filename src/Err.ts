@@ -101,7 +101,7 @@ export class ErrImpl<E> implements Err<E> {
 
 (ErrImpl.prototype as any).kind = SymbolErr;
 Object.defineProperty(
-  ErrImpl.prototype.constructor,
+  ErrImpl,
   'name',
   { enumerable: false, value: 'Err' },
 );

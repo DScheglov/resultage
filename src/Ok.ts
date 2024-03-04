@@ -95,7 +95,7 @@ export class OkImpl<T> implements Result<T, never> {
 
 (OkImpl.prototype as any).kind = SymbolOk;
 Object.defineProperty(
-  OkImpl.prototype.constructor,
+  OkImpl,
   'name',
   { enumerable: false, value: 'Ok' },
 );
