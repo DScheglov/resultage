@@ -1,6 +1,6 @@
 {
   "name": "@cardellini/ts-result",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Useful type to model success and failure",
   "scripts": {
     "test": "jest",
