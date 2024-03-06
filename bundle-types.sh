@@ -1,6 +1,6 @@
 npx -y dts-bundle --name @cardellini/ts-result --main ./lib/index.d.ts --out ../dist/result.d.ts
 npx -y dts-bundle --name @cardellini/ts-result/base --main ./lib/base.d.ts --out ../dist/base.d.ts
-npx -y dts-bundle --name @cardellini/ts-result/fn --main ./lib/fn/index.d.ts --out ../dist/fn.d.ts
+npx -y dts-bundle --name @cardellini/ts-result/fn --main ./lib/fn/index.d.ts --out ../../dist/fn.d.ts
 npx -y dts-bundle --name @cardellini/ts-result/do --main ./lib/do.d.ts --out ../dist/do.d.ts
 npx -y dts-bundle --name @cardellini/ts-result/methods --main ./lib/methods.d.ts --out ../dist/methods.d.ts
 npx -y dts-bundle --name @cardellini/ts-result/lists --main ./lib/lists.d.ts --out ../dist/lists.d.ts
