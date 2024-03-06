@@ -5,8 +5,10 @@
   "scripts": {
     "test": "jest",
     "build": "webpack",
+    "clear": "rm -rf ./lib; rm -rf ./dist; rm -rf ./esm",
     "compile:cjs": "tsc --project tsconfig.cjs.json",
-    "compile": "rm -rf ./lib; npm run compile:cjs && npm run build && ./bundle-types.sh",
+    "compile:esm": "tsc --project tsconfig.esm.json",
+    "compile": "npm run clear; npm run compile:cjs && npm run compile:esm && npm run build && ./bundle-types.sh",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [
@@ -49,50 +51,74 @@
   "exports": {
     ".": {
       "default": "./lib/index.js",
+      "import": "./esm/index.js",
+      "require": "./lib/index.js",
       "types": "./lib/index.d.ts"
     },
     "./base": {
       "default": "./lib/base.js",
+      "import": "./esm/base.js",
+      "require": "./lib/base.js",
       "types": "./lib/base.d.ts"
     },
     "./fn": {
       "default": "./lib/fn/index.js",
+      "import": "./esm/fn/index.js",
+      "require": "./lib/fn/index.js",
       "types": "./lib/fn/index.d.ts"
     },
     "./do": {
       "default": "./lib/do.js",
+      "import": "./esm/do.js",
+      "require": "./lib/do.js",
       "types": "./lib/do.d.ts"
     },
     "./methods": {
       "default": "./lib/methods.js",
+      "import": "./esm/methods.js",
+      "require": "./lib/methods.js",
       "types": "./lib/methods.d.ts"
     },
     "./lists": {
       "default": "./lib/lists.js",
+      "import": "./esm/lists.js",
+      "require": "./lib/lists.js",
       "types": "./lib/lists.d.ts"
     },
     "./sync": {
       "default": "./lib/sync.js",
+      "import": "./esm/sync.js",
+      "require": "./lib/sync.js",
       "types": "./lib/sync.d.ts"
     },
     "./sync/do": {
       "default": "./lib/do-gen.js",
+      "import": "./esm/do-gen.js",
+      "require": "./lib/do-gen.js",
       "types": "./lib/do-gen.d.ts"
     },
     "./sync/methods": {
       "default": "./lib/sync-methods.js",
+      "import": "./esm/sync-methods.js",
+      "require": "./lib/sync-methods.js",
       "types": "./lib/sync-methods.d.ts"
     },
     "./async": {
       "default": "./lib/async.js",
+      "import": "./esm/async.js",
+      "require": "./lib/async.js",
       "types": "./lib/async.d.ts"
     },
     "./async/do": {
       "default": "./lib/async-do-gen.js",
+      "import": "./esm/async-do-gen.js",
+      "require": "./lib/async-do-gen.js",
       "types": "./lib/async-do-gen.d.ts"
     },
     "./async/methods": {
       "default": "./lib/async-methods.js",
+      "import": "./esm/async-methods.js",
+      "require": "./lib/async-methods.js",
       "types": "./lib/async-methods.d.ts"
     }
   },

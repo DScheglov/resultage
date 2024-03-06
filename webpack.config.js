@@ -1,13 +1,15 @@
 /* eslint-disable */
 const path = require('path');
 
+const distPath = path.resolve(__dirname, 'dist');
+
 module.exports = [
   {
     mode: "production",
     entry: { "result": "./lib/index.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
         name: 'Result',
@@ -20,7 +22,7 @@ module.exports = [
     entry: { "base": "./lib/base.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
         name: 'Result',
@@ -33,10 +35,10 @@ module.exports = [
     entry: { "fn": "./lib/fn/index.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
-        name: 'Result.Fn',
+        name: 'ResultFn',
         type: 'umd',
       },
     },
@@ -46,10 +48,10 @@ module.exports = [
     entry: { "do": "./lib/do.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
-        name: 'Result.Do',
+        name: 'ResultDo',
         type: 'umd',
       },
     },
@@ -59,10 +61,10 @@ module.exports = [
     entry: { "methods": "./lib/methods.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
-        name: 'Result.Methods',
+        name: 'ResultMethods',
         type: 'umd',
       },
     },
@@ -72,10 +74,10 @@ module.exports = [
     entry: { "lists": "./lib/lists.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
-        name: 'Result.lists',
+        name: 'ResultLists',
         type: 'umd',
       },
     },
@@ -85,7 +87,7 @@ module.exports = [
     entry: { "sync": "./lib/sync.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
         name: 'Result',
@@ -98,10 +100,10 @@ module.exports = [
     entry: { "sync/do": "./lib/do-gen.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
-        name: 'Result.Do',
+        name: 'ResultDo',
         type: 'umd',
       },
     },
@@ -111,10 +113,10 @@ module.exports = [
     entry: { "sync/methods": "./lib/sync-methods.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
-        name: 'Result.Methods',
+        name: 'ResultMethods',
         type: 'umd',
       },
     },
@@ -124,7 +126,7 @@ module.exports = [
     entry: { "async": "./lib/async.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
         name: 'Result',
@@ -137,10 +139,10 @@ module.exports = [
     entry: { "async/do": "./lib/async-do-gen.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
-        name: 'Result.Do',
+        name: 'ResultDo',
         type: 'umd',
       },
     },
@@ -150,10 +152,10 @@ module.exports = [
     entry: { "async/methods": "./lib/async-methods.js" },
     output: {
       globalObject: 'this',
-      path: path.resolve(__dirname, 'lib/dist'),
+      path: distPath,
       filename: '[name].min.js',
       library: {
-        name: 'Result.Methods',
+        name: 'ResultMethods',
         type: 'umd',
       },
     },
