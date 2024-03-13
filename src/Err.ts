@@ -1,15 +1,7 @@
-import {
-  Result, AsyncErr, SymbolErr, Err,
-} from './types';
+import { Result, AsyncErr } from './types';
 
-export class ErrImpl<E> implements Err<E> {
-  private error!: E; // making field observable for js to allow comparison in tests
-
-  declare readonly kind: typeof SymbolErr;
-
-  constructor(error: E) {
-    this.error = error;
-  }
+export class ErrImpl<E> implements Result<never, E> {
+  constructor(public readonly error: E) {}
 
   isOk() { // eslint-disable-line class-methods-use-this
     return false;
@@ -97,9 +89,16 @@ export class ErrImpl<E> implements Err<E> {
     // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw this.error;
   }
+
+  biMap<S, F>(_: unknown, errFn: (error: E) => F): Result<S, F> {
+    return this.mapErr(errFn);
+  }
+
+  biChain<S, F>(_: unknown, errFn: (error: E) => Result<S, F>): Result<S, F> {
+    return errFn(this.error);
+  }
 }
 
-(ErrImpl.prototype as any).kind = SymbolErr;
 Object.defineProperty(
   ErrImpl,
   'name',

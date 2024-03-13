@@ -59,7 +59,7 @@ describe('Result', () => {
     });
 
     it('should narrow type in if statement', () => {
-      expect.assertions(2); // ensure that both if and else branches are executed
+      expect.assertions(3); // ensure that both if and else branches are executed
       const result: Result<'foo', string> = ok('foo');
 
       type FirstCheck = Expect<Equal<typeof result, Result<'foo', string>>>;
@@ -68,8 +68,11 @@ describe('Result', () => {
 
       if (Guards.isOk(result)) {
         type Check = Expect<Equal<typeof result, Ok<'foo'>>>;
+        type CheckValue = Expect<Equal<typeof result.value, 'foo'>>;
         const check: Check = true;
+        const checkValue: CheckValue = true;
         expect(check).toBe(true);
+        expect(checkValue).toBe(true);
       }
     });
 
@@ -794,6 +797,116 @@ describe('Result', () => {
           ),
         ),
       );
+    });
+  });
+
+  describe('biMap', () => {
+    it('maps an Ok result', () => {
+      expect(
+        pipe(
+          'foo',
+          ok,
+          R.biMap((s: string) => s.length, (s: string) => s.toUpperCase()),
+        ),
+      ).toEqual(ok(3));
+    });
+
+    it('maps an Err result', () => {
+      expect(
+        pipe(
+          'foo',
+          err,
+          R.biMap((s: string) => s.length, (s: string) => s.toUpperCase()),
+        ),
+      ).toEqual(err('FOO'));
+    });
+
+    it('respects the identity law (ok)', () => {
+      const result = ok('foo');
+      expect(
+        pipe(
+          result,
+          R.biMap(identity, identity),
+        ),
+      ).toEqual(result);
+    });
+
+    it('respects the identity law (err)', () => {
+      const result = err('foo');
+      expect(
+        pipe(
+          result,
+          R.biMap(identity, identity),
+        ),
+      ).toEqual(result);
+    });
+
+    it('respects the composition law (ok)', () => {
+      const result = ok('foo');
+      const f = (s: string) => s.length;
+      const g = (n: number) => n * 2;
+      const h = (s: string) => s.toUpperCase();
+      const i = (s: string) => s + '!';
+      expect(
+        pipe(
+          result,
+          R.biMap(f, h),
+          R.biMap(g, i),
+        ),
+      ).toEqual(
+        pipe(
+          result,
+          R.biMap(
+            (s) => g(f(s)),
+            (s) => i(h(s)),
+          ),
+        ),
+      );
+    });
+
+    it('respects the composition law (err)', () => {
+      const result = err('foo');
+      const f = (s: string) => s.length;
+      const g = (n: number) => n * 2;
+      const h = (s: string) => s.toUpperCase();
+      const i = (s: string) => s + '!';
+      expect(
+        pipe(
+          result,
+          R.biMap(f, h),
+          R.biMap(g, i),
+        ),
+      ).toEqual(
+        pipe(
+          result,
+          R.biMap(
+            (s) => g(f(s)),
+            (s) => i(h(s)),
+          ),
+        ),
+      );
+    });
+  });
+
+  describe('biChain', () => {
+    it('chains an Ok result', () => {
+      expect(
+        pipe(
+          'foo',
+          ok,
+          R.biChain((s: string) => ok(s.length), (s: string) => ok(s.toUpperCase())),
+        ),
+      ).toEqual(ok(3));
+    });
+
+    it('chains an Err result', () => {
+      expect(
+        pipe(
+          'foo',
+          err,
+          R.biChain((s: string) => ok(s.length), (s: string) => ok(s.toUpperCase())),
+        ),
+      ).toEqual(ok('FOO'));
     });
   });
 });

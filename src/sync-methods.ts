@@ -57,3 +57,15 @@ export const tapErr =
 export const apply =
   <T, F, S>(result: Result<(data: T) => S, F>) =>
     <E>(value: Result<T, E>): Result<S, E | F> => value.apply(result);
+
+export const biMap =
+  <T, S, E, F>(okFn: (data: T) => S, errFn: (error: E) => F) =>
+    (result: Result<T, E>): Result<S, F> => result.biMap(okFn, errFn);
+
+export const biChain =
+  <T, E, TS, TF, ES, EF>(
+    okFn: (data: T) => Result<TS, TF>,
+    errFn: (error: E) => Result<ES, EF>,
+  ) =>
+    (result: Result<T, E>): Result<TS | ES, TF | EF> =>
+      result.biChain(okFn, errFn);

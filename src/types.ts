@@ -1,13 +1,10 @@
-export const SymbolOk = Symbol('Result::Kind::Ok');
-export const SymbolErr = Symbol('Result::Kind::Err');
-
 export type Ok<T> =
   & Result<T, never>
-  & { readonly kind: typeof SymbolOk };
+  & { readonly value: T };
 
 export type Err<E> =
   & Result<never, E>
-  & { readonly kind: typeof SymbolErr };
+  & { readonly error: E };
 
 /**
  * Represents a result that can either be successful (`Ok`) or contain an error (`Err`).
@@ -16,7 +13,6 @@ export type Err<E> =
  * @template E The type of the error.
  */
 export interface Result<T, E> {
-  readonly kind: typeof SymbolOk | typeof SymbolErr;
   isOk(): this is Ok<T>;
   isErr(): this is Err<E>;
   map<S>(fn: (data: T) => S): Result<S, E>;
@@ -40,6 +36,11 @@ export interface Result<T, E> {
   tap(fn: (data: T) => void): Result<T, E>;
   tapErr(fn: (error: E) => void): Result<T, E>;
   apply<S, F>(result: Result<(data: T) => S, F>): Result<S, E | F>;
+  biMap<S, F>(okFn: (data: T) => S, errFn: (error: E) => F): Result<S, F>;
+  biChain<TS, TF, ES, EF>(
+    okFn: (data: T) => Result<TS, TF>,
+    errFn: (error: E) => Result<ES, EF>,
+  ): Result<TS | ES, TF | EF>;
 }
 
 export type NotResultOf<T> = T extends Result<any, any> ? never : T;

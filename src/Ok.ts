@@ -1,15 +1,7 @@
-import {
-  AsyncOk, Ok, Result, SymbolOk,
-} from './types';
+import { AsyncOk, Result } from './types';
 
 export class OkImpl<T> implements Result<T, never> {
-  private value!: T; // making field observable for js to allow comparison
-
-  declare readonly kind: typeof SymbolOk;
-
-  constructor(value: T) {
-    this.value = value;
-  }
+  constructor(public readonly value: T) {}
 
   isOk() { // eslint-disable-line class-methods-use-this
     return true;
@@ -91,9 +83,16 @@ export class OkImpl<T> implements Result<T, never> {
   * [Symbol.iterator](): Generator<never, T> { // eslint-disable-line require-yield
     return this.value;
   }
+
+  biMap<S>(okFn: (value: T) => S): Result<S, never> {
+    return this.map(okFn);
+  }
+
+  biChain<S, F>(okFn: (data: T) => Result<S, F>): Result<S, F> {
+    return okFn(this.value);
+  }
 }
 
-(OkImpl.prototype as any).kind = SymbolOk;
 Object.defineProperty(
   OkImpl,
   'name',
