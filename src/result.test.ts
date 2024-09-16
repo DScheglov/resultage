@@ -24,7 +24,7 @@ describe('Result', () => {
 
     it('should narrow type in if statement', () => {
       expect.assertions(1); // ensure that both if and else branches are executed
-      const result: string | Result<string, 'foo'> = err('foo');
+      const result = err('foo') as string | Result<string, 'foo'>;
 
       if (Guards.isResult(result)) {
         type Check = Expect<Equal<typeof result, Result<string, 'foo'>>>;
@@ -60,7 +60,7 @@ describe('Result', () => {
 
     it('should narrow type in if statement', () => {
       expect.assertions(3); // ensure that both if and else branches are executed
-      const result: Result<'foo', string> = ok('foo');
+      const result = ok('foo') as Result<'foo', string>;
 
       type FirstCheck = Expect<Equal<typeof result, Result<'foo', string>>>;
       const check1: FirstCheck = true;
@@ -78,7 +78,7 @@ describe('Result', () => {
 
     it('(as method) should narrow type in if statement', () => {
       expect.assertions(2); // ensure that both if and else branches are executed
-      const result: Result<'foo', string> = ok('foo');
+      const result = ok('foo') as Result<'foo', string>;
 
       type FirstCheck = Expect<Equal<typeof result, Result<'foo', string>>>;
       const check1: FirstCheck = true;
@@ -103,7 +103,7 @@ describe('Result', () => {
 
     it('should narrow type in if statement', () => {
       expect.assertions(2); // ensure that both if and else branches are executed
-      const result: Result<string, 'foo'> = err('foo');
+      const result = err('foo') as Result<string, 'foo'>;
 
       type FirstCheck = Expect<Equal<typeof result, Result<string, 'foo'>>>;
 
@@ -119,7 +119,7 @@ describe('Result', () => {
 
     it('(as method) should narrow type in if statement', () => {
       expect.assertions(2); // ensure that both if and else branches are executed
-      const result: Result<string, 'foo'> = err('foo');
+      const result = err('foo') as Result<string, 'foo'>;
 
       type FirstCheck = Expect<Equal<typeof result, Result<string, 'foo'>>>;
 
@@ -841,6 +841,25 @@ describe('Result', () => {
       ).toEqual(result);
     });
 
+    it('respects the composition law (ok) - methods', () => {
+      const result = ok('foo');
+      const f = (s: string) => s.length;
+      const g = (n: number) => n * 2;
+      const h = (s: string) => s.toUpperCase();
+      const i = (s: string) => s + '!';
+      expect(
+        result
+          .biMap(f, h)
+          .biMap(g, i),
+
+      ).toEqual(
+        result.biMap(
+          (s) => g(f(s)),
+          (s) => i(h(s)),
+        ),
+      );
+    });
+
     it('respects the composition law (ok)', () => {
       const result = ok('foo');
       const f = (s: string) => s.length;
@@ -860,6 +879,24 @@ describe('Result', () => {
             (s) => g(f(s)),
             (s) => i(h(s)),
           ),
+        ),
+      );
+    });
+
+    it('respects the composition law (err) - methods', () => {
+      const result = err('foo');
+      const f = (s: string) => s.length;
+      const g = (n: number) => n * 2;
+      const h = (s: string) => s.toUpperCase();
+      const i = (s: string) => s + '!';
+      expect(
+        result
+          .biMap(f, h)
+          .biMap(g, i),
+      ).toEqual(
+        result.biMap(
+          (s) => g(f(s)),
+          (s) => i(h(s)),
         ),
       );
     });

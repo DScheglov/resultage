@@ -1,5 +1,4 @@
 import {
-  asyncDo as Index_asyncDo,
   thenMap as Index_thenMap,
   thenMapErr as Index_thenMapErr,
   thenChain as Index_thenChain,
@@ -81,7 +80,6 @@ import {
   
 import {
   Do as Do_Do,
-  asyncDo as Do_asyncDo,
 } from '@cardellini/ts-result/do';
   
 import {
@@ -143,7 +141,6 @@ import {
 } from '@cardellini/ts-result/sync';
 
 import {
-  asyncDo as Async_asyncDo,
   thenMap as Async_thenMap,
   thenMapErr as Async_thenMapErr,
   thenChain as Async_thenChain,
@@ -164,10 +161,6 @@ import {
   from as Async_from,
   thenUnpack as Async_thenUnpack,
 } from '@cardellini/ts-result/async';
-  
-import {
-  asyncDo as AsyncDo_asyncDo,
-} from '@cardellini/ts-result/async/do';
   
 import {
   thenMap as AsyncMethods_thenMap,
@@ -193,7 +186,6 @@ import {
 
 
 console.log({
-  Index_asyncDo,
   Index_thenMap,
   Index_thenMapErr,
   Index_thenChain,
@@ -315,7 +307,6 @@ console.log({
   Sync_collect,
   Sync_partition,
   Sync_sequence,
-  Async_asyncDo,
   Async_thenMap,
   Async_thenMapErr,
   Async_thenChain,
@@ -335,7 +326,6 @@ console.log({
   Async_flip,
   Async_from,
   Async_thenUnpack,
-  AsyncDo_asyncDo,
   AsyncMethods_thenMap,
   AsyncMethods_thenMapErr,
   AsyncMethods_thenChain,

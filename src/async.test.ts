@@ -17,7 +17,7 @@ describe('async exports', () => {
     async.expect,
     async.expectExists,
     async.okIfExists,
-    async.asyncDo,
+    async.Do,
     async.thenMap,
     async.thenMapErr,
     async.thenChain,

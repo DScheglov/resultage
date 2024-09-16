@@ -1,13 +1,17 @@
-import { Result, AsyncErr } from './types';
+import {
+  AsyncErr,
+  Err,
+  Result,
+} from './types';
 
-export class ErrImpl<E> implements Result<never, E> {
+export class ErrImpl<E> implements Err<E> {
   constructor(public readonly error: E) {}
 
-  isOk() { // eslint-disable-line class-methods-use-this
+  isOk(): false { // eslint-disable-line class-methods-use-this
     return false;
   }
 
-  isErr() { // eslint-disable-line class-methods-use-this
+  isErr(): this is Err<E> { // eslint-disable-line class-methods-use-this
     return true;
   }
 
@@ -75,11 +79,6 @@ export class ErrImpl<E> implements Result<never, E> {
     return this;
   }
 
-  * unwrapGen(): Generator<E, never> {
-    yield this.error;
-    return undefined as any as never;
-  }
-
   * [Symbol.iterator](): Generator<E, never> {
     yield this.error;
     return undefined as any as never;
@@ -105,6 +104,6 @@ Object.defineProperty(
   { enumerable: false, value: 'Err' },
 );
 
-export const err = <E>(error: E): Result<never, E> => new ErrImpl(error);
+export const err = <E>(error: E): Err<E> => new ErrImpl(error);
 export const asyncErr = async <E>(error: E | Promise<E>): AsyncErr<E> =>
   err(await error);

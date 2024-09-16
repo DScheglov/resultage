@@ -1,10 +1,14 @@
-export type Ok<T> =
-  & Result<T, never>
-  & { readonly value: T };
+export interface Ok<T> extends ResultInterface<T, never> {
+  readonly value: T
+  isOk(): this is Ok<T>;
+  isErr(): false;
+}
 
-export type Err<E> =
-  & Result<never, E>
-  & { readonly error: E };
+export interface Err<E> extends ResultInterface<never, E> {
+  readonly error: E;
+  isOk(): false;
+  isErr(): this is Err<E>;
+}
 
 /**
  * Represents a result that can either be successful (`Ok`) or contain an error (`Err`).
@@ -12,9 +16,7 @@ export type Err<E> =
  * @template T The type of the successful result.
  * @template E The type of the error.
  */
-export interface Result<T, E> {
-  isOk(): this is Ok<T>;
-  isErr(): this is Err<E>;
+export interface ResultInterface<T, E> {
   map<S>(fn: (data: T) => S): Result<S, E>;
   mapErr<F>(fn: (error: E) => F): Result<T, F>;
   chain<S, F>(next: (data: T) => Result<S, F>): Result<S, F | E>;
@@ -25,7 +27,6 @@ export interface Result<T, E> {
   unwrapErr(): E;
   unwrapErrOr<F>(fallback: F): E | F;
   unwrapErrOrElse<F>(fallback: (data: T) => F): E | F;
-  unwrapGen(): Generator<E, T>;
   [Symbol.iterator](): Generator<E, T>;
   unwrapOrThrow(): T;
   unpack(): T | E;
@@ -43,9 +44,11 @@ export interface Result<T, E> {
   ): Result<TS | ES, TF | EF>;
 }
 
+export type Result<T, E> = Ok<T> | Err<E>;
+
 export type NotResultOf<T> = T extends Result<any, any> ? never : T;
-export type ErrTypeOf<T> = T extends Result<unknown, infer E> ? E : never;
-export type OkTypeOf<T> = T extends Result<infer R, unknown> ? R : never;
+export type ErrTypeOf<T> = T extends Err<infer E> ? E : never;
+export type OkTypeOf<T> = T extends Ok<infer R> ? R : never;
 
 export type AsyncResult<T, E> = Promise<Result<T, E>>;
 export type AsyncOk<T> = AsyncResult<T, never>;
