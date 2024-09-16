@@ -1,13 +1,17 @@
-import { AsyncOk, Result } from './types';
+import {
+  AsyncOk,
+  Ok,
+  Result,
+} from './types';
 
-export class OkImpl<T> implements Result<T, never> {
+export class OkImpl<T> implements Ok<T> {
   constructor(public readonly value: T) {}
 
-  isOk() { // eslint-disable-line class-methods-use-this
+  isOk(): this is Ok<T> { // eslint-disable-line class-methods-use-this
     return true;
   }
 
-  isErr() { // eslint-disable-line class-methods-use-this
+  isErr(): false { // eslint-disable-line class-methods-use-this
     return false;
   }
 
@@ -72,10 +76,6 @@ export class OkImpl<T> implements Result<T, never> {
     return result.map((fn) => fn(this.value));
   }
 
-  * unwrapGen(): Generator<never, T> { // eslint-disable-line require-yield
-    return this.value;
-  }
-
   unwrapOrThrow(): T {
     return this.value;
   }
@@ -99,6 +99,6 @@ Object.defineProperty(
   { enumerable: false, value: 'Ok' },
 );
 
-export const ok = <T>(value: T): Result<T, never> => new OkImpl(value);
+export const ok = <T>(value: T): Ok<T> => new OkImpl(value);
 export const asyncOk = async <T>(value: T | Promise<T>): AsyncOk<T> =>
   ok(await value);

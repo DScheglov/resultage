@@ -89,9 +89,9 @@ export const thenTapErrAndWait = <E, T>(fn: (error: E) => Promise<void>) =>
 export const flip = async <E, T>(
   result: Result<T | Promise<T>, E | Promise<E>>,
 ): AsyncResult<T, E> => (
-  Guards.isOk(result)
-    ? ok(await result.unwrap())
-    : err(await result.unwrapErr())
+  result.isOk()
+    ? ok(await result.value)
+    : err(await result.error)
 );
 
 export const from =

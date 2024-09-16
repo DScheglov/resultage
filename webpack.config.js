@@ -97,19 +97,6 @@ module.exports = [
   },
   {
     mode: "production",
-    entry: { "sync/do": "./lib/do-gen.js" },
-    output: {
-      globalObject: 'this',
-      path: distPath,
-      filename: '[name].min.js',
-      library: {
-        name: 'ResultDo',
-        type: 'umd',
-      },
-    },
-  },
-  {
-    mode: "production",
     entry: { "sync/methods": "./lib/sync-methods.js" },
     output: {
       globalObject: 'this',
@@ -130,19 +117,6 @@ module.exports = [
       filename: '[name].min.js',
       library: {
         name: 'Result',
-        type: 'umd',
-      },
-    },
-  },
-  {
-    mode: "production",
-    entry: { "async/do": "./lib/async-do-gen.js" },
-    output: {
-      globalObject: 'this',
-      path: distPath,
-      filename: '[name].min.js',
-      library: {
-        name: 'ResultDo',
         type: 'umd',
       },
     },

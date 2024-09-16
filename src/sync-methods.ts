@@ -18,9 +18,6 @@ export const chainErr =
 
 export const unwrap = <E, T>(result: Result<T, E>): T => result.unwrap();
 
-export const unwrapGen = <E, T>(result: Result<T, E>): Generator<E, T> =>
-  result.unwrapGen();
-
 export const unwrapOr = <E, T, S>(fallback: S) =>
   (result: Result<T, E>): T | S => result.unwrapOr(fallback);
 
@@ -59,11 +56,11 @@ export const apply =
     <E>(value: Result<T, E>): Result<S, E | F> => value.apply(result);
 
 export const biMap =
-  <T, S, E, F>(okFn: (data: T) => S, errFn: (error: E) => F) =>
+  <S, F, T = never, E = never>(okFn: (data: T) => S, errFn: (error: E) => F) =>
     (result: Result<T, E>): Result<S, F> => result.biMap(okFn, errFn);
 
 export const biChain =
-  <T, E, TS, TF, ES, EF>(
+  <TS, TF, ES, EF, T = never, E = never>(
     okFn: (data: T) => Result<TS, TF>,
     errFn: (error: E) => Result<ES, EF>,
   ) =>

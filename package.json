@@ -30,6 +30,7 @@
     "url": "https://github.com/DScheglov/ts-result/issues"
   },
   "license": "MIT",
+  "dependencies": {},
   "devDependencies": {
     "@type-challenges/utils": "^0.1.1",
     "@types/node": "^20.10.5",
@@ -91,12 +92,6 @@
       "require": "./lib/sync.js",
       "types": "./lib/sync.d.ts"
     },
-    "./sync/do": {
-      "default": "./lib/do-gen.js",
-      "import": "./esm/do-gen.js",
-      "require": "./lib/do-gen.js",
-      "types": "./lib/do-gen.d.ts"
-    },
     "./sync/methods": {
       "default": "./lib/sync-methods.js",
       "import": "./esm/sync-methods.js",
@@ -108,12 +103,6 @@
       "import": "./esm/async.js",
       "require": "./lib/async.js",
       "types": "./lib/async.d.ts"
-    },
-    "./async/do": {
-      "default": "./lib/async-do-gen.js",
-      "import": "./esm/async-do-gen.js",
-      "require": "./lib/async-do-gen.js",
-      "types": "./lib/async-do-gen.d.ts"
     },
     "./async/methods": {
       "default": "./lib/async-methods.js",
@@ -142,17 +131,11 @@
       "sync": [
         "./lib/sync.d.ts"
       ],
-      "sync/do": [
-        "./lib/do-gen.d.ts"
-      ],
       "sync/methods": [
         "./lib/sync-methods.d.ts"
       ],
       "async": [
         "./lib/async.d.ts"
-      ],
-      "async/do": [
-        "./lib/async-do-gen.d.ts"
       ],
       "async/methods": [
         "./lib/async-methods.d.ts"
