@@ -1,21 +1,15 @@
 export interface Ok<T> extends ResultInterface<T, never> {
   readonly value: T
-  isOk(): this is Ok<T>;
-  isErr(): false;
+  readonly isOk: true;
+  readonly isErr: false;
 }
 
 export interface Err<E> extends ResultInterface<never, E> {
   readonly error: E;
-  isOk(): false;
-  isErr(): this is Err<E>;
+  readonly isOk: false;
+  readonly isErr: true;
 }
 
-/**
- * Represents a result that can either be successful (`Ok`) or contain an error (`Err`).
- *
- * @template T The type of the successful result.
- * @template E The type of the error.
- */
 export interface ResultInterface<T, E> {
   map<S>(fn: (data: T) => S): Result<S, E>;
   mapErr<F>(fn: (error: E) => F): Result<T, F>;
@@ -27,7 +21,6 @@ export interface ResultInterface<T, E> {
   unwrapErr(): E;
   unwrapErrOr<F>(fallback: F): E | F;
   unwrapErrOrElse<F>(fallback: (data: T) => F): E | F;
-  [Symbol.iterator](): Generator<E, T>;
   unwrapOrThrow(): T;
   unpack(): T | E;
   match<ER, TR>(
@@ -42,6 +35,7 @@ export interface ResultInterface<T, E> {
     okFn: (data: T) => Result<TS, TF>,
     errFn: (error: E) => Result<ES, EF>,
   ): Result<TS | ES, TF | EF>;
+  [Symbol.iterator](): Generator<E, T>;
 }
 
 export type Result<T, E> = Ok<T> | Err<E>;

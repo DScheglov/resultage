@@ -159,13 +159,111 @@ run().catch(console.error);
 
 ## Result Type
 
-`Result<T, E>` is a generic type that represents either success or failure, where:
+`Result<T, E>` is a generic type that represents either success or failure, and
+is an union of `Ok<T>` and `Err<E>` types:
+  
+  ```typescript
+  type Result<T, E> = Ok<T> | Err<E>;
+  ```
 
-- `T` is the type of value that represents success and wrapped with `Ok<T>`.
-- `E` is the type of error that represents failure and wrapped with `Err<E>`.
+Where:
 
-The `Result<T, E>` is not a union type, it is an interface with the methods described below,
-which is implemented by `Ok<T>` and `Err<E>` classes.
+- `Ok<T>` is a type that represents success and wraps the value of type `T`.
+- `Err<E>` is a type that represents failure and wraps the error of type `E`.
+
+### `Ok<T>` Interface
+
+`Ok<T>` is an interface that extends the `ResultInterface<T, never>` interface
+with the following structure.
+
+```typescript
+interface Ok<T> extends ResultInterface<T, never> {
+  readonly value: T;
+  readonly isOk: true;
+  readonly isErr: false;
+}
+```
+
+The property `value` is accessible only when the type of the correspondent variable
+or parameter is narrowed from the `Result<T, E>` to the `Ok<T>`.
+
+To narrow the type of the variable or parameter to `Ok<T>`, use either the `isOk` method
+or the `isErr` method on the `Result<T, E>` instance.
+
+### `Err<E>` Interface
+
+`Err<E>` is an interface that extends the `ResultInterface<never, E>` interface
+with the following structure.
+
+```typescript
+interface Err<E> extends ResultInterface<never, E> {
+  readonly error: E;
+  readonly isOk: false;
+  readonly isErr: true;
+}
+```
+
+The property `error` is accessible only when the type of the correspondent variable
+or parameter is narrowed from the `Result<T, E>` to the `Err<E>`.
+
+To narrow the type of the variable or parameter to `Err<E>`, use either the `isOk` method
+or the `isErr` method on the `Result<T, E>` instance.
+
+### `ResultInterface<T, E>` Interface
+
+`ResultInterface<T, E>` is an interface that defines the common Result methods.
+
+```typescript
+interface ResultInterface<T, E> {
+  map<S>(fn: (data: T) => S): Result<S, E>;
+  mapErr<F>(fn: (error: E) => F): Result<T, F>;
+  chain<S, F>(next: (data: T) => Result<S, F>): Result<S, F | E>;
+  chainErr<S, F>(next: (error: E) => Result<S, F>): Result<T | S, F>;
+  unwrap(): T;
+  unwrapOr<S>(fallback: S): T | S;
+  unwrapOrElse<S>(fallback: (error: E) => S): T | S;
+  unwrapErr(): E;
+  unwrapErrOr<F>(fallback: F): E | F;
+  unwrapErrOrElse<F>(fallback: (data: T) => F): E | F;
+  unwrapOrThrow(): T;
+  unpack(): T | E;
+  match<ER, TR>(
+    okMatcher: (data: T) => TR,
+    errMatcher: (error: E) => ER,
+  ): ER | TR;
+  tap(fn: (data: T) => void): Result<T, E>;
+  tapErr(fn: (error: E) => void): Result<T, E>;
+  apply<S, F>(result: Result<(data: T) => S, F>): Result<S, E | F>;
+  biMap<S, F>(okFn: (data: T) => S, errFn: (error: E) => F): Result<S, F>;
+  biChain<TS, TF, ES, EF>(
+    okFn: (data: T) => Result<TS, TF>,
+    errFn: (error: E) => Result<ES, EF>,
+  ): Result<TS | ES, TF | EF>;
+  [Symbol.iterator](): Generator<E, T>;
+}
+```
+
+## Constructors
+
+### ok(value)
+
+Creates an instance of `Ok<T>`.
+
+Function Signature:
+
+```typescript
+const ok: <T>(value: T) => Ok<T>
+```
+
+### err(error)
+
+Creates an instance of `Err<E>`.
+
+Function Signature:
+
+```typescript
+const err: <E>(error: E) => Err<E>
+```
 
 ## Methods of `Result<T, E>` Instances
 
@@ -301,24 +399,6 @@ Function Signature:
 
 ```typescript
 const unwrap: <T>(result: Result<T, unknown>) => T
-```
-
-### unwrapGen()
-
-Returns a generator function that yields the value of `Err<E>` or returns the value of `Ok<T>`.
-
-Method Signature:
-
-```typescript
-interface Result<T, E> {
-  unwrapGen(): Generator<E, T, unknown>
-}
-```
-
-Function Signature:
-
-```typescript
-const unwrapGen: <T, E>(result: Result<T, E>) => Generator<E, T, unknown>
 ```
 
 ### unwrapOr(fallback)

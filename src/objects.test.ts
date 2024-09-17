@@ -39,7 +39,7 @@ describe('objects', () => {
         c: ok(3),
       };
       const result = reduceObject(input, mockReducer, 0);
-      expect(result.isErr()).toBe(true);
+      expect(result.isErr).toBe(true);
       expect(result.unwrapErr()).toBe('Error' as const);
 
       const check: Expect<Equal<typeof result, Result<number, 'Error'>>> = true;
@@ -96,7 +96,7 @@ describe('objects', () => {
         c: err('Error' as const),
       };
       const result = reduceObjectErr(input, mockReducer, '');
-      expect(result.isOk()).toBe(true);
+      expect(result.isOk).toBe(true);
       expect(result.unwrap()).toBe(2);
     });
 
@@ -120,7 +120,7 @@ describe('objects', () => {
         c: ok(true),
       };
       const result = collectFromObject(input);
-      expect(result.isOk()).toBe(true);
+      expect(result.isOk).toBe(true);
       expect(result.unwrap()).toEqual({ a: 1, b: 'two', c: true });
     });
 
@@ -131,7 +131,7 @@ describe('objects', () => {
         c: ok(true),
       };
       const result = collectFromObject(input);
-      expect(result.isErr()).toBe(true);
+      expect(result.isErr).toBe(true);
       expect(result.unwrapErr()).toBe('Error');
     });
 
@@ -158,7 +158,7 @@ describe('objects', () => {
   describe('collectErrFromObject', () => {
     it('returns an empty object for an empty input object', () => {
       const result = collectErrFromObject({});
-      expect(result.isErr()).toBe(true);
+      expect(result.isErr).toBe(true);
       expect(result.unwrapErr()).toEqual({});
     });
 
@@ -169,7 +169,7 @@ describe('objects', () => {
         c: err('Error3'),
       };
       const result = collectErrFromObject(input);
-      expect(result.isErr()).toBe(true);
+      expect(result.isErr).toBe(true);
       expect(result.unwrapErr()).toEqual({
         a: 'Error1',
         b: 'Error2',

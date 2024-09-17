@@ -15,7 +15,7 @@ export const reduceObject = <R extends Record<string, Result<any, any>>, S>(
   let acc = initial;
 
   for (const [key, result] of Object.entries(resultStruct)) {
-    if (result.isErr()) return result;
+    if (result.isErr) return result;
     acc = reducer(acc, result.unwrap(), key, resultStruct);
   }
 
@@ -35,7 +35,7 @@ export const reduceObjectErr = <R extends Record<string, Result<any, any>>, S>(
   let acc = initial;
 
   for (const [key, result] of Object.entries(resultStruct)) {
-    if (result.isOk()) return result;
+    if (result.isOk) return result;
     acc = reducer(acc, result.unwrapErr(), key, resultStruct);
   }
 
