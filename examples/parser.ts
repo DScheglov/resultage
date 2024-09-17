@@ -32,7 +32,7 @@ const okIfNotEmptyStr = (value: unknown): Result<
 const okIfPerson = (value: unknown): Result<Person, 'ERR_NOT_A_PERSON'> => {
   const objectValidation = okIfObject(value);
 
-  if (objectValidation.isErr()) {
+  if (objectValidation.isErr) {
     return err('ERR_NOT_A_PERSON');
   }
 
@@ -40,19 +40,19 @@ const okIfPerson = (value: unknown): Result<Person, 'ERR_NOT_A_PERSON'> => {
 
   const nameValidation = okIfNotEmptyStr(object.name);
 
-  if (nameValidation.isErr()) {
+  if (nameValidation.isErr) {
     return err('ERR_NOT_A_PERSON');
   }
 
   const ageValidation1 = okIfInt(object.age);
 
-  if (ageValidation1.isErr()) {
+  if (ageValidation1.isErr) {
     return err('ERR_NOT_A_PERSON');
   }
 
   const ageValidation2 = okIfPositive(ageValidation1.unwrap());
 
-  if (ageValidation2.isErr()) {
+  if (ageValidation2.isErr) {
     return err('ERR_NOT_A_PERSON');
   }
 

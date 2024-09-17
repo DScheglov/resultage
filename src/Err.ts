@@ -7,11 +7,11 @@ import {
 export class ErrImpl<E> implements Err<E> {
   constructor(public readonly error: E) {}
 
-  isOk(): false { // eslint-disable-line class-methods-use-this
+  get isOk(): false { // eslint-disable-line class-methods-use-this
     return false;
   }
 
-  isErr(): this is Err<E> { // eslint-disable-line class-methods-use-this
+  get isErr(): true { // eslint-disable-line class-methods-use-this
     return true;
   }
 

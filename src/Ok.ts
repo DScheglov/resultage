@@ -7,11 +7,11 @@ import {
 export class OkImpl<T> implements Ok<T> {
   constructor(public readonly value: T) {}
 
-  isOk(): this is Ok<T> { // eslint-disable-line class-methods-use-this
+  get isOk(): true { // eslint-disable-line class-methods-use-this
     return true;
   }
 
-  isErr(): false { // eslint-disable-line class-methods-use-this
+  get isErr(): false { // eslint-disable-line class-methods-use-this
     return false;
   }
 

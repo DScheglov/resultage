@@ -7,12 +7,10 @@ export const isResult =
     value instanceof OkImpl || value instanceof ErrImpl;
 
 export const isOk =
-  <T>(value: Result<T, unknown>): value is Ok<T> =>
-    value.isOk();
+  <T>(value: Result<T, unknown>): value is Ok<T> => value.isOk;
 
 export const isErr =
-  <E>(value: Result<unknown, E>): value is Err<E> =>
-    value.isErr();
+  <E>(value: Result<unknown, E>): value is Err<E> => value.isErr;
 
 export const ensureResult = <T, S, E>(
   value: T | Result<S, E>,

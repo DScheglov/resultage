@@ -38,7 +38,7 @@ const quadraticEquation = (a: number, b: number, c: number): QuadraticEquationRe
 
 const result = quadraticEquation(0, 0, 0);
 
-if (result.isOk()) {
+if (result.isOk) {
   console.log(result.unwrap());
 } else {
   const errorCode = result.unwrapErr();

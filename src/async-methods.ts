@@ -1,5 +1,4 @@
 import * as R from './sync-methods';
-import * as Guards from './guards';
 import { Result, AsyncResult, MaybeAsyncResult } from './types';
 import { ok } from './Ok';
 import { err } from './Err';
@@ -18,14 +17,14 @@ export const thenChain =
   <T, S, F>(next: (data: T) => MaybeAsyncResult<S, F>) =>
   <E>(asyncRes: AsyncResult<T, E>): AsyncResult<T | S, E | F> =>
       asyncRes.then((result) => (
-        Guards.isOk(result) ? next(result.unwrap()) : result
+        result.isOk ? next(result.value) : result
       ));
 
 export const thenChainErr =
   <E, F, S>(next: (error: E) => MaybeAsyncResult<S, F>) =>
   <T>(asyncRes: AsyncResult<T, E>): AsyncResult<T | S, E | F> =>
       asyncRes.then((result) => (
-        Guards.isErr(result) ? next(result.unwrapErr()) : result
+        result.isErr ? next(result.error) : result
       ));
 
 export const thenMatch =
@@ -89,7 +88,7 @@ export const thenTapErrAndWait = <E, T>(fn: (error: E) => Promise<void>) =>
 export const flip = async <E, T>(
   result: Result<T | Promise<T>, E | Promise<E>>,
 ): AsyncResult<T, E> => (
-  result.isOk()
+  result.isOk
     ? ok(await result.value)
     : err(await result.error)
 );

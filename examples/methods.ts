@@ -12,16 +12,16 @@ import { Result, ok, err } from '@cardellini/ts-result/base';
   const okResult = ok(42);
   const errResult = err('ERR_NOT_FOUND' as const);
 
-  okResult.isOk(); // true
-  errResult.isOk(); // false
+  okResult.isOk; // true
+  errResult.isOk; // false
 }
 
 {
   const okResult = ok(42);
   const errResult = err('ERR_NOT_FOUND' as const);
 
-  okResult.isErr(); // false
-  errResult.isErr(); // true
+  okResult.isErr; // false
+  errResult.isErr; // true
 }
 
 {

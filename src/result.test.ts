@@ -76,7 +76,27 @@ describe('Result', () => {
       }
     });
 
-    it('(as method) should narrow type in if statement', () => {
+    it('should narrow type in else branch of if statement', () => {
+      expect.assertions(3); // ensure that both if and else branches are executed
+      const result = err('bar') as Result<'foo', string>;
+
+      type FirstCheck = Expect<Equal<typeof result, Result<'foo', string>>>;
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (Guards.isOk(result)) {
+        // eslint-disable-next-line no-trailing-spaces
+      } else {
+        type Check = Expect<Equal<typeof result, Err<string>>>;
+        type CheckValue = Expect<Equal<typeof result.error, string>>;
+        const check: Check = true;
+        const checkValue: CheckValue = true;
+        expect(check).toBe(true);
+        expect(checkValue).toBe(true);
+      }
+    });
+
+    it('(as property) should narrow type in if statement', () => {
       expect.assertions(2); // ensure that both if and else branches are executed
       const result = ok('foo') as Result<'foo', string>;
 
@@ -84,8 +104,25 @@ describe('Result', () => {
       const check1: FirstCheck = true;
       expect(check1).toBe(true);
 
-      if (result.isOk()) {
+      if (result.isOk) {
         type Check = Expect<Equal<typeof result, Ok<'foo'>>>;
+        const check: Check = true;
+        expect(check).toBe(true);
+      }
+    });
+
+    it('(as property) should narrow type in else branch of if statement', () => {
+      expect.assertions(2); // ensure that both if and else branches are executed
+      const result = err('bar') as Result<'foo', 'bar'>;
+
+      type FirstCheck = Expect<Equal<typeof result, Result<'foo', 'bar'>>>;
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (result.isOk) {
+        // eslint-disable-next-line no-trailing-spaces
+      } else {
+        type Check = Expect<Equal<typeof result, Err<'bar'>>>;
         const check: Check = true;
         expect(check).toBe(true);
       }
@@ -117,7 +154,25 @@ describe('Result', () => {
       }
     });
 
-    it('(as method) should narrow type in if statement', () => {
+    it('should narrow type in else branch of if statement', () => {
+      expect.assertions(2); // ensure that both if and else branches are executed
+      const result = ok('foo') as Result<string, 'foo'>;
+
+      type FirstCheck = Expect<Equal<typeof result, Result<string, 'foo'>>>;
+
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (Guards.isErr(result)) {
+        // eslint-disable-next-line no-trailing-spaces
+      } else {
+        type Check = Expect<Equal<typeof result, Ok<string>>>;
+        const check: Check = true;
+        expect(check).toBe(true);
+      }
+    });
+
+    it('(as property) should narrow type in if statement', () => {
       expect.assertions(2); // ensure that both if and else branches are executed
       const result = err('foo') as Result<string, 'foo'>;
 
@@ -126,8 +181,26 @@ describe('Result', () => {
       const check1: FirstCheck = true;
       expect(check1).toBe(true);
 
-      if (result.isErr()) {
+      if (result.isErr) {
         type Check = Expect<Equal<typeof result, Err<'foo'>>>;
+        const check: Check = true;
+        expect(check).toBe(true);
+      }
+    });
+
+    it('(as property) should narrow type in else branch of if statement', () => {
+      expect.assertions(2); // ensure that both if and else branches are executed
+      const result = ok('foo') as Result<string, 'foo'>;
+
+      type FirstCheck = Expect<Equal<typeof result, Result<string, 'foo'>>>;
+
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (result.isErr) {
+        // eslint-disable-next-line no-trailing-spaces
+      } else {
+        type Check = Expect<Equal<typeof result, Ok<string>>>;
         const check: Check = true;
         expect(check).toBe(true);
       }
@@ -944,6 +1017,29 @@ describe('Result', () => {
           R.biChain((s: string) => ok(s.length), (s: string) => ok(s.toUpperCase())),
         ),
       ).toEqual(ok('FOO'));
+    });
+  });
+
+  describe('Ok::equality', () => {
+    it('should be equal for equal Ok results', () => {
+      const obj = {};
+      expect(ok(obj)).toEqual(ok(obj));
+    });
+
+    it('should not be equal for different Ok results', () => {
+      expect(ok(1)).not.toEqual(ok(2));
+    });
+  });
+
+  describe('Err::equality', () => {
+    it('should be equal for equal Err results', () => {
+      const obj = {};
+      expect(err(obj)).toEqual(err(obj));
+      expect(err(1)).toEqual(err(1));
+    });
+
+    it('should not be equal for different Err results', () => {
+      expect(err(1)).not.toEqual(err(2));
     });
   });
 });
