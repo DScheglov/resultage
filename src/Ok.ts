@@ -72,10 +72,6 @@ export class OkImpl<T> implements Ok<T> {
     return this;
   }
 
-  apply<S, F>(result: Result<(data: T) => S, F>): Result<S, F> {
-    return result.map((fn) => fn(this.value));
-  }
-
   unwrapOrThrow(): T {
     return this.value;
   }
@@ -99,6 +95,6 @@ Object.defineProperty(
   { enumerable: false, value: 'Ok' },
 );
 
-export const ok = <T>(value: T): Ok<T> => new OkImpl(value);
+export const ok = <T>(value: T): Result<T, never> => new OkImpl(value);
 export const asyncOk = async <T>(value: T | Promise<T>): AsyncOk<T> =>
   ok(await value);
