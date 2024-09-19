@@ -29,7 +29,7 @@ export interface ResultInterface<T, E> {
   ): ER | TR;
   tap(fn: (data: T) => void): Result<T, E>;
   tapErr(fn: (error: E) => void): Result<T, E>;
-  apply<S, F>(result: Result<(data: T) => S, F>): Result<S, E | F>;
+
   biMap<S, F>(okFn: (data: T) => S, errFn: (error: E) => F): Result<S, F>;
   biChain<TS, TF, ES, EF>(
     okFn: (data: T) => Result<TS, TF>,

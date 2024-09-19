@@ -27,7 +27,7 @@ export const reduce = <T, S, E>(
   let index = 0;
   for (const result of results) {
     if (result.isErr) return result;
-    acc = reducer(acc, result.unwrap(), index++, results);
+    acc = reducer(acc, result.value, index++, results);
   }
 
   return ok(acc);
@@ -154,7 +154,7 @@ export const separate = <R extends readonly Result<any, any>[]>(
 
   for (const result of results) {
     if (result.isOk) {
-      oks.push(result.unwrap());
+      oks.push(result.value);
     } else {
       errs.push(result.unwrapErr());
     }
@@ -181,7 +181,7 @@ export const sequence = <T extends readonly (() => Result<any, any>)[]>(
   for (const task of tasks) {
     const res = task(); // eslint-disable-line no-await-in-loop
     if (res.isErr) return res;
-    results.push(res.unwrap());
+    results.push(res.value);
   }
 
   return ok(results as any);
@@ -205,7 +205,7 @@ export const sequenceAsync =
     for (const task of tasks) {
       const res = await task(); // eslint-disable-line no-await-in-loop
       if (res.isErr) return res;
-      results.push(res.unwrap());
+      results.push(res.value);
     }
 
     return ok(results as any);

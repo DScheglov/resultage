@@ -75,10 +75,6 @@ export class ErrImpl<E> implements Err<E> {
     return this;
   }
 
-  apply() {
-    return this;
-  }
-
   * [Symbol.iterator](): Generator<E, never> {
     yield this.error;
     return undefined as any as never;
@@ -104,6 +100,6 @@ Object.defineProperty(
   { enumerable: false, value: 'Err' },
 );
 
-export const err = <E>(error: E): Err<E> => new ErrImpl(error);
+export const err = <E>(error: E): Result<never, E> => new ErrImpl(error);
 export const asyncErr = async <E>(error: E | Promise<E>): AsyncErr<E> =>
   err(await error);

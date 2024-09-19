@@ -817,62 +817,6 @@ describe('Result', () => {
     });
   });
 
-  describe('apply', () => {
-    it('should apply an Ok result', () => {
-      expect(
-        pipe(
-          'foo',
-          ok,
-          R.apply(ok((s: string) => s.length)),
-        ),
-      ).toEqual(ok(3));
-    });
-
-    it('should not apply an Err result', () => {
-      expect(
-        pipe(
-          'foo',
-          err,
-          R.apply(ok((s: string) => s.length)),
-        ),
-      ).toEqual(err('foo'));
-    });
-
-    it('should apply Ok with f and g with the same result as apply Ok with result f applied to result g', () => {
-      const len = (s: string) => s.length;
-      const mul = (n: number) => (m: number) => n * m;
-      /*
-      v.apply(
-        u.apply(
-          a.map(
-            f => g => x => f(g(x))
-          )
-        )
-      ) is equivalent to v.apply(u).apply(a)
-      */
-
-      const v = ok('foo');
-      const u = ok(len);
-      const a = ok(mul(2));
-
-      expect(
-        pipe(
-          v,
-          R.apply(u),
-          R.apply(a),
-        ),
-      ).toEqual(
-        v.apply(
-          u.apply(
-            a.map(
-              (f) => (g) => (x) => f(g(x)),
-            ),
-          ),
-        ),
-      );
-    });
-  });
-
   describe('biMap', () => {
     it('maps an Ok result', () => {
       expect(
@@ -1040,6 +984,113 @@ describe('Result', () => {
 
     it('should not be equal for different Err results', () => {
       expect(err(1)).not.toEqual(err(2));
+    });
+  });
+
+  describe('apply', () => {
+    it('returns the Ok if applied on Ok(idX)', () => {
+      const result = ok(identity);
+      expect(
+        pipe(
+          result,
+          R.apply(ok(1)),
+        ),
+      ).toEqual(ok(1));
+    });
+
+    it('returns the Err if applied on Err(idX)', () => {
+      const result = err(identity);
+      expect(
+        pipe(
+          result,
+          R.apply(ok(1)),
+        ),
+      ).toEqual(result);
+    });
+
+    it('returns the Err if applied on Ok(idX) with Err', () => {
+      const result = ok(identity);
+      expect(
+        pipe(
+          result,
+          R.apply(err(1)),
+        ),
+      ).toEqual(err(1));
+    });
+
+    it('returns Ok if applied on Ok(x => y => [x, y]) with Oks', () => {
+      const result = ok((x: number) => (y: string) => [x, y]);
+      expect(
+        pipe(
+          result,
+          R.apply(ok(1)),
+          R.apply(ok('foo')),
+        ),
+      ).toEqual(ok([1, 'foo']));
+    });
+
+    it('returns a correctly typed Result if applied on Ok(x => y => [x, y]) with Oks', () => {
+      const result = pipe(
+        ok((x: number) => (y: string) => [x, y] as const),
+        R.apply(ok(1)),
+        R.apply(ok('foo')),
+      );
+
+      const check: Expect<Equal<
+        typeof result,
+        Result<readonly [number, string], never>>
+      > = true;
+
+      expect(check).toBe(true);
+    });
+
+    it('returns a correctly typed Result if applied on Ok(x => y => [x, y]) with Oks typed as Results', () => {
+      const result = pipe(
+        ok((x: number) => (y: string) => [x, y] as const) as Result<(x: number) => (y: string) => readonly [number, string], 'ERR'>,
+        R.apply(ok(1) as Result<number, 'ERR1'>),
+        R.apply(ok('foo') as Result<string, 'ERR2'>),
+      );
+
+      const check: Expect<Equal<
+        typeof result,
+        Result<readonly [number, string], 'ERR' | 'ERR1' | 'ERR2'>>
+      > = true;
+
+      expect(check).toBe(true);
+    });
+
+    it('returns the Ok if applied on Ok(x => y => [x, y]) with pure params', () => {
+      const result = ok((x: number) => (y: string) => [x, y]);
+      expect(
+        pipe(
+          result,
+          R.apply(1),
+          R.apply('foo'),
+        ),
+      ).toEqual(ok([1, 'foo']));
+    });
+
+    it('returns the correctly typed Result if applied on Ok(x => y => [x, y]) with pure params', () => {
+      const result = pipe(
+        ok((x: number) => (y: string) => [x, y]),
+        R.apply(1),
+        R.apply('foo'),
+      );
+
+      const check: Expect<Equal<
+        typeof result,
+        Result<(number | string)[], never>>
+      > = true;
+
+      expect(check).toBe(true);
+    });
+
+    it('throws an error if applied on Ok(not a function) with Oks', () => {
+      expect(() =>
+        pipe(
+          ok(1 as any),
+          R.apply(ok(1)),
+        )).toThrowError(new TypeError('Result.value is not a function', { cause: ok(1) }));
     });
   });
 });

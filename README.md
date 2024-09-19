@@ -190,6 +190,9 @@ or parameter is narrowed from the `Result<T, E>` to the `Ok<T>`.
 To narrow the type of the variable or parameter to `Ok<T>`, use either the `isOk` method
 or the `isErr` method on the `Result<T, E>` instance.
 
+**Note**: The `Ok<T>` is an interface, not a class, so it is not possible to create
+an instance of `Ok<T>` directly. Use the `ok` function to create an instance of `Ok<T>`.
+
 ### `Err<E>` Interface
 
 `Err<E>` is an interface that extends the `ResultInterface<never, E>` interface
@@ -209,9 +212,12 @@ or parameter is narrowed from the `Result<T, E>` to the `Err<E>`.
 To narrow the type of the variable or parameter to `Err<E>`, use either the `isOk` method
 or the `isErr` method on the `Result<T, E>` instance.
 
+**Note**: The `Err<E>` is an interface, not a class, so it is not possible to create
+an instance of `Err<E>` directly. Use the `err` function to create an instance of `Err<E>`.
+
 ### `ResultInterface<T, E>` Interface
 
-`ResultInterface<T, E>` is an interface that defines the common Result methods.
+`ResultInterface<T, E>` is an interface that defines the common `Result` methods.
 
 ```typescript
 interface ResultInterface<T, E> {
@@ -233,7 +239,6 @@ interface ResultInterface<T, E> {
   ): ER | TR;
   tap(fn: (data: T) => void): Result<T, E>;
   tapErr(fn: (error: E) => void): Result<T, E>;
-  apply<S, F>(result: Result<(data: T) => S, F>): Result<S, E | F>;
   biMap<S, F>(okFn: (data: T) => S, errFn: (error: E) => F): Result<S, F>;
   biChain<TS, TF, ES, EF>(
     okFn: (data: T) => Result<TS, TF>,
@@ -245,9 +250,13 @@ interface ResultInterface<T, E> {
 
 ## Constructors
 
-### ok(value)
+As mentioned above, `Ok<T>` and `Err<E>` are interfaces, not classes, so it is not
+possible to create an instance of `Ok<T>` or `Err<E>` directly. Use the following
+functions to create an instance of `Ok<T>` or `Err<E>`.
 
-Creates an instance of `Ok<T>`.
+### Function ok(value)
+
+Creates an instance of `OkImpl<T>` class (that is not exported from the package).
 
 Function Signature:
 
@@ -255,9 +264,17 @@ Function Signature:
 const ok: <T>(value: T) => Ok<T>
 ```
 
-### err(error)
+Example:
 
-Creates an instance of `Err<E>`.
+```typescript
+import { ok } from '@cardellini/ts-result';
+
+const okNumber = ok(42);
+```
+
+### Function err(error)
+
+Creates an instance of `ErrImpl<E>` class (that is not exported from the package).
 
 Function Signature:
 
@@ -265,18 +282,26 @@ Function Signature:
 const err: <E>(error: E) => Err<E>
 ```
 
-## Methods of `Result<T, E>` Instances
-
-### isOk()
-
-Returns `true` if Result is `Ok<T>`, `false` otherwise. Narrows the `Result<T, E>` to `Ok<T>`.
-
-Method Signature:
+Example:
 
 ```typescript
-interface Result<T, E> {
-  isOk(): this is Ok<T>
-}
+import { err } from '@cardellini/ts-result';
+
+const errString = err('Error message');
+```
+
+## Properties And Methods of `Result<T, E>`
+
+### Property .isOk: boolean
+
+Returns `true` if Result is `Ok<T>`, `false` otherwise. Narrows the `Result<T, E>` to `Ok<T>` in "if"-branches,
+and to `Err<E>` in "else"-branches.
+
+Property Definition:
+
+```typescript
+interface Ok<T> { readonly isOk: true }
+interface Err<E> { readonly isOk: false } 
 ```
 
 Function Signature:
@@ -285,16 +310,55 @@ Function Signature:
 const isOk: <T, E>(result: Result<T, E>) => result is Ok<T>
 ```
 
-### isErr()
-
-Returns `true` if Result is `Err<E>`, `false` otherwise. Narrows the `Result<T, E>` to `Err<E>`.
-
-Method Signature:
+Example:
 
 ```typescript
-interface Result<T, E> {
-  isErr(): this is Err<E>
+import { ok } from '@cardellini/ts-result';
+
+const result = ok(42);
+
+if (result.isOk) {
+  console.log(result.value);
+} else {
+  console.error(result.error);
 }
+```
+
+Example with function:
+
+```typescript
+import { ok, isOk } from '@cardellini/ts-result';
+
+const result = ok(42);
+
+if (isOk(result)) {
+  console.log(result.value);
+} else {
+  console.error(result.error);
+}
+```
+
+The function `isOk(result)` is good to be used as a callback in
+the `Array.prototype.filter` method or similar.
+
+```typescript
+import { isOk } from '@cardellini/ts-result';
+
+const results = [ok(42), err('Error')];
+
+const isEverythingOk = results.every(isOk);
+```
+
+### Property .isErr: boolean
+
+Returns `true` if Result is `Err<E>`, `false` otherwise. Narrows the `Result<T, E>` to `Err<E>` in "if"-branches,
+and to `Ok<T>` in "else"-branches.
+
+Property Definition:
+
+```typescript
+interface Ok<T> { readonly isErr: false }
+interface Err<E> { readonly isErr: true }
 ```
 
 Function Signature:
@@ -303,14 +367,139 @@ Function Signature:
 const  isErr: <T, E>(result: Result<T, E>): result is Err<E>
 ```
 
-### map(fn)
+Example:
+
+```typescript
+import { err } from '@cardellini/ts-result';
+
+const result = err('Error message');
+
+if (result.isErr) {
+  console.error(result.error);
+} else {
+  console.log(result.value);
+}
+```
+
+Example with function:
+
+```typescript
+import { err, isErr } from '@cardellini/ts-result';
+
+const result = err('Error message');
+
+if (isErr(result)) {
+  console.error(result.error);
+} else {
+  console.log(result.value);
+}
+```
+
+The function `isErr(result)` is good to be used as a callback in
+the `Array.prototype.filter` method or similar.
+
+```typescript
+import { isErr } from '@cardellini/ts-result';
+
+const results = [ok(42), err('Error')];
+
+const isSomethingWrong = results.some(isErr);
+```
+
+### Ok Property .value: T
+
+Returns the value of `Ok<T>`. Could be accessed if and only if the `Result<T, S>`
+is explicitly narrowed to `Ok<T>`.
+
+Property Definition:
+
+```typescript
+interface Ok<T> { readonly value: T }
+```
+
+Example:
+
+```typescript
+import { ok } from '@cardellini/ts-result';
+
+const result = ok(42);
+
+console.log(result.value); // Prints to console: 42
+```
+
+Example with narrowing:
+
+```typescript
+import { ok, err } from '@cardellini/ts-result';
+
+const okIfOdd = (value: number) =>
+  value % 2 === 1
+    ? ok(value)
+    : err('Value is not odd');
+
+const result = okIfOdd(43);
+
+result.value;
+//     ^^^^^ - Error: Property 'value' does not exist on type 'Result<number, string>'.
+
+if (result.isOk) {
+  console.log(result.value);
+} else {
+  console.error(result.error);
+}
+```
+
+### Err Property .error: E
+
+Returns the error of `Err<E>`. Could be accessed if and only if the `Result<T, S>`
+is explicitly narrowed to `Err<E>`.
+
+Property Definition:
+
+```typescript
+interface Err<E> { readonly error: E }
+```
+
+Example:
+
+```typescript
+import { err } from '@cardellini/ts-result';
+
+const result = err('Error message');
+
+console.log(result.error); // Prints to console: Error message
+```
+
+Example with narrowing:
+
+```typescript
+import { ok, err } from '@cardellini/ts-result';
+
+const okIfOdd = (value: number) =>
+  value % 2 === 1
+    ? ok(value)
+    : err('Value is not odd');
+
+const result = okIfOdd(42);
+
+result.error;
+//     ^^^^^ - Error: Property 'error' does not exist on type 'Result<number, string>'.
+
+if (result.isErr) {
+  console.error(result.error);
+} else {
+  console.log(result.value);
+}
+```
+
+### Method .map(fn)
 
 Applies `fn` to the value of `Ok<T>` and returns the value wrapped in `Ok<S>`. If `Result<T, E>` is `Err<E>` returns itself without applying `fn`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   map<S>(fn: (data: T) => S): Result<S, E>
 }
 ```
@@ -323,14 +512,26 @@ const map:
   <E>(result: Result<T, E>) => Result<S, E>
 ```
 
-### mapErr(fn)
+Example:
+
+```typescript
+import { ok } from '@cardellini/ts-result';
+
+const result = ok(42);
+
+const mappedResult = result.map(value => value * 2);
+
+console.log(mappedResult.value); // Prints to console: 84
+```
+
+### Method .mapErr(fn)
 
 Applies `fn` to the value of `Err<E>` and returns the value wrapped in `Err<F>`. If `Result<T, E>` is `Ok<T>` returns itself without applying `fn`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   mapErr<F>(fn: (error: E) => F): Result<T, F>
 }
 ```
@@ -343,15 +544,28 @@ const mapErr:
   <T>(result: Result<T, E>) => Result<T, F>
 ```
 
-### chain(next)
+Example:
 
-Applies `next` to the value of `Ok<T>` and returns the result of `next`. If the `Result<T, E>` is `Err<E>`, returns itself without applying `next`.
+```typescript
+import { err } from '@cardellini/ts-result';
+
+const result = err('Error message');
+
+const mappedResult = result.mapErr(error => new Error(error));
+```
+
+### Method .chain(next)
+
+Applies `next` to the value of `Ok<T>` and returns the result of `next`. If the `Result<T, E>` is `Err<E>`,
+returns itself without applying `next`.
+
+The next function must return a `Result<S, F>`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
-  chain<S, F>(next: (data: T) => Result<S, F>): Result<T | S, E | F>
+interface ResultInterface<T, E> {
+  chain<S, F>(next: (data: T) => Result<S, F>): Result<S, E | F>
 }
 ```
 
@@ -359,19 +573,34 @@ Curried Function Signature:
 
 ```typescript
 const chain:
-  <T, S, E, F>(next: (data: T) => Result<S, F>) =>
-  (result: Result<T, E>) => Result<T | S, E | F>
+  <T, S, F>(next: (data: T) => Result<S, F>) =>
+  <E>(result: Result<T, E>) => Result<S, E | F>
 ```
 
-### chainErr(next)
+Example:
 
-Applies `next` to the value of `Err<E>` and returns the result of `next`. If the `Result<T, E>` is `Ok<T>`, returns itself without applying `next`.
+```typescript
+import { ok } from '@cardellini/ts-result';
+
+const result = ok(42);
+
+const chainedResult = result.chain(value => ok(value * 2));
+```
+
+The `chain` method is a main method to compose `(...) => Result<T, E>` functions.
+
+### Method .chainErr(next)
+
+Applies `next` to the value of `Err<E>` and returns the result of `next`.
+If the `Result<T, E>` is `Ok<T>`, returns itself without applying `next`.
+
+The next function must return a `Result<S, F>`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
-  chainErr<S, F>(next: (error: E) => Result<S, F>): Result<T | S, E | F>
+interface ResultInterface<T, E> {
+  chainErr<S, F>(next: (error: E) => Result<S, F>): Result<T | S, F>
 }
 ```
 
@@ -380,17 +609,46 @@ Curried Function Signature:
 ```typescript
 const chainErr:
   <S, E, F>(next: (error: E) => Result<S, F>) =>
-  <T>(result: Result<T, E>) => Result<T | S, E | F>
+  <T>(result: Result<T, E>) => Result<T | S, F>
 ```
 
-### unwrap()
+Example:
 
-Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` throws a `TypeError` where `cause` is the `Err<E>`.
+```typescript
+import { err } from '@cardellini/ts-result';
+
+const result = err('Error message');
+
+const chainedResult = result.chainErr(error => err(new Error(error)));
+```
+
+The `chainErr` is a convenient method to recover from an error.
+
+```typescript
+import { err, ok } from '@cardellini/ts-result';
+
+const okIfOdd = (value: number) =>
+  value % 2 === 1
+    ? ok(value)
+    : err('Value is not odd');
+
+const getOdd = (value: number): number =>
+  okIfOdd(value)
+    .chainErr(() => ok(value + 1))
+    .unwrap();
+
+console.log(getOdd(1)); // 1
+```
+
+### Method .unwrap()
+
+Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` throws a `TypeError`
+where `cause` is the result.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   unwrap(): T
 }
 ```
@@ -401,14 +659,36 @@ Function Signature:
 const unwrap: <T>(result: Result<T, unknown>) => T
 ```
 
-### unwrapOr(fallback)
+Example:
+
+```typescript
+import { ok } from '@cardellini/ts-result';
+
+const result = ok(42);
+
+console.log(result.unwrap()); // Prints to console: 42
+```
+
+Example with error:
+
+```typescript
+import { err } from '@cardellini/ts-result';
+
+const result = err('Error message');
+
+console.log(result.unwrap()); 
+// Throws a TypeError with the message: 'Result is not an Ok' and cause equal
+// to the result.
+```
+
+### Method .unwrapOr(fallback)
 
 Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` returns `fallback`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   unwrapOr<S>(fallback: S): T | S
 }
 ```
@@ -421,7 +701,7 @@ const unwrapOr:
   (result: Result<T, unknown>) => T | S
 ```
 
-### unwrapOrThrow()
+### Method .unwrapOrThrow()
 
 Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` throws a value of
 type `E`.
@@ -432,7 +712,7 @@ possible to throw a non-error literal.
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   unwrapOrThrow(): T
 }
 ```
@@ -443,14 +723,14 @@ Function Signature:
 const unwrapOrThrow: <T>(result: Result<T, unknown>) => T
 ```
 
-### unwrapOrElse
+### Method .unwrapOrElse
 
 Returns the value of `Ok<T>`. If the `Result<T, E>` is `Err<E>` returns the result of `fallbackFn`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   unwrapOrElse<S>(fallbackFn: (error: E) => S): T | S
 }
 ```
@@ -463,14 +743,14 @@ const unwrapOrElse:
   (result: Result<T, unknown>) => T | S
 ```
 
-### unwrapErr
+### Method .unwrapErr
 
 Returns the value of `Err<E>`. If the `Result<T, E>` is `Ok<T>` throws a `TypeError` where `cause` is the `Ok<T>`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   unwrapErr(): E
 }
 ```
@@ -481,14 +761,14 @@ Function Signature:
 const unwrapErr: <E>(result: Result<unknown, E>) => E
 ```
 
-### unwrapErrOr(fallback)
+### Method .unwrapErrOr(fallback)
 
 Returns the value of `Err<E>`. If the `Result<T, E>` is `Ok<T>` returns `fallback`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   unwrapErrOr<F>(fallback: F): E | F
 }
 ```
@@ -501,14 +781,14 @@ const unwrapErrOr:
   <T, E>(result: Result<T, E>) => E | F
 ```
 
-### unwrapErrOrElse(fallbackFn)
+### Method .unwrapErrOrElse(fallbackFn)
 
 Returns the value of `Err<E>`. If the `Result<T, E>` is `Ok<T>` returns the result of `fallback`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   unwrapErrOrElse<F>(fallbackFn: (data: T) => F): E | F
 }
 ```
@@ -521,14 +801,14 @@ const unwrapErrOrElse:
   <E>(result: Result<T, E>) => E | F
 ```
 
-### unpack()
+### Method .unpack()
 
 Returns the value of `Ok<T>` or `Err<E>`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   unpack(): T | E
 }
 ```
@@ -539,14 +819,14 @@ Function Signature:
 const unpack: <T, E>(result: Result<T, E>) => T | E
 ```
 
-### match(okMatcher, errMatcher)
+### Method .match(okMatcher, errMatcher)
 
 Applies `okMatcher` to the value of `Ok<T>` and returns the result. Applies `errMatcher` to the value of `Err<E>` and returns the result.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   match<S, F>(okMatcher: (data: T) => S, errMatcher: (error: E) => F): S | F
 }
 ```
@@ -559,14 +839,14 @@ const match:
   (result: Result<T, E>) => S | F
 ```
 
-### tap(fn)
+### Method .tap(fn)
 
 Applies `fn` to the value of `Ok<T>` and returns the original result. If the `Result<T, E>` is `Err<E>` doesn't apply `fn`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   tap(fn: (data: T) => void): Result<T, E>
 }
 ```
@@ -579,14 +859,14 @@ const tap:
   <E>(result: Result<T, E>) => Result<T, E>
 ```
 
-### tapErr(fn)
+### Method .tapErr(fn)
 
 Applies `fn` to the value of `Err<E>` and returns the original result. If the `Result<T, E>` is `Ok<T>` doesn't apply `fn`.
 
 Method Signature:
 
 ```typescript
-interface Result<T, E> {
+interface ResultInterface<T, E> {
   tapErr(fn: (error: E) => void): Result<T, E>
 }
 ```
@@ -597,26 +877,6 @@ Curried Function Signature:
 const tapErr:
   <E>(fn: (error: E) => void) =>
   <T>(result: Result<T, E>) => Result<T, E>
-```
-
-### apply(fnResult)
-
-Applies the function wrapped in `Ok<(data: T) => S>` of argument `fnResult` to the value of `Ok<T>` and returns the result of the application wrapped into `Ok<S>`. If the `Result<T, E>` is `Err<E>` or `fnResult` is `Err<F>`, returns itself without applying the function.
-
-Method Signature:
-
-```typescript
-interface Result<T, E> {
-  apply<S, F>(fnResult: Result<(data: T) => S, F>): Result<S, E | F>
-}
-```
-
-Curried Function Signature:
-
-```typescript
-const apply: 
-  <T, S, F>(fnResult: Result<(data: T) => S, F>) =>
-  <E>(result: Result<T, E>) => Result<S, E | F>
 ```
 
 ## Operating on Multiple Results
