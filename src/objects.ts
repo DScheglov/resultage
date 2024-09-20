@@ -1,6 +1,6 @@
-import { err } from './Err';
-import { ok } from './Ok';
-import { ErrTypeOf, OkTypeOf, Result } from './types';
+import { err } from './Err.js';
+import { ok } from './Ok.js';
+import type { ErrTypeOf, OkTypeOf, Result } from './types';
 
 export const reduceObject = <R extends Record<string, Result<any, any>>, S>(
   resultStruct: R,
