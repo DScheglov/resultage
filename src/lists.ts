@@ -1,9 +1,9 @@
-import {
+import type {
   Result, AsyncResult, MaybeAsyncResult,
   ErrTypeOf, Collected, AsyncCollected, OkTypeOf, CollectedErr,
 } from './types';
-import { ok } from './Ok';
-import { err } from './Err';
+import { ok } from './Ok.js';
+import { err } from './Err.js';
 
 /**
  * Reduces an array of `Result` objects into a single `Result` by applying a reducer function.

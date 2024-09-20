@@ -1,6 +1,6 @@
-import { Result } from './types';
-import { ok } from './Ok';
-import { err } from './Err';
+import type { Result } from './types';
+import { ok } from './Ok.js';
+import { err } from './Err.js';
 
 export const okIf: {
   <T, S extends T, F>(

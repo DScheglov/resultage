@@ -1,7 +1,7 @@
-import { err } from './Err';
-import { ensureResult } from './guards';
-import { isPromise } from './fn/is-promise';
-import {
+import { err } from './Err.js';
+import { ensureResult } from './guards.js';
+import { isPromise } from './fn/is-promise.js';
+import type {
   ErrTypeOf, NotResultOf, OkTypeOf, Result,
 } from './types';
 

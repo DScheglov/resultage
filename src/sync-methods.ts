@@ -1,6 +1,6 @@
-import { isResult } from './guards';
-import { ok } from './Ok';
-import { Result } from './types';
+import { isResult } from './guards.js';
+import { ok } from './Ok.js';
+import type { Result } from './types';
 
 export const map =
   <T, S>(fn: (data: T) => S) =>

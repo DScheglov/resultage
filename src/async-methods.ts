@@ -1,7 +1,7 @@
-import * as R from './sync-methods';
-import { Result, AsyncResult, MaybeAsyncResult } from './types';
-import { ok } from './Ok';
-import { err } from './Err';
+import * as R from './sync-methods.js';
+import type { Result, AsyncResult, MaybeAsyncResult } from './types';
+import { ok } from './Ok.js';
+import { err } from './Err.js';
 
 export const thenMap =
   <T, S>(fn: (data: T) => S) =>

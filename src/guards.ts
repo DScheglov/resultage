@@ -1,6 +1,6 @@
-import { Err, Ok, Result } from './types';
-import { OkImpl, ok } from './Ok';
-import { ErrImpl } from './Err';
+import type { Err, Ok, Result } from './types';
+import { OkImpl, ok } from './Ok.js';
+import { ErrImpl } from './Err.js';
 
 export const isResult =
   (value: unknown): value is Result<unknown, unknown> =>
