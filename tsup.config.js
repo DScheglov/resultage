@@ -23,7 +23,7 @@ export default defineConfig(entries.map(([entry, globalName]) => ({
       js: '.min.js',
     };
   },
-  dts: false,
+  dts: true,
   minify: false,
   splitting: false,
   sourcemap: true,
