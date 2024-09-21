@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Result, ok, err, Do } from '@cardellini/ts-result';
+import { Result, ok, err, Do } from 'okerr-ts';
 
 type Person = {
   name: string;

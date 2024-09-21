@@ -1,4 +1,4 @@
-import { err, ok, Result } from '@cardellini/ts-result';
+import { err, ok, Result } from 'okerr-ts';
 
 const okIfOdd = (value: number): Result<number, string> =>
   value % 2 === 1 ? ok(value) : err('Value is not odd');

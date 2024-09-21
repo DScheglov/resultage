@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "@cardellini/ts-result": "../"
+    "okerr-ts": "../"
   }
 }

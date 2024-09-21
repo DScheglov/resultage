@@ -1,4 +1,4 @@
-import { Result, ok, err } from '@cardellini/ts-result';
+import { Result, ok, err } from 'okerr-ts';
 
 export type LinearEquationError = 'INFINITE_ROOTS' | 'NO_ROOTS';
 

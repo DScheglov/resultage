@@ -1,4 +1,4 @@
-import { Result, ok, err, Do } from '@cardellini/ts-result';
+import { Result, ok, err, Do } from 'okerr-ts';
 
 type JsonObject = Record<string, unknown>;
 

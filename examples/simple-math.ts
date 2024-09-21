@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Result, ok, err } from '@cardellini/ts-result';
+import { Result, ok, err } from 'okerr-ts';
 
 const div =
   (b: number) =>

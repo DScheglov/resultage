@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
-import { Result, err, ok } from '@cardellini/ts-result';
+import { Result, err, ok } from 'okerr-ts';
 import { Equal, Expect } from '@type-challenges/utils';
 
 type Person = {

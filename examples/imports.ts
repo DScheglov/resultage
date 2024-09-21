@@ -49,7 +49,7 @@ import {
   collect as Index_collect,
   partition as Index_partition,
   sequence as Index_sequence,
-} from '@cardellini/ts-result';
+} from 'okerr-ts';
 
 import {
   ok as Base_ok,
@@ -64,7 +64,7 @@ import {
   expect as Base_expect,
   expectExists as Base_expectExists,
   okIfExists as Base_okIfExists,
-} from '@cardellini/ts-result/base';
+} from 'okerr-ts/base';
 
 import {
   assertNever as Fn_assertNever,
@@ -76,9 +76,9 @@ import {
   asConst as Fn_asConst,
   pipe as Fn_pipe,
   unreachable as Fn_unreachable,
-} from '@cardellini/ts-result/fn';
+} from 'okerr-ts/fn';
 
-import { Do as Do_Do } from '@cardellini/ts-result/do';
+import { Do as Do_Do } from 'okerr-ts/do';
 
 import {
   map as Methods_map,
@@ -95,14 +95,14 @@ import {
   match as Methods_match,
   tap as Methods_tap,
   tapErr as Methods_tapErr,
-} from '@cardellini/ts-result/methods';
+} from 'okerr-ts/methods';
 
 import {
   reduce as Lists_reduce,
   collect as Lists_collect,
   partition as Lists_partition,
   sequence as Lists_sequence,
-} from '@cardellini/ts-result/lists';
+} from 'okerr-ts/lists';
 
 import {
   ok as Sync_ok,
@@ -136,7 +136,7 @@ import {
   collect as Sync_collect,
   partition as Sync_partition,
   sequence as Sync_sequence,
-} from '@cardellini/ts-result/sync';
+} from 'okerr-ts/sync';
 
 import {
   thenMap as Async_thenMap,
@@ -158,7 +158,7 @@ import {
   flip as Async_flip,
   from as Async_from,
   thenUnpack as Async_thenUnpack,
-} from '@cardellini/ts-result/async';
+} from 'okerr-ts/async';
 
 import {
   thenMap as AsyncMethods_thenMap,
@@ -180,7 +180,7 @@ import {
   flip as AsyncMethods_flip,
   from as AsyncMethods_from,
   thenUnpack as AsyncMethods_thenUnpack,
-} from '@cardellini/ts-result/async/methods';
+} from 'okerr-ts/async/methods';
 
 console.log({
   Index_thenMap,
