@@ -1,6 +1,6 @@
 # Result [![Coverage Status](https://coveralls.io/repos/github/DScheglov/ts-result/badge.svg?branch=main)](https://coveralls.io/github/DScheglov/ts-result?branch=main)
-[![npm version](https://img.shields.io/npm/v/@cardellini/ts-result.svg?style=flat-square)](https://www.npmjs.com/package/@cardellini/ts-result)
-[![npm downloads](https://img.shields.io/npm/dm/@cardellini/ts-result.svg?style=flat-square)](https://www.npmjs.com/package/@cardellini/ts-result)
+[![npm version](https://img.shields.io/npm/v/okerr-ts.svg?style=flat-square)](https://www.npmjs.com/package/okerr-ts)
+[![npm downloads](https://img.shields.io/npm/dm/okerr-ts.svg?style=flat-square)](https://www.npmjs.com/package/okerr-ts)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/ts-result/blob/master/LICENSE)
 
 Useful type to model success and failure, implemented with focus on type safety,
@@ -9,7 +9,7 @@ developer experience and preserving flat learning curve.
 ## Installation
 
 ```bash
-npm install @cardellini/ts-result
+npm install okerr-ts
 ```
 
 ## Usage
@@ -17,7 +17,7 @@ npm install @cardellini/ts-result
 ### Creating a Result
 
 ```typescript
-import { Result, ok, err } from '@cardellini/ts-result';
+import { Result, ok, err } from 'okerr-ts';
 
 type JsonObject = Record<string, unknown>;
 
@@ -112,7 +112,7 @@ console.log(silmarillionAuthors.unwrapErr());
 ### Working with Async Results
 
 ```typescript
-import { Do, collect, err, ok } from '@cardellini/ts-result';
+import { Do, collect, err, ok } from 'okerr-ts';
 
 const getBookWithAuthors = (bookId: string) =>
   Do(async function* () {
@@ -267,7 +267,7 @@ const ok: <T>(value: T) => Ok<T>
 Example:
 
 ```typescript
-import { ok } from '@cardellini/ts-result';
+import { ok } from 'okerr-ts';
 
 const okNumber = ok(42);
 ```
@@ -285,7 +285,7 @@ const err: <E>(error: E) => Err<E>
 Example:
 
 ```typescript
-import { err } from '@cardellini/ts-result';
+import { err } from 'okerr-ts';
 
 const errString = err('Error message');
 ```
@@ -313,7 +313,7 @@ const isOk: <T, E>(result: Result<T, E>) => result is Ok<T>
 Example:
 
 ```typescript
-import { ok } from '@cardellini/ts-result';
+import { ok } from 'okerr-ts';
 
 const result = ok(42);
 
@@ -327,7 +327,7 @@ if (result.isOk) {
 Example with function:
 
 ```typescript
-import { ok, isOk } from '@cardellini/ts-result';
+import { ok, isOk } from 'okerr-ts';
 
 const result = ok(42);
 
@@ -342,7 +342,7 @@ The function `isOk(result)` is good to be used as a callback in
 the `Array.prototype.filter` method or similar.
 
 ```typescript
-import { isOk } from '@cardellini/ts-result';
+import { isOk } from 'okerr-ts';
 
 const results = [ok(42), err('Error')];
 
@@ -370,7 +370,7 @@ const  isErr: <T, E>(result: Result<T, E>): result is Err<E>
 Example:
 
 ```typescript
-import { err } from '@cardellini/ts-result';
+import { err } from 'okerr-ts';
 
 const result = err('Error message');
 
@@ -384,7 +384,7 @@ if (result.isErr) {
 Example with function:
 
 ```typescript
-import { err, isErr } from '@cardellini/ts-result';
+import { err, isErr } from 'okerr-ts';
 
 const result = err('Error message');
 
@@ -399,7 +399,7 @@ The function `isErr(result)` is good to be used as a callback in
 the `Array.prototype.filter` method or similar.
 
 ```typescript
-import { isErr } from '@cardellini/ts-result';
+import { isErr } from 'okerr-ts';
 
 const results = [ok(42), err('Error')];
 
@@ -420,7 +420,7 @@ interface Ok<T> { readonly value: T }
 Example:
 
 ```typescript
-import { ok } from '@cardellini/ts-result';
+import { ok } from 'okerr-ts';
 
 const result = ok(42);
 
@@ -430,7 +430,7 @@ console.log(result.value); // Prints to console: 42
 Example with narrowing:
 
 ```typescript
-import { ok, err } from '@cardellini/ts-result';
+import { ok, err } from 'okerr-ts';
 
 const okIfOdd = (value: number) =>
   value % 2 === 1
@@ -463,7 +463,7 @@ interface Err<E> { readonly error: E }
 Example:
 
 ```typescript
-import { err } from '@cardellini/ts-result';
+import { err } from 'okerr-ts';
 
 const result = err('Error message');
 
@@ -473,7 +473,7 @@ console.log(result.error); // Prints to console: Error message
 Example with narrowing:
 
 ```typescript
-import { ok, err } from '@cardellini/ts-result';
+import { ok, err } from 'okerr-ts';
 
 const okIfOdd = (value: number) =>
   value % 2 === 1
@@ -515,7 +515,7 @@ const map:
 Example:
 
 ```typescript
-import { ok } from '@cardellini/ts-result';
+import { ok } from 'okerr-ts';
 
 const result = ok(42);
 
@@ -547,7 +547,7 @@ const mapErr:
 Example:
 
 ```typescript
-import { err } from '@cardellini/ts-result';
+import { err } from 'okerr-ts';
 
 const result = err('Error message');
 
@@ -580,7 +580,7 @@ const chain:
 Example:
 
 ```typescript
-import { ok } from '@cardellini/ts-result';
+import { ok } from 'okerr-ts';
 
 const result = ok(42);
 
@@ -615,7 +615,7 @@ const chainErr:
 Example:
 
 ```typescript
-import { err } from '@cardellini/ts-result';
+import { err } from 'okerr-ts';
 
 const result = err('Error message');
 
@@ -625,7 +625,7 @@ const chainedResult = result.chainErr(error => err(new Error(error)));
 The `chainErr` is a convenient method to recover from an error.
 
 ```typescript
-import { err, ok } from '@cardellini/ts-result';
+import { err, ok } from 'okerr-ts';
 
 const okIfOdd = (value: number) =>
   value % 2 === 1
@@ -662,7 +662,7 @@ const unwrap: <T>(result: Result<T, unknown>) => T
 Example:
 
 ```typescript
-import { ok } from '@cardellini/ts-result';
+import { ok } from 'okerr-ts';
 
 const result = ok(42);
 
@@ -672,7 +672,7 @@ console.log(result.unwrap()); // Prints to console: 42
 Example with error:
 
 ```typescript
-import { err } from '@cardellini/ts-result';
+import { err } from 'okerr-ts';
 
 const result = err('Error message');
 

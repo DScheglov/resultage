@@ -1,6 +1,6 @@
 /* eslint-disable max-len, object-curly-newline, func-names */
-import { Result, err, ok, Do } from '@cardellini/ts-result';
-import { assertNever } from '@cardellini/ts-result/fn';
+import { Result, err, ok, Do } from 'okerr-ts';
+import { assertNever } from 'okerr-ts/fn';
 
 const sqrt = (x: number): Result<number, 'ERR_NEGATIVE_NUMBER'> =>
   x < 0 ? err('ERR_NEGATIVE_NUMBER') : ok(Math.sqrt(x));
