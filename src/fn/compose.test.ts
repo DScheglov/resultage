@@ -16,10 +16,10 @@ describe('compose', () => {
   it.each([1, 2, 3, 4, 5, 6, 7, 8, 9] as const)(
     'works with %i functions',
     (n) => {
-      const fns = Array.from({ length: n }, () => (x: number) => x + 1) as [(x: number) => number];
-      const result = compose(
-        ...fns,
-      );
+      const fns = Array.from({ length: n }, () => (x: number) => x + 1) as [
+        (x: number) => number,
+      ];
+      const result = compose(...fns);
       expect(result(1)).toBe(n + 1);
     },
   );

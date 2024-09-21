@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Equal, Expect } from '@type-challenges/utils';
 import { Result, ok, err } from '@cardellini/ts-result/base';
@@ -41,17 +40,11 @@ import { Result, ok, err } from '@cardellini/ts-result/base';
 }
 
 {
-  const div = (a: number, b: number): Result<number, 'ERR_DIV_BY_ZERO'> => (
-    b === 0
-      ? err('ERR_DIV_BY_ZERO')
-      : ok(a / b)
-  );
+  const div = (a: number, b: number): Result<number, 'ERR_DIV_BY_ZERO'> =>
+    b === 0 ? err('ERR_DIV_BY_ZERO') : ok(a / b);
 
-  const sqrt = (x: number): Result<number, 'ERR_NEGATIVE'> => (
-    x < 0
-      ? err('ERR_NEGATIVE')
-      : ok(Math.sqrt(x))
-  );
+  const sqrt = (x: number): Result<number, 'ERR_NEGATIVE'> =>
+    x < 0 ? err('ERR_NEGATIVE') : ok(Math.sqrt(x));
 
   const okResult = div(18, 2).chain((x) => sqrt(x)); // Ok(3)
   const errResult1 = div(1, 0).chain((x) => sqrt(x)); // Err('ERR_DIV_BY_ZERO')
@@ -59,13 +52,10 @@ import { Result, ok, err } from '@cardellini/ts-result/base';
 }
 
 {
-  type Complex = { re: number; im: number; };
+  type Complex = { re: number; im: number };
 
-  const sqrt = (x: number): Result<number, 'ERR_NEGATIVE'> => (
-    x < 0
-      ? err('ERR_NEGATIVE')
-      : ok(Math.sqrt(x))
-  );
+  const sqrt = (x: number): Result<number, 'ERR_NEGATIVE'> =>
+    x < 0 ? err('ERR_NEGATIVE') : ok(Math.sqrt(x));
 
   const complexSqrt = (x: number): number | Complex =>
     sqrt(x)
@@ -135,27 +125,16 @@ import { Result, ok, err } from '@cardellini/ts-result/base';
   const value = okResult.unpack(); // 42
   const error = errResult.unpack(); // 'ERR_NOT_FOUND'
 
-  const checkValue: Expect<Equal<
-    typeof value,
-    number | 'NOT_FOUND'
-  >> = true;
+  const checkValue: Expect<Equal<typeof value, number | 'NOT_FOUND'>> = true;
 
-  const checkError: Expect<Equal<
-    typeof error,
-    string | 'ERR_NOT_FOUND'
-  >> = true;
+  const checkError: Expect<Equal<typeof error, string | 'ERR_NOT_FOUND'>> =
+    true;
 
   const okValue = ok(42).unpack();
-  const checkOk: Expect<Equal<
-    typeof okValue,
-    number
-  >> = true;
+  const checkOk: Expect<Equal<typeof okValue, number>> = true;
 
   const errValue = err('ERR_NOT_FOUND' as const).unpack();
-  const checkErr: Expect<Equal<
-    typeof errValue,
-    'ERR_NOT_FOUND'
-  >> = true;
+  const checkErr: Expect<Equal<typeof errValue, 'ERR_NOT_FOUND'>> = true;
 }
 
 {

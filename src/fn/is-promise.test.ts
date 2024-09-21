@@ -3,7 +3,9 @@ import { isPromise } from './is-promise';
 
 describe('isPromise', () => {
   it('returns true for a Promise', () => {
-    const promise = new Promise((resolve) => { resolve('Hello'); });
+    const promise = new Promise((resolve) => {
+      resolve('Hello');
+    });
     expect(isPromise(promise)).toBe(true);
   });
 

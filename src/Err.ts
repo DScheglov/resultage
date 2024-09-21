@@ -1,17 +1,15 @@
-import type {
-  AsyncErr,
-  Err,
-  Result,
-} from './types';
+import type { AsyncErr, Err, Result } from './types';
 
 export class ErrImpl<E> implements Err<E> {
   constructor(public readonly error: E) {}
 
-  get isOk(): false { // eslint-disable-line class-methods-use-this
+  get isOk(): false {
+    // eslint-disable-line class-methods-use-this
     return false;
   }
 
-  get isErr(): true { // eslint-disable-line class-methods-use-this
+  get isErr(): true {
+    // eslint-disable-line class-methods-use-this
     return true;
   }
 
@@ -35,7 +33,8 @@ export class ErrImpl<E> implements Err<E> {
     throw new TypeError('Result is not an Ok', { cause: this });
   }
 
-  unwrapOr<S>(fallback: S): S { // eslint-disable-line class-methods-use-this
+  unwrapOr<S>(fallback: S): S {
+    // eslint-disable-line class-methods-use-this
     return fallback;
   }
 
@@ -75,7 +74,7 @@ export class ErrImpl<E> implements Err<E> {
     return this;
   }
 
-  * [Symbol.iterator](): Generator<E, never> {
+  *[Symbol.iterator](): Generator<E, never> {
     yield this.error;
     return undefined as any as never;
   }
@@ -94,11 +93,7 @@ export class ErrImpl<E> implements Err<E> {
   }
 }
 
-Object.defineProperty(
-  ErrImpl,
-  'name',
-  { enumerable: false, value: 'Err' },
-);
+Object.defineProperty(ErrImpl, 'name', { enumerable: false, value: 'Err' });
 
 export const err = <E>(error: E): Result<never, E> => new ErrImpl(error);
 export const asyncErr = async <E>(error: E | Promise<E>): AsyncErr<E> =>

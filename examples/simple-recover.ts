@@ -1,9 +1,7 @@
-import { err, ok } from '@cardellini/ts-result';
+import { err, ok, Result } from '@cardellini/ts-result';
 
-const okIfOdd = (value: number) =>
-  value % 2 === 1
-    ? ok(value)
-    : err('Value is not odd');
+const okIfOdd = (value: number): Result<number, string> =>
+  value % 2 === 1 ? ok(value) : err('Value is not odd');
 
 const getOdd = (value: number): number =>
   okIfOdd(value)

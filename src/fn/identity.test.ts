@@ -1,8 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { Equal, Expect } from '@type-challenges/utils';
-import {
-  identity, idX, asConst, lazy,
-} from './identity';
+import { identity, idX, asConst, lazy } from './identity';
 
 describe('identity', () => {
   it('returns the value passed', () => {

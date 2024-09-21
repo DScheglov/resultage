@@ -1,31 +1,27 @@
 import { Result, err, ok } from '@cardellini/ts-result/base';
 import { Do } from '@cardellini/ts-result/do';
 
-const div = (a: number, b: number): Result<number, 'ERR_DIV_BY_ZERO'> => (
-  b === 0
-    ? err('ERR_DIV_BY_ZERO')
-    : ok(a / b)
-);
+const div = (a: number, b: number): Result<number, 'ERR_DIV_BY_ZERO'> =>
+  b === 0 ? err('ERR_DIV_BY_ZERO') : ok(a / b);
 
-const sqrt = (x: number): Result<number, 'ERR_NEGATIVE'> => (
-  x < 0
-    ? err('ERR_NEGATIVE')
-    : ok(Math.sqrt(x))
-);
+const sqrt = (x: number): Result<number, 'ERR_NEGATIVE'> =>
+  x < 0 ? err('ERR_NEGATIVE') : ok(Math.sqrt(x));
 
-const quadraticEquation = (a: number, b: number, c: number): Result<
-  { x1: number; x2: number },
-  'ERR_NEGATIVE' | 'ERR_DIV_BY_ZERO'
-> => Do(function* () {
-  const d = yield* sqrt(b * b - 4 * a * c);
+const quadraticEquation = (
+  a: number,
+  b: number,
+  c: number,
+): Result<{ x1: number; x2: number }, 'ERR_NEGATIVE' | 'ERR_DIV_BY_ZERO'> =>
+  Do(function* () {
+    const d = yield* sqrt(b * b - 4 * a * c);
 
-  const reciprocalA2 = yield* div(1, a * 2);
+    const reciprocalA2 = yield* div(1, a * 2);
 
-  return {
-    x1: (-b + d) * reciprocalA2,
-    x2: (-b - d) * reciprocalA2,
-  };
-});
+    return {
+      x1: (-b + d) * reciprocalA2,
+      x2: (-b - d) * reciprocalA2,
+    };
+  });
 
 console.log(quadraticEquation(1, 2, 3));
 // Err { error: 'ERR_NEGATIVE' }

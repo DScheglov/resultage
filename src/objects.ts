@@ -4,12 +4,7 @@ import type { ErrTypeOf, OkTypeOf, Result } from './types';
 
 export const reduceObject = <R extends Record<string, Result<any, any>>, S>(
   resultStruct: R,
-  reducer: (
-    acc: S,
-    result: OkTypeOf<R[keyof R]>,
-    key: keyof R,
-    obj: R
-  ) => S,
+  reducer: (acc: S, result: OkTypeOf<R[keyof R]>, key: keyof R, obj: R) => S,
   initial: S,
 ): Result<S, ErrTypeOf<R[keyof R]>> => {
   let acc = initial;
@@ -24,12 +19,7 @@ export const reduceObject = <R extends Record<string, Result<any, any>>, S>(
 
 export const reduceObjectErr = <R extends Record<string, Result<any, any>>, S>(
   resultStruct: R,
-  reducer: (
-    acc: S,
-    err: ErrTypeOf<R[keyof R]>,
-    key: keyof R,
-    obj: R
-  ) => S,
+  reducer: (acc: S, err: ErrTypeOf<R[keyof R]>, key: keyof R, obj: R) => S,
   initial: S,
 ): Result<OkTypeOf<R[keyof R]>, S> => {
   let acc = initial;
@@ -42,11 +32,10 @@ export const reduceObjectErr = <R extends Record<string, Result<any, any>>, S>(
   return err(acc);
 };
 
-export const collectFromObject = <
-  R extends Record<string, Result<any, any>>,
->(resultStruct: R): Result<
-  { [K in keyof R]: OkTypeOf<R[K]> }, ErrTypeOf<R[keyof R]>
-> => reduceObject(
+export const collectFromObject = <R extends Record<string, Result<any, any>>>(
+  resultStruct: R,
+): Result<{ [K in keyof R]: OkTypeOf<R[K]> }, ErrTypeOf<R[keyof R]>> =>
+  reduceObject(
     resultStruct,
     (acc, value, key) => {
       acc[key] = value;
@@ -57,9 +46,10 @@ export const collectFromObject = <
 
 export const collectErrFromObject = <
   R extends Record<string, Result<any, any>>,
->(resultStruct: R): Result<
-  OkTypeOf<R[keyof R]>, { [K in keyof R]: ErrTypeOf<R[K]> }
-> => reduceObjectErr(
+>(
+  resultStruct: R,
+): Result<OkTypeOf<R[keyof R]>, { [K in keyof R]: ErrTypeOf<R[K]> }> =>
+  reduceObjectErr(
     resultStruct,
     (acc, error, key) => {
       acc[key] = error;

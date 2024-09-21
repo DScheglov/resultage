@@ -4,11 +4,11 @@ export type LinearEquationError = 'INFINITE_ROOTS' | 'NO_ROOTS';
 
 export function solveLinearEquation(
   a: number,
-  b: number
+  b: number,
 ): Result<number, LinearEquationError> {
   if (a === 0 && b === 0) return err('INFINITE_ROOTS');
   if (a === 0) return err('NO_ROOTS' as const);
-  
+
   return ok(-b / a);
 }
 

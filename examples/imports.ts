@@ -77,11 +77,9 @@ import {
   pipe as Fn_pipe,
   unreachable as Fn_unreachable,
 } from '@cardellini/ts-result/fn';
-  
-import {
-  Do as Do_Do,
-} from '@cardellini/ts-result/do';
-  
+
+import { Do as Do_Do } from '@cardellini/ts-result/do';
+
 import {
   map as Methods_map,
   mapErr as Methods_mapErr,
@@ -161,7 +159,7 @@ import {
   from as Async_from,
   thenUnpack as Async_thenUnpack,
 } from '@cardellini/ts-result/async';
-  
+
 import {
   thenMap as AsyncMethods_thenMap,
   thenMapErr as AsyncMethods_thenMapErr,
@@ -183,7 +181,6 @@ import {
   from as AsyncMethods_from,
   thenUnpack as AsyncMethods_thenUnpack,
 } from '@cardellini/ts-result/async/methods';
-
 
 console.log({
   Index_thenMap,
@@ -345,4 +342,4 @@ console.log({
   AsyncMethods_flip,
   AsyncMethods_from,
   AsyncMethods_thenUnpack,
-})
+});

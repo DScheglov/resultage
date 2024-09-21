@@ -1,6 +1,12 @@
 import type {
-  Result, AsyncResult, MaybeAsyncResult,
-  ErrTypeOf, Collected, AsyncCollected, OkTypeOf, CollectedErr,
+  Result,
+  AsyncResult,
+  MaybeAsyncResult,
+  ErrTypeOf,
+  Collected,
+  AsyncCollected,
+  OkTypeOf,
+  CollectedErr,
 } from './types';
 import { ok } from './Ok.js';
 import { err } from './Err.js';
@@ -18,8 +24,11 @@ import { err } from './Err.js';
  */
 export const reduce = <T, S, E>(
   results: readonly Result<T, E>[],
-  reducer: (acc: S,
-    result: T, index: number, list: readonly Result<T, E>[]
+  reducer: (
+    acc: S,
+    result: T,
+    index: number,
+    list: readonly Result<T, E>[],
   ) => S,
   initial: S,
 ): Result<S, E> => {
@@ -71,7 +80,8 @@ export const reduceErr = <T, S, E>(
  */
 export const collect = <R extends readonly Result<any, any>[]>(
   results: R,
-): Result<Collected<R>, ErrTypeOf<R[number]>> => reduce(
+): Result<Collected<R>, ErrTypeOf<R[number]>> =>
+  reduce(
     results,
     (list, result) => {
       list.push(result);
@@ -89,7 +99,8 @@ export const collect = <R extends readonly Result<any, any>[]>(
  */
 export const collectErr = <R extends readonly Result<any, any>[]>(
   results: R,
-): Result<OkTypeOf<R[number]>, CollectedErr<R>> => reduceErr(
+): Result<OkTypeOf<R[number]>, CollectedErr<R>> =>
+  reduceErr(
     results,
     (list, result) => {
       list.push(result);
@@ -108,7 +119,7 @@ export const collectErr = <R extends readonly Result<any, any>[]>(
 export const collectAsync = <R extends readonly MaybeAsyncResult<any, any>[]>(
   results: R,
 ): AsyncResult<AsyncCollected<R>, ErrTypeOf<Awaited<R[number]>>> =>
-    Promise.all(results).then(collect);
+  Promise.all(results).then(collect);
 
 /**
  * Partitions an array into two separate arrays based on a given predicate.
@@ -121,7 +132,8 @@ export const collectAsync = <R extends readonly MaybeAsyncResult<any, any>[]>(
 export const partition: {
   <T>(list: T[], predicate: (x: T) => boolean): [T[], T[]];
   <T, S extends T>(
-    list: T[], predicate: (x: T) => x is S
+    list: T[],
+    predicate: (x: T) => x is S,
   ): [S[], Exclude<T, S>[]];
 } = ((
   list: unknown[],
@@ -193,20 +205,21 @@ export const sequence = <T extends readonly (() => Result<any, any>)[]>(
  * @param tasks - An array of functions that return `MaybeAsyncResult` when executed.
  * @returns An `AsyncResult` containing the results of the executed tasks.
  */
-export const sequenceAsync =
-  async <T extends readonly (() => MaybeAsyncResult<any, any>)[]>(
-    tasks: T,
-  ): AsyncResult<
-    { -readonly [K in keyof T]: OkTypeOf<Awaited<ReturnType<T[K]>>> },
-    ErrTypeOf<Awaited<T[number]>>
-  > => {
-    const results: any[] = [];
+export const sequenceAsync = async <
+  T extends readonly (() => MaybeAsyncResult<any, any>)[],
+>(
+  tasks: T,
+): AsyncResult<
+  { -readonly [K in keyof T]: OkTypeOf<Awaited<ReturnType<T[K]>>> },
+  ErrTypeOf<Awaited<T[number]>>
+> => {
+  const results: any[] = [];
 
-    for (const task of tasks) {
-      const res = await task(); // eslint-disable-line no-await-in-loop
-      if (res.isErr) return res;
-      results.push(res.value);
-    }
+  for (const task of tasks) {
+    const res = await task(); // eslint-disable-line no-await-in-loop
+    if (res.isErr) return res;
+    results.push(res.value);
+  }
 
-    return ok(results as any);
-  };
+  return ok(results as any);
+};

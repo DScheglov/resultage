@@ -1,33 +1,29 @@
 // compose2 composes two functions: f and g
 export const compose2 =
   <Args extends any[], B, C>(f: (b: B) => C, g: (...a: Args) => B) =>
-    (...a: Args): C => f(g(...a));
+  (...a: Args): C =>
+    f(g(...a));
 
 export const compose: {
-  <A extends any[], B>(
-    f: (...a: A) => B
-  ): (...a: A) => B;
- <A extends any[], B, C>(
-    f: (b: B) => C,
-    g: (...a: A) => B
-  ): (...a: A) => C;
+  <A extends any[], B>(f: (...a: A) => B): (...a: A) => B;
+  <A extends any[], B, C>(f: (b: B) => C, g: (...a: A) => B): (...a: A) => C;
   <A extends any[], B, C, D>(
-   f: (c: C) => D,
-   g: (b: B) => C,
-   h: (...a: A) => B
- ): (...a: A) => D;
+    f: (c: C) => D,
+    g: (b: B) => C,
+    h: (...a: A) => B,
+  ): (...a: A) => D;
   <A extends any[], B, C, D, E>(
     f: (d: D) => E,
     g: (c: C) => D,
     h: (b: B) => C,
-    i: (...a: A) => B
+    i: (...a: A) => B,
   ): (...a: A) => E;
   <A extends any[], B, C, D, E, F>(
     f: (e: E) => F,
     g: (d: D) => E,
     h: (c: C) => D,
     i: (b: B) => C,
-    j: (...a: A) => B
+    j: (...a: A) => B,
   ): (...a: A) => F;
   <A extends any[], B, C, D, E, F, G>(
     f: (f: F) => G,
@@ -35,7 +31,7 @@ export const compose: {
     h: (d: D) => E,
     i: (c: C) => D,
     j: (b: B) => C,
-    k: (...a: A) => B
+    k: (...a: A) => B,
   ): (...a: A) => G;
   <A extends any[], B, C, D, E, F, G, H>(
     f: (g: G) => H,
@@ -44,7 +40,7 @@ export const compose: {
     i: (d: D) => E,
     j: (c: C) => D,
     k: (b: B) => C,
-    l: (...a: A) => B
+    l: (...a: A) => B,
   ): (...a: A) => H;
   <A extends any[], B, C, D, E, F, G, H, I>(
     f: (h: H) => I,
@@ -54,7 +50,7 @@ export const compose: {
     j: (d: D) => E,
     k: (c: C) => D,
     l: (b: B) => C,
-    m: (...a: A) => B
+    m: (...a: A) => B,
   ): (...a: A) => I;
   <A extends any[], B, C, D, E, F, G, H, I, J>(
     f: (i: I) => J,
@@ -65,7 +61,7 @@ export const compose: {
     k: (d: D) => E,
     l: (c: C) => D,
     m: (b: B) => C,
-    n: (...a: A) => B
+    n: (...a: A) => B,
   ): (...a: A) => J;
   <A extends any[], B, C, D, E, F, G, H, I, J, K>(
     f: (j: J) => K,
@@ -77,7 +73,7 @@ export const compose: {
     l: (d: D) => E,
     m: (c: C) => D,
     n: (b: B) => C,
-    o: (...a: A) => B
+    o: (...a: A) => B,
   ): (...a: A) => K;
   <A extends any[], B, C, D, E, F, G, H, I, J, K, L>(
     f: (k: K) => L,
@@ -90,7 +86,7 @@ export const compose: {
     m: (d: D) => E,
     n: (c: C) => D,
     o: (b: B) => C,
-    p: (...a: A) => B
+    p: (...a: A) => B,
   ): (...a: A) => L;
   <A extends any[], B, C, D, E, F, G, H, I, J, K, L, M>(
     f: (l: L) => M,
@@ -104,7 +100,7 @@ export const compose: {
     n: (d: D) => E,
     o: (c: C) => D,
     p: (b: B) => C,
-    q: (...a: A) => B
+    q: (...a: A) => B,
   ): (...a: A) => M;
   <A extends any[], B, C, D, E, F, G, H, I, J, K, L, M, N>(
     f: (m: M) => N,
@@ -119,7 +115,7 @@ export const compose: {
     o: (d: D) => E,
     p: (c: C) => D,
     q: (b: B) => C,
-    r: (...a: A) => B
+    r: (...a: A) => B,
   ): (...a: A) => N;
   <A extends any[], B, C, D, E, F, G, H, I, J, K, L, M, N, O>(
     f: (n: N) => O,
@@ -135,7 +131,7 @@ export const compose: {
     p: (d: D) => E,
     q: (c: C) => D,
     r: (b: B) => C,
-    s: (...a: A) => B
+    s: (...a: A) => B,
   ): (...a: A) => O;
   <A extends any[], B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(
     f: (o: O) => P,
@@ -152,6 +148,6 @@ export const compose: {
     q: (d: D) => E,
     r: (c: C) => D,
     s: (b: B) => C,
-    t: (...a: A) => B
+    t: (...a: A) => B,
   ): (...a: A) => P;
 } = (...fns: Array<(...args: any[]) => any>) => fns.reduce(compose2);

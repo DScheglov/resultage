@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Result, ok, err } from '@cardellini/ts-result';
 import { solveLinearEquation, LinearEquationError } from './linear-eq';
 
@@ -16,7 +17,7 @@ export function sqrt(x: number): Result<number, SqrtError> {
 function solveQuadraticEquation(
   a: number,
   b: number,
-  c: number
+  c: number,
 ): QuadraticEquationResult {
   if (a === 0) solveLinearEquation(b, c).map((x) => [x]);
 

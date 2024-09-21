@@ -1,17 +1,15 @@
-import type {
-  AsyncOk,
-  Ok,
-  Result,
-} from './types';
+import type { AsyncOk, Ok, Result } from './types';
 
 export class OkImpl<T> implements Ok<T> {
   constructor(public readonly value: T) {}
 
-  get isOk(): true { // eslint-disable-line class-methods-use-this
+  get isOk(): true {
+    // eslint-disable-line class-methods-use-this
     return true;
   }
 
-  get isErr(): false { // eslint-disable-line class-methods-use-this
+  get isErr(): false {
+    // eslint-disable-line class-methods-use-this
     return false;
   }
 
@@ -47,7 +45,8 @@ export class OkImpl<T> implements Ok<T> {
     throw new TypeError('Result is not an Err', { cause: this });
   }
 
-  unwrapErrOr<F>(fallback: F): F { // eslint-disable-line class-methods-use-this
+  unwrapErrOr<F>(fallback: F): F {
+    // eslint-disable-line class-methods-use-this
     return fallback;
   }
 
@@ -76,7 +75,8 @@ export class OkImpl<T> implements Ok<T> {
     return this.value;
   }
 
-  * [Symbol.iterator](): Generator<never, T> { // eslint-disable-line require-yield
+  *[Symbol.iterator](): Generator<never, T> {
+    // eslint-disable-line require-yield
     return this.value;
   }
 
@@ -89,11 +89,7 @@ export class OkImpl<T> implements Ok<T> {
   }
 }
 
-Object.defineProperty(
-  OkImpl,
-  'name',
-  { enumerable: false, value: 'Ok' },
-);
+Object.defineProperty(OkImpl, 'name', { enumerable: false, value: 'Ok' });
 
 export const ok = <T>(value: T): Result<T, never> => new OkImpl(value);
 export const asyncOk = async <T>(value: T | Promise<T>): AsyncOk<T> =>

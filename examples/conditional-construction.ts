@@ -1,26 +1,17 @@
-/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 import { Equal, Expect } from '@type-challenges/utils';
-import {
-  expect, okIf, expectExists, AsyncResult,
-} from '../src/base';
+import { expect, okIf, expectExists, AsyncResult } from '../src/base';
 
 {
   const isNumber = (x: unknown): x is number => typeof x === 'number';
   const isPositive = (x: number) => x > 0;
 
-  const okIfNumber = (value: unknown) => okIf(
-    value,
-    isNumber,
-    'ERR_NOT_A_NUMBER' as const,
-  );
+  const okIfNumber = (value: unknown) =>
+    okIf(value, isNumber, 'ERR_NOT_A_NUMBER' as const);
 
-  const okIfPositive = (value: number) => okIf(
-    value,
-    isPositive,
-    'ERR_NOT_POSITIVE' as const,
-  );
+  const okIfPositive = (value: number) =>
+    okIf(value, isPositive, 'ERR_NOT_POSITIVE' as const);
 
   console.log(okIfNumber(42).chain(okIfPositive));
   // prints to console:
@@ -39,7 +30,8 @@ import {
   type CodedError<C extends string, P> = { code: C; payload?: P };
 
   const codedError = <C extends string, P = undefined>(
-    code: C, payload?: P,
+    code: C,
+    payload?: P,
   ): CodedError<C, P> => (payload === undefined ? { code } : { code, payload });
 
   const expectNumber = expect(
@@ -82,11 +74,12 @@ import {
         }),
       );
 
-  const checkFetchUser: Expect<Equal<
-    typeof fetchUser,
-    (login: string) => AsyncResult<
-      User,
-      { code: 'ERR_USER_NOT_FOUND'; message: string; }
+  const checkFetchUser: Expect<
+    Equal<
+      typeof fetchUser,
+      (
+        login: string,
+      ) => AsyncResult<User, { code: 'ERR_USER_NOT_FOUND'; message: string }>
     >
-  >> = true;
+  > = true;
 }

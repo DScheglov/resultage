@@ -11,6 +11,8 @@ describe('assertNever', () => {
   });
 
   it('throws a TypeError with a message generator', () => {
-    expect(() => assertNever(1 as never, (x: number) => `Unreachable ${x}`)).toThrow('Unreachable 1');
+    expect(() =>
+      assertNever(1 as never, (x: number) => `Unreachable ${x}`),
+    ).toThrow('Unreachable 1');
   });
 });

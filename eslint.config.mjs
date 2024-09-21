@@ -12,7 +12,7 @@ export default tsLint.config(
     files: ['**/*.{ts,js,mjs}'],
   },
   {
-    ignores: ['dist', 'node_modules', 'coverage'],
+    ignores: ['dist', 'lib', 'esm', 'node_modules', 'coverage'],
   },
   {
     languageOptions: {
@@ -24,7 +24,6 @@ export default tsLint.config(
           'tsconfig.json',
           'tsconfig.eslint.json',
           'tsconfig.test.json',
-          './example/tsconfig.json',
         ],
       },
     },

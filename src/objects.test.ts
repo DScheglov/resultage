@@ -1,9 +1,10 @@
-import {
-  describe, it, expect, jest,
-} from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { Equal, Expect } from '@type-challenges/utils';
 import {
-  collectErrFromObject, collectFromObject, reduceObject, reduceObjectErr,
+  collectErrFromObject,
+  collectFromObject,
+  reduceObject,
+  reduceObjectErr,
 } from './objects';
 import { ok } from './Ok';
 import { err } from './Err';
@@ -57,7 +58,7 @@ describe('objects', () => {
       expect(check).toBe(true);
     });
 
-    it('does\'t call reducer after the first Err result', () => {
+    it("does't call reducer after the first Err result", () => {
       const input = {
         a: ok(1),
         b: err('Error' as const),
@@ -69,10 +70,10 @@ describe('objects', () => {
     });
   });
   describe('reduceObjectErr', () => {
-    const mockReducer = <
-      A extends string,
-      E extends string,
-    >(acc: A, error: E): `${A}${E}` => `${acc}${error}`;
+    const mockReducer = <A extends string, E extends string>(
+      acc: A,
+      error: E,
+    ): `${A}${E}` => `${acc}${error}`;
 
     it('returns initial value as error for an empty object', () => {
       const result = reduceObjectErr({}, mockReducer, '');
@@ -147,10 +148,12 @@ describe('objects', () => {
         c: ok(true) as Result<boolean, 'Error'>,
       };
       const result = collectFromObject(input);
-      const check: Expect<Equal<
-        typeof result,
-        Result<{ a: number; b: string; c: boolean; }, 'Error'>
-      >> = true;
+      const check: Expect<
+        Equal<
+          typeof result,
+          Result<{ a: number; b: string; c: boolean }, 'Error'>
+        >
+      > = true;
       expect(check).toBe(true);
     });
   });

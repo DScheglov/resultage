@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { defineConfig } from 'tsup';
 
 const entries = [
@@ -14,18 +13,20 @@ const entries = [
   [{ 'async/methods': './src/async-methods.ts' }, 'ResultMethods'],
 ];
 
-export default defineConfig(entries.map(([entry, globalName]) => ({
-  entry,
-  globalName,
-  format: ['iife'],
-  outExtension() {
-    return {
-      js: '.min.js',
-    };
-  },
-  dts: true,
-  minify: false,
-  splitting: false,
-  sourcemap: true,
-  outDir: 'dist',
-})));
+export default defineConfig(
+  entries.map(([entry, globalName]) => ({
+    entry,
+    globalName,
+    format: ['iife'],
+    outExtension() {
+      return {
+        js: '.min.js',
+      };
+    },
+    dts: true,
+    minify: false,
+    splitting: false,
+    sourcemap: true,
+    outDir: 'dist',
+  })),
+);
