@@ -1,6 +1,6 @@
 import { isResult } from './guards.js';
 import { ok } from './Ok.js';
-import type { ErrTypeOf, Result } from './types';
+import type { Err, ErrTypeOf, Result } from './types';
 
 export const map =
   <T, S>(fn: (data: T) => S) =>
@@ -87,7 +87,7 @@ export const apply =
       if (!isResult(arg)) {
         argValues.push(arg);
       } else if (arg.isErr) {
-        return arg as any;
+        return arg as Err<ErrTypeOf<PR[number]>>;
       } else {
         argValues.push(arg.value);
       }
