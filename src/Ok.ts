@@ -91,6 +91,6 @@ export class OkImpl<T> implements Ok<T> {
 
 Object.defineProperty(OkImpl, 'name', { enumerable: false, value: 'Ok' });
 
-export const ok = <T>(value: T): Result<T, never> => new OkImpl(value);
+export const ok = <T>(value: T): Ok<T> => new OkImpl(value);
 export const asyncOk = async <T>(value: T | Promise<T>): AsyncOk<T> =>
   ok(await value);
