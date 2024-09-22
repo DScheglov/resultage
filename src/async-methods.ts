@@ -1,7 +1,14 @@
 import * as R from './sync-methods.js';
-import type { Result, AsyncResult, MaybeAsyncResult } from './types';
+import type {
+  Result,
+  AsyncResult,
+  MaybeAsyncResult,
+  ErrTypeOf,
+  Err,
+} from './types';
 import { ok } from './Ok.js';
 import { err } from './Err.js';
+import { isResult } from './guards.js';
 
 export const thenMap =
   <T, S>(fn: (data: T) => S) =>
@@ -110,3 +117,35 @@ export const from = async <T, E>(result: Result<T, E>): AsyncResult<T, E> =>
 
 export const thenUnpack = <E, T>(asyncRes: AsyncResult<T, E>): Promise<E | T> =>
   asyncRes.then(R.unpack);
+
+export type ResolveAwaitedOks<P extends readonly any[]> = {
+  [K in keyof P]: P[K] extends Awaited<Result<infer T, any>> ? T : P[K];
+};
+
+export const thenApply =
+  <PR extends readonly any[]>(...args: PR) =>
+  async <T = never, E = never>(
+    asyncRes: MaybeAsyncResult<(...args: ResolveAwaitedOks<PR>) => T, E>,
+  ): AsyncResult<T, E | ErrTypeOf<Awaited<PR[number]>>> => {
+    const result = await asyncRes;
+    if (result.isErr) return result;
+
+    if (typeof result.value !== 'function') {
+      throw new TypeError('Result.value is not a function', { cause: result });
+    }
+
+    const argValues = [] as any[];
+    const awaitedArgs = await Promise.all(args);
+
+    for (const arg of awaitedArgs) {
+      if (!isResult(arg)) {
+        argValues.push(arg);
+      } else if (arg.isErr) {
+        return arg as Err<ErrTypeOf<PR[number]>>;
+      } else {
+        argValues.push(arg.value);
+      }
+    }
+
+    return ok(result.value(...(argValues as any)));
+  };

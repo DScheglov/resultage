@@ -8,7 +8,7 @@ import * as M from './async-methods';
 import * as R from './sync-methods';
 import { ok, asyncOk } from './Ok';
 import { err, asyncErr } from './Err';
-import type { AsyncResult } from './types';
+import type { AsyncResult, Result } from './types';
 
 const resolved = <T>(value: T): Promise<T> => Promise.resolve(value);
 
@@ -658,6 +658,327 @@ describe('AsyncResult', () => {
       resolve(undefined);
       await promise;
       expect(await asyncRes).toEqual(err(2));
+    });
+  });
+
+  describe('thenApply', () => {
+    it('returns the Ok if applied on Ok(idX)', async () => {
+      const result = ok(identity);
+      expect(await pipe(result, M.thenApply(ok(1)))).toEqual(ok(1));
+    });
+
+    it('returns the Ok if applied on asyncOk(idX)', async () => {
+      const result = ok(identity);
+      expect(await pipe(result, M.thenApply(asyncOk(1)))).toEqual(ok(1));
+    });
+
+    it('returns the Ok if applied on AsyncOk(idX)', async () => {
+      const result = asyncOk(identity);
+      expect(await pipe(result, M.thenApply(ok(1)))).toEqual(ok(1));
+    });
+
+    it('returns the Ok if applied on AsyncOk(idX) with asyncOk', async () => {
+      const result = asyncOk(identity);
+      expect(await pipe(result, M.thenApply(asyncOk(1)))).toEqual(ok(1));
+    });
+
+    it('returns the Err if applied on Ok(idX) with Err', async () => {
+      const result = ok(identity);
+      expect(await pipe(result, M.thenApply(err(1)))).toEqual(err(1));
+    });
+
+    it('returns the Err if applied on asyncOk(idX) with Err', async () => {
+      const result = asyncOk(identity);
+      expect(await pipe(result, M.thenApply(err(1)))).toEqual(err(1));
+    });
+
+    it('returns the Err if applied on Ok(idX) with asyncErr', async () => {
+      const result = ok(identity);
+      expect(await pipe(result, M.thenApply(asyncErr(1)))).toEqual(err(1));
+    });
+
+    it('returns the Err if applied on asyncOk(idX) with asyncErr', async () => {
+      const result = asyncOk(identity);
+      expect(await pipe(result, M.thenApply(asyncErr(1)))).toEqual(err(1));
+    });
+
+    it('returns the Err if applied on Err(...)', async () => {
+      const result = err('error') as Result<typeof identity, string>;
+      expect(await pipe(result, M.thenApply(ok(1)))).toEqual(err('error'));
+    });
+
+    it('returns the Err if applied on asyncErr(...)', async () => {
+      const result = asyncErr('error') as AsyncResult<typeof identity, string>;
+      expect(await pipe(result, M.thenApply(ok(1)))).toEqual(err('error'));
+    });
+
+    it('returns Ok if applied to curried function wrapped with Ok', async () => {
+      const result = await pipe(
+        ok((x: number) => (s: string) => x + s.length),
+        M.thenApply(ok(1)),
+        M.thenApply(ok('foo')),
+      );
+
+      expect(result).toEqual(ok(4));
+    });
+
+    it('returns Err if applied to curried function wrapped with Ok if one arg is Err', async () => {
+      const result = await pipe(
+        ok((x: number) => (s: string) => x + s.length),
+        M.thenApply(err(1) as Result<number, number>),
+        M.thenApply(ok('foo')),
+      );
+
+      expect(result).toEqual(err(1));
+    });
+
+    it('returns a correctly typed Ok if applied to curried function wrapped with Ok', async () => {
+      const result = pipe(
+        ok((x: number) => (s: string) => x + s.length),
+        M.thenApply(ok(1)),
+        M.thenApply(ok('foo')),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const check: Expect<
+        Equal<
+          typeof result, //
+          AsyncResult<number, never>
+        >
+      > = true;
+
+      await result;
+      expect(check).toBe(true);
+    });
+
+    it('returns a correctly typed Ok if applied to curried function wrapped with Ok (declared as result)', async () => {
+      const result = pipe(
+        ok((x: number) => (s: string) => x + s.length) as Result<
+          (x: number) => (s: string) => number,
+          'ERR'
+        >,
+        M.thenApply(ok(1) as Result<1, 'ERR2'>),
+        M.thenApply(ok('foo') as Result<'foo', 'ERR3'>),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const check: Expect<
+        Equal<
+          typeof result, //
+          AsyncResult<number, 'ERR' | 'ERR2' | 'ERR3'>
+        >
+      > = true;
+
+      await result;
+      expect(check).toBe(true);
+    });
+
+    it('returns Ok if applied to binary function wrapped with Ok', async () => {
+      const result = await pipe(
+        ok((x: number, s: string) => x + s.length),
+        M.thenApply(ok(1), ok('foo')),
+      );
+
+      expect(result).toEqual(ok(4));
+    });
+
+    it('returns a correctly typed Ok if applied to binary function wrapped with Ok', async () => {
+      const result = pipe(
+        ok((x: number, s: string) => x + s.length),
+        M.thenApply(ok(1), ok('foo')),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const check: Expect<
+        Equal<
+          typeof result, //
+          AsyncResult<number, never>
+        >
+      > = true;
+
+      await result;
+      expect(check).toBe(true);
+    });
+
+    it('returns Ok if applied to curried function wrapped with Ok - pure args', async () => {
+      const result = await pipe(
+        ok((x: number) => (s: string) => x + s.length),
+        M.thenApply(1),
+        M.thenApply('foo'),
+      );
+
+      expect(result).toEqual(ok(4));
+    });
+
+    it('returns a correctly typed Ok if applied to curried function wrapped with Ok - pure args', async () => {
+      const result = pipe(
+        ok((x: number) => (s: string) => x + s.length),
+        M.thenApply(1),
+        M.thenApply('foo'),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const check: Expect<
+        Equal<
+          typeof result, //
+          AsyncResult<number, never>
+        >
+      > = true;
+
+      await result;
+      expect(check).toBe(true);
+    });
+
+    it('returns Ok if applied to binary function wrapped with Ok', async () => {
+      const result = await pipe(
+        ok((x: number, s: string) => x + s.length),
+        M.thenApply(ok(1), ok('foo')),
+      );
+
+      expect(result).toEqual(ok(4));
+    });
+
+    it('returns a correctly typed Ok if applied to binary function wrapped with Ok', async () => {
+      const result = pipe(
+        ok((x: number, s: string) => x + s.length),
+        M.thenApply(ok(1), ok('foo')),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const check: Expect<
+        Equal<
+          typeof result, //
+          AsyncResult<number, never>
+        >
+      > = true;
+
+      await result;
+      expect(check).toBe(true);
+    });
+
+    it('returns Ok if applied to curried function wrapped with asyncOk', async () => {
+      const result = await pipe(
+        asyncOk((x: number) => (s: string) => x + s.length),
+        M.thenApply(ok(1)),
+        M.thenApply(ok('foo')),
+      );
+
+      expect(result).toEqual(ok(4));
+    });
+
+    it('returns a correctly typed Ok if applied to curried function wrapped with asyncOk', async () => {
+      const result = pipe(
+        asyncOk((x: number) => (s: string) => x + s.length),
+        M.thenApply(ok(1)),
+        M.thenApply(ok('foo')),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const check: Expect<
+        Equal<
+          typeof result, //
+          AsyncResult<number, never>
+        >
+      > = true;
+
+      await result;
+      expect(check).toBe(true);
+    });
+
+    it('returns Ok if applied to curried function wrapped with asyncOk - pure args', async () => {
+      const result = await pipe(
+        asyncOk((x: number) => (s: string) => x + s.length),
+        M.thenApply(1),
+        M.thenApply('foo'),
+      );
+
+      expect(result).toEqual(ok(4));
+    });
+
+    it('returns a correctly typed Ok if applied to curried function wrapped with asyncOk - pure args', async () => {
+      const result = pipe(
+        asyncOk((x: number) => (s: string) => x + s.length),
+        M.thenApply(1),
+        M.thenApply('foo'),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const check: Expect<
+        Equal<
+          typeof result, //
+          AsyncResult<number, never>
+        >
+      > = true;
+
+      await result;
+      expect(check).toBe(true);
+    });
+
+    it('returns Ok if applied to binary function wrapped with asyncOk', async () => {
+      const result = await pipe(
+        asyncOk((x: number, s: string) => x + s.length),
+        M.thenApply(ok(1), ok('foo')),
+      );
+
+      expect(result).toEqual(ok(4));
+    });
+
+    it('returns a correctly typed Ok if applied to binary function wrapped with Ok', async () => {
+      const result = pipe(
+        ok((x: number, s: string) => x + s.length),
+        M.thenApply(ok(1), ok('foo')),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const check: Expect<
+        Equal<
+          typeof result, //
+          AsyncResult<number, never>
+        >
+      > = true;
+
+      await result;
+      expect(check).toBe(true);
+    });
+
+    it('returns Ok if applied to binary function wrapped with asyncOk - pure args', async () => {
+      const result = await pipe(
+        asyncOk((x: number, s: string) => x + s.length),
+        M.thenApply(1, 'foo'),
+      );
+
+      expect(result).toEqual(ok(4));
+    });
+
+    it('returns a correctly typed Ok if applied to binary function wrapped with Ok - pure args', async () => {
+      const result = pipe(
+        ok((x: number, s: string) => x + s.length),
+        M.thenApply(1, 'foo'),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const check: Expect<
+        Equal<
+          typeof result, //
+          AsyncResult<number, never>
+        >
+      > = true;
+
+      await result;
+      expect(check).toBe(true);
+    });
+
+    it('throws if applied to Ok(non-function)', async () => {
+      const result = ok(1 as any) as Result<typeof identity, 'string'>;
+      await expect(pipe(result, M.thenApply(ok(1)))).rejects.toThrow(TypeError);
+    });
+
+    it('throws if applied to asyncOk(non-function)', async () => {
+      const result = asyncOk(1 as any) as AsyncResult<
+        typeof identity,
+        'string'
+      >;
+      await expect(pipe(result, M.thenApply(ok(1)))).rejects.toThrow(TypeError);
     });
   });
 });
