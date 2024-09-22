@@ -128,6 +128,23 @@ export const pipe: {
     fn12: (value: K) => L,
     fn13: (value: L) => M,
   ): M;
+  <T, A, B, C, D, E, F, G, H, I, J, K, L, M, N>(
+    value: T,
+    fn1: (value: T) => A,
+    fn2: (value: A) => B,
+    fn3: (value: B) => C,
+    fn4: (value: C) => D,
+    fn5: (value: D) => E,
+    fn6: (value: E) => F,
+    fn7: (value: F) => G,
+    fn8: (value: G) => H,
+    fn9: (value: H) => I,
+    fn10: (value: I) => J,
+    fn11: (value: J) => K,
+    fn12: (value: K) => L,
+    fn13: (value: L) => M,
+    fn14: (value: M) => N,
+  ): N;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 } = (...fns: [any, ...Array<(value: any) => any>]) => {
   const count = fns.length;
