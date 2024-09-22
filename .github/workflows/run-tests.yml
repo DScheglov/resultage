@@ -28,7 +28,7 @@ jobs:
         run: npm run lint
 
       - name: Test with Coverage
-        run: npm run test
+        run: npm run test -- --verbose
 
       - name: Publish on Coveralls
         uses: coverallsapp/github-action@master
