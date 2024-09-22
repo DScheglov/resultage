@@ -1,9 +1,6 @@
-# OkErr-Ts [![Coverage Status](https://coveralls.io/repos/github/DScheglov/ts-result/badge.svg?branch=main)](https://coveralls.io/github/DScheglov/ts-result?branch=main)
-[![npm version](https://img.shields.io/npm/v/okerr-ts.svg?style=flat-square)](https://www.npmjs.com/package/okerr-ts)
-[![npm downloads](https://img.shields.io/npm/dm/okerr-ts.svg?style=flat-square)](https://www.npmjs.com/package/okerr-ts)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/ts-result/blob/master/LICENSE)
+# OkErr-Ts [![Coverage Status](https://coveralls.io/repos/github/DScheglov/ts-result/badge.svg?branch=main)](https://coveralls.io/github/DScheglov/ts-result?branch=main) [![npm version](https://img.shields.io/npm/v/okerr-ts.svg?style=flat-square)](https://www.npmjs.com/package/okerr-ts) [![npm downloads](https://img.shields.io/npm/dm/okerr-ts.svg?style=flat-square)](https://www.npmjs.com/package/okerr-ts) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/ts-result/blob/master/LICENSE)
 
-Provides the Result<T, E> type and tools for handling success and failure,
+Provides the `Result<T, E>` type and tools for handling success and failure,
 focusing on type safety, great developer experience, and an easy learning curve.
 
 ## Installation
