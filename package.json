@@ -23,10 +23,10 @@
   "author": "Dmytro Shchehlov <dmitry.scheglov@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DScheglov/ts-result"
+    "url": "git+https://github.com/DScheglov/okerr-ts"
   },
   "bugs": {
-    "url": "https://github.com/DScheglov/ts-result/issues"
+    "url": "https://github.com/DScheglov/okerr-ts/issues"
   },
   "license": "MIT",
   "devDependencies": {
