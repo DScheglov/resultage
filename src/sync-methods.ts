@@ -1,6 +1,6 @@
 import { isResult } from './guards.js';
 import { ok } from './Ok.js';
-import type { Result } from './types';
+import type { ErrTypeOf, Result } from './types';
 
 export const map =
   <T, S>(fn: (data: T) => S) =>
@@ -70,15 +70,11 @@ type ResolveOks<P extends readonly any[]> = {
   [K in keyof P]: P[K] extends Result<infer T, any> ? T : P[K];
 };
 
-type ResolveErrs<P extends readonly any[]> = {
-  [K in keyof P]: P[K] extends Result<any, infer E> ? E : never;
-};
-
 export const apply =
   <PR extends readonly any[]>(...args: PR) =>
-  <T, E>(
+  <T = never, E = never>(
     result: Result<(...args: ResolveOks<PR>) => T, E>,
-  ): Result<T, E | ResolveErrs<PR>[number]> => {
+  ): Result<T, E | ErrTypeOf<PR[number]>> => {
     if (result.isErr) return result;
 
     if (typeof result.value !== 'function') {
@@ -90,10 +86,11 @@ export const apply =
     for (const arg of args) {
       if (!isResult(arg)) {
         argValues.push(arg);
-        continue; // eslint-disable-line no-continue
+      } else if (arg.isErr) {
+        return arg as any;
+      } else {
+        argValues.push(arg.value);
       }
-      if (arg.isErr) return arg as any;
-      argValues.push(arg.value);
     }
 
     return ok(result.value(...(argValues as any)));
