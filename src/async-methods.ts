@@ -134,7 +134,7 @@ export const thenApply =
       throw new TypeError('Result.value is not a function', { cause: result });
     }
 
-    const argValues = [] as any[];
+    const argValues = [] as ResolveAwaitedOks<PR> & any[];
     const awaitedArgs = await Promise.all(args);
 
     for (const arg of awaitedArgs) {
