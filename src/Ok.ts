@@ -1,4 +1,4 @@
-import { resolveOks } from './resolve-args';
+import { resolveOks } from './resolve-oks';
 import type { AsyncOk, ErrTypeOf, Ok, ResolveOks, Result } from './types';
 
 export class OkImpl<T> implements Ok<T> {

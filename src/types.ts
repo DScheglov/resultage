@@ -42,15 +42,15 @@ export interface ResultInterface<T, E> {
   ): Result<R, E | ErrTypeOf<Args[number]>>;
 }
 
-export type MaybeResultsOf<T extends readonly any[], E> = {
-  [K in keyof T]: T[K] | Result<T[K], E>;
-};
-
-export type ResolveOks<P extends readonly any[]> = {
-  [K in keyof P]: P[K] extends Result<infer T, any> ? T : P[K];
-};
-
 export type Result<T, E> = (Ok<T> | Err<E>) & {
+  /**
+   * Applies the function contained in this Result to the given arguments.
+   * If this Result is an Err, it returns the Err. If any argument is an Err, it returns that Err.
+   * Otherwise, it applies the function to the resolved arguments and wraps the result in a new Result.
+   *
+   * @param args - The arguments to apply to the function. Arguments can be both Results and regular values.
+   * @returns A new Result containing either the function's result or an error
+   */
   apply<Args extends any[], R>(
     this: ResultInterface<(...args: ResolveOks<Args>) => R, E>,
     ...args: Args
@@ -89,3 +89,12 @@ export type ResultOf<T extends (...args: any[]) => Result<any, any>> = Result<
   OkTypeOf<ReturnType<T>>,
   ErrTypeOf<ReturnType<T>>
 >;
+
+/**
+ * Maps over an array type P, resolving Result types to their contained type T.
+ * If an element is not a Result, it retains its original type.
+ * This type is used in the apply method to handle arguments that may be Results.
+ */
+export type ResolveOks<P extends readonly any[]> = {
+  [K in keyof P]: P[K] extends Result<infer T, any> ? T : P[K];
+};

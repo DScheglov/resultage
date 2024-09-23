@@ -92,6 +92,10 @@ export class ErrImpl<E> implements Err<E> {
     return errFn(this.error);
   }
 
+  /**
+   * Applies a function to the contained value if Ok, or returns self if Err.
+   * For Err, this is a no-op to maintain consistent interface with Ok.
+   */
   apply() {
     return this;
   }
