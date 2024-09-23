@@ -4,15 +4,16 @@ import { Err, ErrTypeOf, ResolveOks } from './types';
 export const resolveOks = <PR extends any[]>(
   args: PR,
 ): ResolveOks<PR> | Err<ErrTypeOf<PR[number]>> => {
-  const argValues = [] as any[];
+  const argValues = new Array(args.length);
+  let index = 0;
 
   for (const arg of args) {
     if (!isResult(arg)) {
-      argValues.push(arg);
+      argValues[index++] = arg;
     } else if (arg.isErr) {
       return arg as Err<ErrTypeOf<PR[number]>>;
     } else {
-      argValues.push(arg.value);
+      argValues[index++] = arg.value;
     }
   }
 
