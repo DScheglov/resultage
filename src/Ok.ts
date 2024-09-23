@@ -1,4 +1,5 @@
-import type { AsyncOk, Ok, Result } from './types';
+import { resolveOks } from './resolve-args';
+import type { AsyncOk, ErrTypeOf, Ok, ResolveOks, Result } from './types';
 
 export class OkImpl<T> implements Ok<T> {
   constructor(public readonly value: T) {}
@@ -86,6 +87,19 @@ export class OkImpl<T> implements Ok<T> {
 
   biChain<S, F>(okFn: (data: T) => Result<S, F>): Result<S, F> {
     return okFn(this.value);
+  }
+
+  apply<Args extends any[], R = never>(
+    this: OkImpl<(...args: ResolveOks<Args>) => R>,
+    ...args: Args
+  ): Result<R, ErrTypeOf<Args[number]>> {
+    if (typeof this.value !== 'function') {
+      throw new TypeError('Result.value is not a function', { cause: this });
+    }
+
+    const argValues = resolveOks(args);
+
+    return Array.isArray(argValues) ? ok(this.value(...argValues)) : argValues;
   }
 }
 

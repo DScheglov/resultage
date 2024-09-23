@@ -91,6 +91,10 @@ export class ErrImpl<E> implements Err<E> {
   biChain<S, F>(_: unknown, errFn: (error: E) => Result<S, F>): Result<S, F> {
     return errFn(this.error);
   }
+
+  apply() {
+    return this;
+  }
 }
 
 Object.defineProperty(ErrImpl, 'name', { enumerable: false, value: 'Err' });

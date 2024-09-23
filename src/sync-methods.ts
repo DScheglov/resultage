@@ -1,6 +1,4 @@
-import { isResult } from './guards.js';
-import { ok } from './Ok.js';
-import type { Err, ErrTypeOf, Result } from './types';
+import type { ErrTypeOf, ResolveOks, Result } from './types';
 
 export const map =
   <T, S>(fn: (data: T) => S) =>
@@ -66,35 +64,10 @@ export const tapErr =
   <T>(result: Result<T, E>): Result<T, E> =>
     result.tapErr(fn);
 
-type ResolveOks<P extends readonly any[]> = {
-  [K in keyof P]: P[K] extends Result<infer T, any> ? T : P[K];
-};
-
 export const apply =
   <PR extends readonly any[]>(...args: PR) =>
-  <T = never, E = never>(
-    result: Result<(...args: ResolveOks<PR>) => T, E>,
-  ): Result<T, E | ErrTypeOf<PR[number]>> => {
-    if (result.isErr) return result;
-
-    if (typeof result.value !== 'function') {
-      throw new TypeError('Result.value is not a function', { cause: result });
-    }
-
-    const argValues = [] as any[];
-
-    for (const arg of args) {
-      if (!isResult(arg)) {
-        argValues.push(arg);
-      } else if (arg.isErr) {
-        return arg as Err<ErrTypeOf<PR[number]>>;
-      } else {
-        argValues.push(arg.value);
-      }
-    }
-
-    return ok(result.value(...(argValues as any)));
-  };
+  <T = never, E = never>(result: Result<(...args: ResolveOks<PR>) => T, E>) =>
+    result.apply(...args) as Result<T, E | ErrTypeOf<PR[number]>>;
 
 export const biMap =
   <S, F, T = never, E = never>(okFn: (data: T) => S, errFn: (error: E) => F) =>

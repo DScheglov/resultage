@@ -36,9 +36,26 @@ export interface ResultInterface<T, E> {
     errFn: (error: E) => Result<ES, EF>,
   ): Result<TS | ES, TF | EF>;
   [Symbol.iterator](): Generator<E, T>;
+  apply<Args extends any[], R>(
+    this: ResultInterface<(...args: ResolveOks<Args>) => R, E>,
+    ...args: Args
+  ): Result<R, E | ErrTypeOf<Args[number]>>;
 }
 
-export type Result<T, E> = Ok<T> | Err<E>;
+export type MaybeResultsOf<T extends readonly any[], E> = {
+  [K in keyof T]: T[K] | Result<T[K], E>;
+};
+
+export type ResolveOks<P extends readonly any[]> = {
+  [K in keyof P]: P[K] extends Result<infer T, any> ? T : P[K];
+};
+
+export type Result<T, E> = (Ok<T> | Err<E>) & {
+  apply<Args extends any[], R>(
+    this: ResultInterface<(...args: ResolveOks<Args>) => R, E>,
+    ...args: Args
+  ): Result<R, E | ErrTypeOf<Args[number]>>;
+};
 
 export type NotResultOf<T> = T extends Result<any, any> ? never : T;
 export type ErrTypeOf<T> = T extends Err<infer E> ? E : never;
