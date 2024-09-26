@@ -14,7 +14,7 @@ const entries = [
 ];
 
 export default defineConfig(
-  entries.map(([entry, globalName]) => ({
+  entries.map(([entry, globalName, options]) => ({
     entry,
     globalName,
     format: ['iife'],
@@ -24,9 +24,10 @@ export default defineConfig(
       };
     },
     dts: true,
-    minify: false,
+    minify: 'terser',
     splitting: false,
     sourcemap: true,
     outDir: 'dist',
+    ...options,
   })),
 );

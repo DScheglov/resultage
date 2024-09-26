@@ -121,6 +121,30 @@ describe('Result', () => {
     });
   });
 
+  describe('Ok.value', () => {
+    it('returns the value for an Ok result', () => {
+      expect(ok('foo').value).toBe('foo');
+    });
+
+    it('throws a TypeError for an Err result', () => {
+      expect(() => (err('foo') as any).value).toThrowError(
+        new TypeError('Result is not an Ok', { cause: err('foo') }),
+      );
+    });
+  });
+
+  describe('Err.error', () => {
+    it('returns the error for an Err result', () => {
+      expect(err('foo').error).toBe('foo');
+    });
+
+    it('throws a TypeError for an Ok result', () => {
+      expect(() => (ok('foo') as any).error).toThrowError(
+        new TypeError('Result is not an Err', { cause: ok('foo') }),
+      );
+    });
+  });
+
   describe('isErr', () => {
     it('should return true for an Err result', () => {
       expect(Guards.isErr(err('foo'))).toBe(true);
