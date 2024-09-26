@@ -15,7 +15,9 @@ export class OkImpl<T> implements Ok<T> {
   }
 
   get error(): never {
-    throw new TypeError('Result is not an Err', { cause: this });
+    throw new TypeError('Cannot access `error` on an Ok instance.', {
+      cause: this,
+    });
   }
 
   map<S>(fn: (value: T) => S): Result<S, never> {
