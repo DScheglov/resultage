@@ -14,6 +14,10 @@ export class OkImpl<T> implements Ok<T> {
     return false;
   }
 
+  get error(): never {
+    throw new TypeError('Result is not an Err', { cause: this });
+  }
+
   map<S>(fn: (value: T) => S): Result<S, never> {
     return new OkImpl(fn(this.value));
   }

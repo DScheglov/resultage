@@ -13,6 +13,10 @@ export class ErrImpl<E> implements Err<E> {
     return true;
   }
 
+  get value(): never {
+    throw new TypeError('Result is not an Ok', { cause: this });
+  }
+
   map(): Result<never, E> {
     return this;
   }

@@ -119,8 +119,8 @@ import { Result, ok, err } from 'okerr-ts/base';
 }
 
 {
-  const okResult: Result<number, 'NOT_FOUND'> = ok(42);
-  const errResult: Result<string, 'ERR_NOT_FOUND'> = err('ERR_NOT_FOUND');
+  const okResult = ok(42) as Result<number, 'NOT_FOUND'>;
+  const errResult = err('ERR_NOT_FOUND') as Result<string, 'ERR_NOT_FOUND'>;
 
   const value = okResult.unpack(); // 42
   const error = errResult.unpack(); // 'ERR_NOT_FOUND'
