@@ -14,7 +14,9 @@ export class ErrImpl<E> implements Err<E> {
   }
 
   get value(): never {
-    throw new TypeError('Result is not an Ok', { cause: this });
+    throw new TypeError('Cannot access `value` on an Err instance.', {
+      cause: this,
+    });
   }
 
   map(): Result<never, E> {

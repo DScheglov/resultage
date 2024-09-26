@@ -128,7 +128,9 @@ describe('Result', () => {
 
     it('throws a TypeError for an Err result', () => {
       expect(() => (err('foo') as any).value).toThrowError(
-        new TypeError('Result is not an Ok', { cause: err('foo') }),
+        new TypeError('Cannot access `value` on an Err instance.', {
+          cause: err('foo'),
+        }),
       );
     });
   });
@@ -140,7 +142,9 @@ describe('Result', () => {
 
     it('throws a TypeError for an Ok result', () => {
       expect(() => (ok('foo') as any).error).toThrowError(
-        new TypeError('Result is not an Err', { cause: ok('foo') }),
+        new TypeError('Cannot access `error` on an Ok instance.', {
+          cause: ok('foo'),
+        }),
       );
     });
   });
