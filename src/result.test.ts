@@ -1243,4 +1243,258 @@ describe('Result', () => {
       ).toEqual(ok([1, 'foo']));
     });
   });
+
+  describe('asTuple', () => {
+    it('returns a tuple for an Ok result', () => {
+      expect.assertions(2);
+      const [isOk, value, error] = ok('foo').asTuple();
+
+      if (isOk) {
+        expect(value).toBe('foo');
+        expect(error).toBeUndefined();
+      }
+    });
+
+    it('returns a tuple for an Ok result - pipe', () => {
+      expect.assertions(2);
+      const [isOk, value, error] = pipe(ok('foo'), R.asTuple);
+
+      if (isOk) {
+        expect(value).toBe('foo');
+        expect(error).toBeUndefined();
+      }
+    });
+
+    it('returns a correctly typed tuple for an Ok result', () => {
+      const result = ok('foo');
+      const [isOk, value, error] = result.asTuple();
+
+      const checkStatus: Expect<Equal<typeof isOk, true>> = true;
+      expect(checkStatus).toBe(true);
+
+      const checkValue: Expect<Equal<typeof value, string>> = true;
+      expect(checkValue).toBe(true);
+
+      const checkError: Expect<Equal<typeof error, undefined>> = true;
+      expect(checkError).toBe(true);
+    });
+
+    it('returns a correctly typed tuple for an Ok result - pipe', () => {
+      const result = ok('foo');
+      const [isOk, value, error] = pipe(result, R.asTuple);
+
+      const checkStatus: Expect<Equal<typeof isOk, boolean>> = true;
+      expect(checkStatus).toBe(true);
+
+      const checkValue: Expect<Equal<typeof value, string | undefined>> = true;
+      expect(checkValue).toBe(true);
+
+      const checkError: Expect<Equal<typeof error, undefined>> = true;
+      expect(checkError).toBe(true);
+    });
+
+    it('returns a tuple for an Ok result typed as Result', () => {
+      expect.assertions(2);
+      const result = ok('foo') as Result<string, 'ERR'>;
+      const [isOk, value, error] = result.asTuple();
+
+      if (isOk) {
+        expect(value).toBe('foo');
+        expect(error).toBeUndefined();
+      }
+    });
+
+    it('returns a tuple for an Ok result typed as Result - pipe', () => {
+      expect.assertions(2);
+      const result = ok('foo') as Result<string, 'ERR'>;
+      const [isOk, value, error] = pipe(result, R.asTuple);
+
+      if (isOk) {
+        expect(value).toBe('foo');
+        expect(error).toBeUndefined();
+      }
+    });
+
+    it('returns a correctly typed tuple for an Ok result typed as Result', () => {
+      const result = ok('foo') as Result<string, 'ERR'>;
+      const [isOk, value, error] = result.asTuple();
+
+      const checkStatus: Expect<Equal<typeof isOk, boolean>> = true;
+      expect(checkStatus).toBe(true);
+
+      const checkValue: Expect<Equal<typeof value, string | undefined>> = true;
+      expect(checkValue).toBe(true);
+
+      const checkError: Expect<Equal<typeof error, 'ERR' | undefined>> = true;
+      expect(checkError).toBe(true);
+    });
+
+    it('returns a correctly typed tuple for an Ok result typed as Result - pipe', () => {
+      const result = ok('foo') as Result<string, 'ERR'>;
+      const [isOk, value, error] = pipe(result, R.asTuple);
+
+      const checkStatus: Expect<Equal<typeof isOk, boolean>> = true;
+      expect(checkStatus).toBe(true);
+
+      const checkValue: Expect<Equal<typeof value, string | undefined>> = true;
+      expect(checkValue).toBe(true);
+
+      const checkError: Expect<Equal<typeof error, 'ERR' | undefined>> = true;
+      expect(checkError).toBe(true);
+    });
+
+    it('returns a tuple that could correctly discriminated for an Ok result typed as Result', () => {
+      expect.assertions(2);
+      const result = ok('foo') as Result<string, 'ERR'>;
+      const [isOk, value, error] = result.asTuple();
+
+      if (isOk) {
+        const checkValue: Expect<Equal<typeof value, string>> = true;
+        expect(checkValue).toBe(true);
+
+        const checkError: Expect<Equal<typeof error, undefined>> = true;
+        expect(checkError).toBe(true);
+      }
+    });
+
+    it('returns a tuple that could correctly discriminated for an Ok result typed as Result - pipe', () => {
+      expect.assertions(2);
+      const result = ok('foo') as Result<string, 'ERR'>;
+      const [isOk, value, error] = pipe(result, R.asTuple);
+
+      if (isOk) {
+        const checkValue: Expect<Equal<typeof value, string>> = true;
+        expect(checkValue).toBe(true);
+
+        const checkError: Expect<Equal<typeof error, undefined>> = true;
+        expect(checkError).toBe(true);
+      }
+    });
+
+    it('returns a tuple for an Err result', () => {
+      expect.assertions(2);
+      const [isOk, value, error] = err('foo').asTuple();
+
+      if (!isOk) {
+        expect(value).toBeUndefined();
+        expect(error).toBe('foo');
+      }
+    });
+
+    it('returns a tuple for an Err result - pipe', () => {
+      expect.assertions(2);
+      const [isOk, value, error] = pipe(err('foo'), R.asTuple);
+
+      if (!isOk) {
+        expect(value).toBeUndefined();
+        expect(error).toBe('foo');
+      }
+    });
+
+    it('returns a correctly typed tuple for an Err result', () => {
+      const result = err('foo');
+      const [isOk, value, error] = result.asTuple();
+
+      const checkStatus: Expect<Equal<typeof isOk, false>> = true;
+      expect(checkStatus).toBe(true);
+
+      const checkValue: Expect<Equal<typeof value, undefined>> = true;
+      expect(checkValue).toBe(true);
+
+      const checkError: Expect<Equal<typeof error, string>> = true;
+      expect(checkError).toBe(true);
+    });
+
+    it('returns a correctly typed tuple for an Err result - pipe', () => {
+      const result = err('foo');
+      const [isOk, value, error] = pipe(result, R.asTuple);
+
+      const checkStatus: Expect<Equal<typeof isOk, boolean>> = true;
+      expect(checkStatus).toBe(true);
+
+      const checkValue: Expect<Equal<typeof value, unknown>> = true;
+      expect(checkValue).toBe(true);
+
+      const checkError: Expect<Equal<typeof error, string | undefined>> = true;
+      expect(checkError).toBe(true);
+    });
+
+    it('returns a tuple for an Err result typed as Result', () => {
+      expect.assertions(2);
+      const result = err('ERR') as Result<string, 'ERR'>;
+      const [isOk, value, error] = result.asTuple();
+
+      if (!isOk) {
+        expect(value).toBeUndefined();
+        expect(error).toBe('ERR');
+      }
+    });
+
+    it('returns a tuple for an Err result typed as Result - pipe', () => {
+      expect.assertions(2);
+      const result = err('ERR') as Result<string, 'ERR'>;
+      const [isOk, value, error] = pipe(result, R.asTuple);
+
+      if (!isOk) {
+        expect(value).toBeUndefined();
+        expect(error).toBe('ERR');
+      }
+    });
+
+    it('returns a correctly typed tuple for an Err result typed as Result', () => {
+      const result = err('ERR') as Result<string, 'ERR'>;
+      const [isOk, value, error] = result.asTuple();
+
+      const checkStatus: Expect<Equal<typeof isOk, boolean>> = true;
+      expect(checkStatus).toBe(true);
+
+      const checkValue: Expect<Equal<typeof value, string | undefined>> = true;
+      expect(checkValue).toBe(true);
+
+      const checkError: Expect<Equal<typeof error, 'ERR' | undefined>> = true;
+      expect(checkError).toBe(true);
+    });
+
+    it('returns a correctly typed tuple for an Err result typed as Result - pipe', () => {
+      const result = err('ERR') as Result<string, 'ERR'>;
+      const [isOk, value, error] = pipe(result, R.asTuple);
+
+      const checkStatus: Expect<Equal<typeof isOk, boolean>> = true;
+      expect(checkStatus).toBe(true);
+
+      const checkValue: Expect<Equal<typeof value, string | undefined>> = true;
+      expect(checkValue).toBe(true);
+
+      const checkError: Expect<Equal<typeof error, 'ERR' | undefined>> = true;
+      expect(checkError).toBe(true);
+    });
+
+    it('returns a tuple that could correctly discriminated for an Err result typed as Result', () => {
+      expect.assertions(2);
+      const result = err('ERR') as Result<string, 'ERR'>;
+      const [isOk, value, error] = result.asTuple();
+
+      if (!isOk) {
+        const checkValue: Expect<Equal<typeof value, undefined>> = true;
+        expect(checkValue).toBe(true);
+
+        const checkError: Expect<Equal<typeof error, 'ERR'>> = true;
+        expect(checkError).toBe(true);
+      }
+    });
+
+    it('returns a tuple that could correctly discriminated for an Err result typed as Result - pipe', () => {
+      expect.assertions(2);
+      const result = err('ERR') as Result<string, 'ERR'>;
+      const [isOk, value, error] = pipe(result, R.asTuple);
+
+      if (!isOk) {
+        const checkValue: Expect<Equal<typeof value, undefined>> = true;
+        expect(checkValue).toBe(true);
+
+        const checkError: Expect<Equal<typeof error, 'ERR'>> = true;
+        expect(checkError).toBe(true);
+      }
+    });
+  });
 });
