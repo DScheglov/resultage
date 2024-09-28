@@ -1,6 +1,6 @@
-import type { AsyncErr, Err, Result } from './types';
+import type { AsyncErr, Err as ErrType, Result } from './types';
 
-export class ErrImpl<E> implements Err<E> {
+class Err<E> implements ErrType<E> {
   constructor(public readonly error: E) {}
 
   get isOk(): false {
@@ -24,7 +24,7 @@ export class ErrImpl<E> implements Err<E> {
   }
 
   mapErr<F>(fn: (error: E) => F): Result<never, F> {
-    return new ErrImpl(fn(this.error));
+    return new Err(fn(this.error));
   }
 
   chain(): Result<never, E> {
@@ -107,8 +107,10 @@ export class ErrImpl<E> implements Err<E> {
   }
 }
 
-Object.defineProperty(ErrImpl, 'name', { enumerable: false, value: 'Err' });
+Object.setPrototypeOf(Err.prototype, null);
 
-export const err = <E>(error: E): Err<E> => new ErrImpl(error);
+export const ErrImpl = Err;
+
+export const err = <E>(error: E): ErrType<E> => new Err(error);
 export const asyncErr = async <E>(error: E | Promise<E>): AsyncErr<E> =>
   err(await error);

@@ -1,7 +1,13 @@
 import { resolveOks } from './resolve-oks.js';
-import type { AsyncOk, ErrTypeOf, Ok, ResolveOks, Result } from './types';
+import type {
+  AsyncOk,
+  ErrTypeOf,
+  Ok as OkType,
+  ResolveOks,
+  Result,
+} from './types';
 
-export class OkImpl<T> implements Ok<T> {
+class Ok<T> implements OkType<T> {
   constructor(public readonly value: T) {}
 
   get isOk(): true {
@@ -21,7 +27,7 @@ export class OkImpl<T> implements Ok<T> {
   }
 
   map<S>(fn: (value: T) => S): Result<S, never> {
-    return new OkImpl(fn(this.value));
+    return new Ok(fn(this.value));
   }
 
   mapErr(): Result<T, never> {
@@ -96,7 +102,7 @@ export class OkImpl<T> implements Ok<T> {
   }
 
   apply<Args extends any[], R = never>(
-    this: OkImpl<(...args: ResolveOks<Args>) => R>,
+    this: Ok<(...args: ResolveOks<Args>) => R>,
     ...args: Args
   ): Result<R, ErrTypeOf<Args[number]>> {
     if (typeof this.value !== 'function') {
@@ -109,8 +115,10 @@ export class OkImpl<T> implements Ok<T> {
   }
 }
 
-Object.defineProperty(OkImpl, 'name', { enumerable: false, value: 'Ok' });
+Object.setPrototypeOf(Ok.prototype, null);
 
-export const ok = <T>(value: T): Ok<T> => new OkImpl(value);
+export const OkImpl = Ok;
+
+export const ok = <T>(value: T): OkType<T> => new Ok(value);
 export const asyncOk = async <T>(value: T | Promise<T>): AsyncOk<T> =>
   ok(await value);
