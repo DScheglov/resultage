@@ -1,6 +1,6 @@
 {
   "name": "okerr-ts",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Useful type to model success and failure",
   "scripts": {
     "test": "jest",
