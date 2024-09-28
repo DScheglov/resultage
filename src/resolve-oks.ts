@@ -1,4 +1,4 @@
-import { isResult } from './guards';
+import { isResult } from './guards.js';
 import { Err, ErrTypeOf, ResolveOks } from './types';
 
 export const resolveOks = <PR extends any[]>(
