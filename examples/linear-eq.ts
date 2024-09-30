@@ -1,4 +1,4 @@
-import { Result, ok, err } from 'okerr-ts';
+import { Result, ok, err } from 'resultage';
 
 export type LinearEquationError = 'INFINITE_ROOTS' | 'NO_ROOTS';
 

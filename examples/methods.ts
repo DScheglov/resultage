@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Equal, Expect } from '@type-challenges/utils';
-import { Result, ok, err } from 'okerr-ts/base';
+import { Result, ok, err } from 'resultage/base';
 
 {
   const okResult = ok(42); // Result<number, never>

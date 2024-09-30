@@ -1,5 +1,5 @@
-import { Result, err, ok } from 'okerr-ts/base';
-import { Do } from 'okerr-ts/do';
+import { Result, err, ok } from 'resultage/base';
+import { Do } from 'resultage/do';
 
 const div = (a: number, b: number): Result<number, 'ERR_DIV_BY_ZERO'> =>
   b === 0 ? err('ERR_DIV_BY_ZERO') : ok(a / b);

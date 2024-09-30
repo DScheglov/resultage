@@ -1,4 +1,4 @@
-import { AsyncResult, Do, collect, err, ok } from 'okerr-ts';
+import { AsyncResult, Do, collect, err, ok } from 'resultage';
 
 type Book = {
   id: string;

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Result, ok, err } from 'okerr-ts';
+import { Result, ok, err } from 'resultage';
 import { solveLinearEquation, LinearEquationError } from './linear-eq';
 
 type QuadraticEquationError = LinearEquationError | 'NO_REAL_ROOTS';

@@ -1,4 +1,4 @@
-import { Result, ok, err, Do } from 'okerr-ts';
+import { Result, ok, err, Do } from 'resultage';
 
 type JsonObject = Record<string, unknown>;
 

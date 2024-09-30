@@ -1,4 +1,4 @@
-import { AsyncResult, Do, err, ok } from 'okerr-ts';
+import { AsyncResult, Do, err, ok } from 'resultage';
 
 const ERR_REQUEST_FAILED = 'ERR_REQUEST_FAILED' as const;
 const ERR_UNSUCCESSFUL_RESPONSE = 'ERR_UNSUCCESSFUL_RESPONSE' as const;

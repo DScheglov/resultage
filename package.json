@@ -1,5 +1,5 @@
 {
-  "name": "okerr-ts",
+  "name": "resultage",
   "version": "0.5.7",
   "description": "Useful type to model success and failure",
   "scripts": {
@@ -23,10 +23,10 @@
   "author": "Dmytro Shchehlov <dmitry.scheglov@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DScheglov/okerr-ts"
+    "url": "git+https://github.com/DScheglov/resultage"
   },
   "bugs": {
-    "url": "https://github.com/DScheglov/okerr-ts/issues"
+    "url": "https://github.com/DScheglov/resultage/issues"
   },
   "license": "MIT",
   "devDependencies": {

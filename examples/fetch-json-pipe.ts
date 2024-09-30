@@ -1,5 +1,5 @@
-import { AsyncResult, err, ok, thenChain } from 'okerr-ts';
-import { pipe } from 'okerr-ts/fn';
+import { AsyncResult, err, ok, thenChain } from 'resultage';
+import { pipe } from 'resultage/fn';
 
 const ERR_REQUEST_FAILED = 'ERR_REQUEST_FAILED' as const;
 const ERR_UNSUCCESSFUL_RESPONSE = 'ERR_UNSUCCESSFUL_RESPONSE' as const;

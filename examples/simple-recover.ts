@@ -1,4 +1,4 @@
-import { err, ok, Result } from 'okerr-ts';
+import { err, ok, Result } from 'resultage';
 
 const okIfOdd = (value: number): Result<number, string> =>
   value % 2 === 1 ? ok(value) : err('Value is not odd');
