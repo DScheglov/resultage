@@ -52,22 +52,6 @@ import {
 } from 'resultage';
 
 import {
-  ok as Base_ok,
-  asyncOk as Base_asyncOk,
-  err as Base_err,
-  asyncErr as Base_asyncErr,
-  isResult as Base_isResult,
-  isOk as Base_isOk,
-  isErr as Base_isErr,
-  ensureResult as Base_ensureResult,
-  okIf as Base_okIf,
-  expect as Base_expect,
-  expectExists as Base_expectExists,
-  okIfExists as Base_okIfExists,
-  Do as Base_Do,
-} from 'resultage/base';
-
-import {
   assertNever as Fn_assertNever,
   compose2 as Fn_compose2,
   compose as Fn_compose,
@@ -78,30 +62,6 @@ import {
   pipe as Fn_pipe,
   unreachable as Fn_unreachable,
 } from 'resultage/fn';
-
-import {
-  map as Methods_map,
-  mapErr as Methods_mapErr,
-  chain as Methods_chain,
-  chainErr as Methods_chainErr,
-  unwrap as Methods_unwrap,
-  unwrapOr as Methods_unwrapOr,
-  unwrapOrElse as Methods_unwrapOrElse,
-  unwrapErr as Methods_unwrapErr,
-  unwrapErrOr as Methods_unwrapErrOr,
-  unwrapErrOrElse as Methods_unwrapErrOrElse,
-  unpack as Methods_unpack,
-  match as Methods_match,
-  tap as Methods_tap,
-  tapErr as Methods_tapErr,
-} from 'resultage/methods';
-
-import {
-  reduce as Lists_reduce,
-  collect as Lists_collect,
-  partition as Lists_partition,
-  sequence as Lists_sequence,
-} from 'resultage/lists';
 
 console.log({
   Index_thenMap,
@@ -154,19 +114,6 @@ console.log({
   Index_collect,
   Index_partition,
   Index_sequence,
-  Base_ok,
-  Base_asyncOk,
-  Base_err,
-  Base_asyncErr,
-  Base_isResult,
-  Base_isOk,
-  Base_isErr,
-  Base_ensureResult,
-  Base_okIf,
-  Base_expect,
-  Base_expectExists,
-  Base_okIfExists,
-  Base_Do,
   Fn_assertNever,
   Fn_compose2,
   Fn_compose,
@@ -176,22 +123,4 @@ console.log({
   Fn_asConst,
   Fn_pipe,
   Fn_unreachable,
-  Methods_map,
-  Methods_mapErr,
-  Methods_chain,
-  Methods_chainErr,
-  Methods_unwrap,
-  Methods_unwrapOr,
-  Methods_unwrapOrElse,
-  Methods_unwrapErr,
-  Methods_unwrapErrOr,
-  Methods_unwrapErrOrElse,
-  Methods_unpack,
-  Methods_match,
-  Methods_tap,
-  Methods_tapErr,
-  Lists_reduce,
-  Lists_collect,
-  Lists_partition,
-  Lists_sequence,
 });

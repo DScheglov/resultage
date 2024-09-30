@@ -50,40 +50,16 @@
       "import": "./esm/index.js",
       "require": "./lib/index.js"
     },
-    "./base": {
-      "types": "./lib/base.d.ts",
-      "import": "./esm/base.js",
-      "require": "./lib/base.js"
-    },
     "./fn": {
       "types": "./lib/fn/index.d.ts",
       "import": "./esm/fn/index.js",
       "require": "./lib/fn/index.js"
-    },
-    "./methods": {
-      "types": "./lib/methods.d.ts",
-      "import": "./esm/methods.js",
-      "require": "./lib/methods.js"
-    },
-    "./lists": {
-      "types": "./lib/lists.d.ts",
-      "import": "./esm/lists.js",
-      "require": "./lib/lists.js"
     }
   },
   "typesVersions": {
     "*": {
-      "base": [
-        "./lib/base.d.ts"
-      ],
       "fn": [
         "./lib/fn/index.d.ts"
-      ],
-      "methods": [
-        "./lib/methods.d.ts"
-      ],
-      "lists": [
-        "./lib/lists.d.ts"
       ],
       "*": [
         "./lib/*"

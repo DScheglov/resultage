@@ -2,10 +2,7 @@ import { defineConfig } from 'tsup';
 
 const entries = [
   [{ resultage: './src/index.ts' }, 'Resultage'],
-  [{ base: './src/base.ts' }, 'Resultage'],
   [{ fn: './src/fn/index.ts' }, 'Resultage.Fn'],
-  [{ methods: './src/methods.ts' }, 'Resultage.Methods'],
-  [{ lists: './src/lists.ts' }, 'Resultage.Lists'],
 ];
 
 export default defineConfig(

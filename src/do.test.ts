@@ -1,9 +1,15 @@
 import { describe, it, expect } from '@jest/globals';
 import { Equal, Expect } from '@type-challenges/utils';
-import { Result, err, ok, AsyncResult, okIfExists } from './base';
-import { Do } from './do';
-import { collect } from './lists';
-import { mapErr } from './sync-methods';
+import {
+  Result,
+  err,
+  ok,
+  AsyncResult,
+  okIfExists,
+  Do,
+  collect,
+  mapErr,
+} from './index';
 
 describe('Do::sync', () => {
   describe('case sqrt', () => {
