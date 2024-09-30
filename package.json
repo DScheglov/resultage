@@ -60,11 +60,6 @@
       "import": "./esm/fn/index.js",
       "require": "./lib/fn/index.js"
     },
-    "./do": {
-      "types": "./lib/do.d.ts",
-      "import": "./esm/do.js",
-      "require": "./lib/do.js"
-    },
     "./methods": {
       "types": "./lib/methods.d.ts",
       "import": "./esm/methods.js",
@@ -74,26 +69,6 @@
       "types": "./lib/lists.d.ts",
       "import": "./esm/lists.js",
       "require": "./lib/lists.js"
-    },
-    "./sync": {
-      "types": "./lib/sync.d.ts",
-      "import": "./esm/sync.js",
-      "require": "./lib/sync.js"
-    },
-    "./sync/methods": {
-      "types": "./lib/sync-methods.d.ts",
-      "import": "./esm/sync-methods.js",
-      "require": "./lib/sync-methods.js"
-    },
-    "./async": {
-      "types": "./lib/async.d.ts",
-      "import": "./esm/async.js",
-      "require": "./lib/async.js"
-    },
-    "./async/methods": {
-      "types": "./lib/async-methods.d.ts",
-      "import": "./esm/async-methods.js",
-      "require": "./lib/async-methods.js"
     }
   },
   "typesVersions": {
@@ -104,26 +79,11 @@
       "fn": [
         "./lib/fn/index.d.ts"
       ],
-      "do": [
-        "./lib/do.d.ts"
-      ],
       "methods": [
         "./lib/methods.d.ts"
       ],
       "lists": [
         "./lib/lists.d.ts"
-      ],
-      "sync": [
-        "./lib/sync.d.ts"
-      ],
-      "sync/methods": [
-        "./lib/sync-methods.d.ts"
-      ],
-      "async": [
-        "./lib/async.d.ts"
-      ],
-      "async/methods": [
-        "./lib/async-methods.d.ts"
       ],
       "*": [
         "./lib/*"

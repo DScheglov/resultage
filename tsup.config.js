@@ -1,16 +1,11 @@
 import { defineConfig } from 'tsup';
 
 const entries = [
-  [{ okerr: './src/index.ts' }, 'OkErr'],
-  [{ base: './src/base.ts' }, 'OkErr'],
-  [{ fn: './src/fn/index.ts' }, 'OkErr.Fn'],
-  [{ do: './src/do.ts' }, 'OkErr.Do'],
-  [{ methods: './src/methods.ts' }, 'OkErr.Methods'],
-  [{ lists: './src/lists.ts' }, 'OkErr.Lists'],
-  [{ sync: './src/sync.ts' }, 'OkErr'],
-  [{ 'sync/methods': './src/sync-methods.ts' }, 'OkErr.Methods'],
-  [{ async: './src/async.ts' }, 'OkErr'],
-  [{ 'async/methods': './src/async-methods.ts' }, 'OkErr.Methods'],
+  [{ resultage: './src/index.ts' }, 'Resultage'],
+  [{ base: './src/base.ts' }, 'Resultage'],
+  [{ fn: './src/fn/index.ts' }, 'Resultage.Fn'],
+  [{ methods: './src/methods.ts' }, 'Resultage.Methods'],
+  [{ lists: './src/lists.ts' }, 'Resultage.Lists'],
 ];
 
 export default defineConfig(

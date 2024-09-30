@@ -17,6 +17,7 @@ describe('base exports', () => {
     base.expect,
     base.expectExists,
     base.okIfExists,
+    base.Do,
   ])('exports %p', (value) => {
     expect(value).toBeDefined();
   });

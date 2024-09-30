@@ -105,9 +105,19 @@ class Err<E> implements ErrType<E> {
   apply() {
     return this;
   }
+
+  get [Symbol.toStringTag](): string {
+    return 'Err';
+  }
 }
 
 Object.setPrototypeOf(Err.prototype, null);
+Object.defineProperty(Err.prototype, 'name', {
+  value: 'Err',
+  writable: false,
+  enumerable: false,
+  configurable: false,
+});
 
 export const ErrImpl = Err;
 

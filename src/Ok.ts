@@ -113,9 +113,19 @@ class Ok<T> implements OkType<T> {
 
     return Array.isArray(argValues) ? ok(this.value(...argValues)) : argValues;
   }
+
+  get [Symbol.toStringTag](): string {
+    return 'Ok';
+  }
 }
 
 Object.setPrototypeOf(Ok.prototype, null);
+Object.defineProperty(Ok.prototype, 'name', {
+  value: 'Ok',
+  writable: false,
+  enumerable: false,
+  configurable: false,
+});
 
 export const OkImpl = Ok;
 

@@ -13,3 +13,4 @@ export type {
 } from './types';
 export * from './guards.js';
 export * from './conditional.js';
+export * from './do.js';
