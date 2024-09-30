@@ -1,7 +1,6 @@
 # resultage [![Coverage Status](https://coveralls.io/repos/github/DScheglov/resultage/badge.svg?branch=main)](https://coveralls.io/github/DScheglov/resultage?branch=main) [![npm version](https://img.shields.io/npm/v/resultage.svg?style=flat-square)](https://www.npmjs.com/package/resultage) [![npm downloads](https://img.shields.io/npm/dm/resultage.svg?style=flat-square)](https://www.npmjs.com/package/resultage) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/resultage/blob/master/LICENSE)
 
-Provides the `Result<T, E>` type and tools for handling success and failure,
-focusing on type safety, great developer experience, and an easy learning curve.
+A clear way for handling success and failure in both synchronous and asynchronous operations.
 
 ## Installation
 
