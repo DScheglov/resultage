@@ -1,6 +1,6 @@
 {
   "name": "resultage",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Useful type to model success and failure",
   "scripts": {
     "test": "jest",
