@@ -81,3 +81,11 @@ export const biChain =
   ) =>
   (result: Result<T, E>): Result<TS | ES, TF | EF> =>
     result.biChain(okFn, errFn);
+
+export const asTuple: {
+  <T, E>(
+    result: Result<T, E>,
+  ):
+    | readonly [ok: true, value: T, error: undefined]
+    | readonly [ok: false, value: undefined, error: E];
+} = (result: Result<unknown, unknown>): any => result.asTuple();

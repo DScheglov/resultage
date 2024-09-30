@@ -105,6 +105,9 @@ class Err<E> implements ErrType<E> {
   apply() {
     return this;
   }
+  asTuple(): readonly [ok: false, value: undefined, error: E] {
+    return [false, undefined, this.error] as const;
+  }
 }
 
 Object.setPrototypeOf(Err.prototype, null);

@@ -2,12 +2,14 @@ export interface Ok<T> extends ResultInterface<T, never> {
   readonly value: T;
   readonly isOk: true;
   readonly isErr: false;
+  asTuple(): readonly [ok: true, value: T, error: undefined];
 }
 
 export interface Err<E> extends ResultInterface<never, E> {
   readonly error: E;
   readonly isOk: false;
   readonly isErr: true;
+  asTuple(): readonly [ok: false, value: undefined, error: E];
 }
 
 export interface ResultInterface<T, E> {

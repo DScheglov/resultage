@@ -113,6 +113,9 @@ class Ok<T> implements OkType<T> {
 
     return Array.isArray(argValues) ? ok(this.value(...argValues)) : argValues;
   }
+  asTuple(): readonly [ok: true, value: T, error: undefined] {
+    return [true, this.value, undefined] as const;
+  }
 }
 
 Object.setPrototypeOf(Ok.prototype, null);
