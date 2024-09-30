@@ -120,7 +120,7 @@ class Ok<T> implements OkType<T> {
 }
 
 Object.setPrototypeOf(Ok.prototype, null);
-Object.defineProperty(Ok.prototype, 'name', {
+Object.defineProperty(Ok, 'name', {
   value: 'Ok',
   writable: false,
   enumerable: false,

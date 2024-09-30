@@ -112,7 +112,7 @@ class Err<E> implements ErrType<E> {
 }
 
 Object.setPrototypeOf(Err.prototype, null);
-Object.defineProperty(Err.prototype, 'name', {
+Object.defineProperty(Err, 'name', {
   value: 'Err',
   writable: false,
   enumerable: false,
