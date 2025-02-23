@@ -1,4 +1,4 @@
-import { Result, err, ok } from 'resultage/base';
+import { Result, err, ok } from 'resultage';
 import { Do } from 'resultage/do';
 
 const div = (a: number, b: number): Result<number, 'ERR_DIV_BY_ZERO'> =>
