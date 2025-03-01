@@ -368,4 +368,61 @@ describe('Do::async', () => {
 
     expect(check).toBe(true);
   });
+
+  describe('this context', () => {
+    it('supports this in the sync methods', () => {
+      class A {
+        #value: number;
+
+        constructor(value: number) {
+          this.#value = value;
+        }
+
+        calculate() {
+          return Do(function* calculateJob() {
+            const value = this.#value;
+            return value < 0 ? err('ERR_NEGATIVE_VALUE' as const) : value;
+          }, this);
+        }
+      }
+
+      const a = new A(42);
+
+      const result = a.calculate();
+      expect(result).toEqual(ok(42));
+
+      const check: Expect<
+        Equal<typeof result, Result<number, 'ERR_NEGATIVE_VALUE'>>
+      > = true;
+      expect(check).toBe(true);
+    });
+  });
+
+  it('supports this in the async methods', async () => {
+    expect.assertions(2);
+    class A {
+      #value: number;
+
+      constructor(value: number) {
+        this.#value = value;
+      }
+
+      async calculate() {
+        return Do(async function* calculateJob() {
+          const value = this.#value;
+          return value < 0 ? err('ERR_NEGATIVE_VALUE' as const) : value;
+        }, this);
+      }
+    }
+
+    const a = new A(42);
+
+    const result = await a.calculate();
+    expect(result).toEqual(ok(42));
+
+    const check: Expect<
+      Equal<typeof result, Result<number, 'ERR_NEGATIVE_VALUE'>>
+    > = true;
+    expect(check).toBe(true);
+  });
 });
