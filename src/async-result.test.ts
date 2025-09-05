@@ -9,6 +9,7 @@ import * as R from './sync-methods';
 import { ok, asyncOk } from './Ok';
 import { err, asyncErr } from './Err';
 import type { AsyncResult, Result } from './types';
+import { ResultError } from './ResultError';
 
 const resolved = <T>(value: T): Promise<T> => Promise.resolve(value);
 
@@ -450,7 +451,11 @@ describe('AsyncResult', () => {
 
     it('should unpack an AsyncErr', async () =>
       expect(pipe(1, asyncErr, M.thenUnwrap)).rejects.toEqual(
-        new TypeError('Result is not an Ok', { cause: err(1) }),
+        new ResultError(
+          err(1),
+          'ERR_NOT_OK',
+          'Cannot `unwrap` an Err instance.',
+        ),
       ));
   });
 
@@ -496,7 +501,11 @@ describe('AsyncResult', () => {
 
     it('should unpack an AsyncOk', async () =>
       expect(pipe(1, asyncOk, M.thenUnwrapErr)).rejects.toEqual(
-        new TypeError('Result is not an Err', { cause: ok(1) }),
+        new ResultError(
+          ok(1),
+          'ERR_NOT_ERR',
+          'Cannot `unwrapErr` an Ok instance.',
+        ),
       ));
   });
 

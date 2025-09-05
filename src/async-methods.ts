@@ -4,7 +4,7 @@ import type {
   AsyncResult,
   MaybeAsyncResult,
   ErrTypeOf,
-  Err,
+  ErrResult,
 } from './types';
 import { ok } from './Ok.js';
 import { err } from './Err.js';
@@ -141,7 +141,7 @@ export const thenApply =
       if (!isResult(arg)) {
         argValues.push(arg);
       } else if (arg.isErr) {
-        return arg as Err<ErrTypeOf<PR[number]>>;
+        return arg as ErrResult<ErrTypeOf<PR[number]>>;
       } else {
         argValues.push(arg.value);
       }

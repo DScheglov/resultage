@@ -1,6 +1,9 @@
-import type { AsyncErr, Err as ErrType, Result } from './types';
+import { ResultError } from './ResultError';
+import type { AsyncErr, ErrResult, Result } from './types';
 
-class Err<E> implements ErrType<E> {
+type ErrType<E> = ErrResult<E>;
+
+class Err<E> implements ErrResult<E> {
   constructor(public readonly error: E) {}
 
   get isOk(): false {
@@ -14,20 +17,23 @@ class Err<E> implements ErrType<E> {
   }
 
   get value(): never {
-    throw new TypeError('Cannot access `value` on an Err instance.', {
-      cause: this,
-    });
+    return ResultError.raise(
+      this,
+      'ERR_NOT_OK',
+      'Cannot access `value` on an Err instance.',
+      Object.getOwnPropertyDescriptor(Err.prototype, 'value')!.get!,
+    );
   }
 
-  map(): Result<never, E> {
+  map() {
     return this;
   }
 
-  mapErr<F>(fn: (error: E) => F): Result<never, F> {
+  mapErr<F>(fn: (error: E) => F) {
     return new Err(fn(this.error));
   }
 
-  chain(): Result<never, E> {
+  chain() {
     return this;
   }
 
@@ -36,7 +42,12 @@ class Err<E> implements ErrType<E> {
   }
 
   unwrap(): never {
-    throw new TypeError('Result is not an Ok', { cause: this });
+    return ResultError.raise(
+      this,
+      'ERR_NOT_OK',
+      'Cannot `unwrap` an Err instance.',
+      Object.getOwnPropertyDescriptor(Err.prototype, 'unwrap')!.get!,
+    );
   }
 
   unwrapOr<S>(fallback: S): S {
@@ -71,11 +82,11 @@ class Err<E> implements ErrType<E> {
     return errMatcher(this.error);
   }
 
-  tap(): Result<never, E> {
+  tap() {
     return this;
   }
 
-  tapErr(fn: (error: E) => void): Result<never, E> {
+  tapErr(fn: (error: E) => void) {
     fn(this.error);
     return this;
   }
@@ -90,11 +101,11 @@ class Err<E> implements ErrType<E> {
     throw this.error;
   }
 
-  biMap<S, F>(_: unknown, errFn: (error: E) => F): Result<S, F> {
+  biMap<F>(_: unknown, errFn: (error: E) => F) {
     return this.mapErr(errFn);
   }
 
-  biChain<S, F>(_: unknown, errFn: (error: E) => Result<S, F>): Result<S, F> {
+  biChain<S, F>(_: unknown, errFn: (error: E) => Result<S, F>) {
     return errFn(this.error);
   }
 

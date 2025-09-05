@@ -41,20 +41,40 @@ const fixtures = {
   ],
 };
 
+type NotFound<Entity extends string> = {
+  code: `ERR_${Uppercase<Entity>}_NOT_FOUND`;
+  message?: string;
+};
+
+const upper = <T extends string>(str: T): Uppercase<T> =>
+  str.toUpperCase() as Uppercase<T>;
+
+const notFoundError =
+  <Entity extends string>(entity: Entity) =>
+  (id: string): NotFound<Entity> => ({
+    code: `ERR_${upper(entity)}_NOT_FOUND`,
+    message: `The ${entity} with id '${id}' was not found.`,
+  });
+
+const errBookNotFound = notFoundError('book');
+const errPersonNotFound = notFoundError('person');
+type ERR_BOOK_NOT_FOUND = ReturnType<typeof errBookNotFound>;
+type ERR_PERSON_NOT_FOUND = ReturnType<typeof errPersonNotFound>;
+
 async function fetchBook(
   bookId: string,
-): AsyncResult<Book, 'ERR_BOOK_NOT_FOUND'> {
+): AsyncResult<Book, ERR_BOOK_NOT_FOUND> {
   const book = fixtures.books.find(({ id }) => id === bookId);
 
-  return book != null ? ok(book) : err('ERR_BOOK_NOT_FOUND');
+  return book != null ? ok(book) : err(errBookNotFound(bookId));
 }
 
 async function fetchPerson(
   personId: string,
-): AsyncResult<Person, 'ERR_PERSON_NOT_FOUND'> {
+): AsyncResult<Person, ERR_PERSON_NOT_FOUND> {
   const person = fixtures.persons.find(({ id }) => id === personId);
 
-  return person != null ? ok(person) : err('ERR_PERSON_NOT_FOUND');
+  return person != null ? ok(person) : err(errPersonNotFound(personId));
 }
 
 async function run() {

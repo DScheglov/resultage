@@ -1,9 +1,9 @@
 import { isResult } from './guards.js';
-import { Err, ErrTypeOf, ResolveOks } from './types';
+import { ErrResult, ErrTypeOf, ResolveOks } from './types';
 
 export const resolveOks = <PR extends any[]>(
   args: PR,
-): ResolveOks<PR> | Err<ErrTypeOf<PR[number]>> => {
+): ResolveOks<PR> | ErrResult<ErrTypeOf<PR[number]>> => {
   const argValues = new Array(args.length);
   let index = 0;
 
@@ -11,7 +11,7 @@ export const resolveOks = <PR extends any[]>(
     if (!isResult(arg)) {
       argValues[index++] = arg;
     } else if (arg.isErr) {
-      return arg as Err<ErrTypeOf<PR[number]>>;
+      return arg as ErrResult<ErrTypeOf<PR[number]>>;
     } else {
       argValues[index++] = arg.value;
     }

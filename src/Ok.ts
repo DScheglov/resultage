@@ -1,13 +1,10 @@
 import { resolveOks } from './resolve-oks.js';
-import type {
-  AsyncOk,
-  ErrTypeOf,
-  Ok as OkType,
-  ResolveOks,
-  Result,
-} from './types';
+import { ResultError } from './ResultError.js';
+import type { AsyncOk, ErrTypeOf, OkResult, ResolveOks, Result } from './types';
 
-class Ok<T> implements OkType<T> {
+type OkType<T> = OkResult<T>;
+
+class Ok<T> implements OkResult<T> {
   constructor(public readonly value: T) {}
 
   get isOk(): true {
@@ -21,24 +18,28 @@ class Ok<T> implements OkType<T> {
   }
 
   get error(): never {
-    throw new TypeError('Cannot access `error` on an Ok instance.', {
-      cause: this,
-    });
+    return ResultError.raise(
+      this,
+      'ERR_NOT_ERR',
+      'Cannot access `error` on an Ok instance.',
+      Object.getOwnPropertyDescriptor(this.constructor.prototype, 'error')!
+        .get!,
+    );
   }
 
-  map<S>(fn: (value: T) => S): Result<S, never> {
+  map<S>(fn: (value: T) => S) {
     return new Ok(fn(this.value));
   }
 
-  mapErr(): Result<T, never> {
-    return this as Result<T, never>;
+  mapErr() {
+    return this;
   }
 
-  chain<S, F>(next: (value: T) => Result<S, F>): Result<S, F> {
+  chain<S, F>(next: (value: T) => Result<S, F>) {
     return next(this.value);
   }
 
-  chainErr(): Result<T, never> {
+  chainErr() {
     return this;
   }
 
@@ -55,7 +56,12 @@ class Ok<T> implements OkType<T> {
   }
 
   unwrapErr(): never {
-    throw new TypeError('Result is not an Err', { cause: this });
+    return ResultError.raise(
+      this,
+      'ERR_NOT_ERR',
+      'Cannot `unwrapErr` an Ok instance.',
+      Object.getOwnPropertyDescriptor(Ok.prototype, 'unwrapErr')!.get!,
+    );
   }
 
   unwrapErrOr<F>(fallback: F): F {
@@ -75,12 +81,12 @@ class Ok<T> implements OkType<T> {
     return okMatcher(this.value);
   }
 
-  tap(fn: (value: T) => void): Result<T, never> {
+  tap(fn: (value: T) => void) {
     fn(this.value);
     return this;
   }
 
-  tapErr(): Result<T, never> {
+  tapErr() {
     return this;
   }
 
@@ -93,11 +99,11 @@ class Ok<T> implements OkType<T> {
     return this.value;
   }
 
-  biMap<S>(okFn: (value: T) => S): Result<S, never> {
+  biMap<S>(okFn: (value: T) => S) {
     return this.map(okFn);
   }
 
-  biChain<S, F>(okFn: (data: T) => Result<S, F>): Result<S, F> {
+  biChain<S, F>(okFn: (data: T) => Result<S, F>) {
     return okFn(this.value);
   }
 
@@ -106,7 +112,13 @@ class Ok<T> implements OkType<T> {
     ...args: Args
   ): Result<R, ErrTypeOf<Args[number]>> {
     if (typeof this.value !== 'function') {
-      throw new TypeError('Result.value is not a function', { cause: this });
+      return ResultError.raise(
+        this,
+        'ERR_VALUE_IS_NOT_A_FUNC',
+        'Result.value is not a function',
+        Object.getOwnPropertyDescriptor(this.constructor.prototype, 'apply')!
+          .value,
+      );
     }
 
     const argValues = resolveOks(args);

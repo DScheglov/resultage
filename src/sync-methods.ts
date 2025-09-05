@@ -1,4 +1,4 @@
-import type { ErrTypeOf, ResolveOks, Result } from './types';
+import type { Result } from './types';
 
 export const map =
   <T, S>(fn: (data: T) => S) =>
@@ -63,11 +63,6 @@ export const tapErr =
   <E>(fn: (error: E) => void) =>
   <T>(result: Result<T, E>): Result<T, E> =>
     result.tapErr(fn);
-
-export const apply =
-  <PR extends readonly any[]>(...args: PR) =>
-  <T = never, E = never>(result: Result<(...args: ResolveOks<PR>) => T, E>) =>
-    result.apply(...args) as Result<T, E | ErrTypeOf<PR[number]>>;
 
 export const biMap =
   <S, F, T = never, E = never>(okFn: (data: T) => S, errFn: (error: E) => F) =>

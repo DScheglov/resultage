@@ -1,15 +1,3 @@
-export interface Ok<T> extends ResultInterface<T, never> {
-  readonly value: T;
-  readonly isOk: true;
-  readonly isErr: false;
-}
-
-export interface Err<E> extends ResultInterface<never, E> {
-  readonly error: E;
-  readonly isOk: false;
-  readonly isErr: true;
-}
-
 export interface ResultInterface<T, E> {
   map<S>(fn: (data: T) => S): Result<S, E>;
   mapErr<F>(fn: (error: E) => F): Result<T, F>;
@@ -42,24 +30,73 @@ export interface ResultInterface<T, E> {
   ): Result<R, E | ErrTypeOf<Args[number]>>;
 }
 
-export type Result<T, E> = (Ok<T> | Err<E>) & {
-  /**
-   * Applies the function contained in this Result to the given arguments.
-   * If this Result is an Err, it returns the Err. If any argument is an Err, it returns that Err.
-   * Otherwise, it applies the function to the resolved arguments and wraps the result in a new Result.
-   *
-   * @param args - The arguments to apply to the function. Arguments can be both Results and regular values.
-   * @returns A new Result containing either the function's result or an error
-   */
-  apply<Args extends any[], R>(
-    this: ResultInterface<(...args: ResolveOks<Args>) => R, E>,
-    ...args: Args
-  ): Result<R, E | ErrTypeOf<Args[number]>>;
-};
+export interface OkResult<T> {
+  readonly value: T;
+  readonly isOk: true;
+  readonly isErr: false;
+  map<S>(fn: (data: T) => S): OkResult<S>;
+  mapErr(fn: (error: never) => unknown): OkResult<T>;
+  chain<S, F>(next: (data: T) => Result<S, F>): Result<S, F>;
+  chainErr(next: (error: never) => Result<unknown, unknown>): OkResult<T>;
+  unwrap(): T;
+  unwrapOr(fallback: unknown): T;
+  unwrapOrElse(fallback: (error: never) => unknown): T;
+  unwrapErr(): never;
+  unwrapErrOr<F>(fallback: F): F;
+  unwrapErrOrElse<F>(fallback: (value: T) => F): F;
+  unwrapOrThrow(): T;
+  unpack(): T;
+  match<TR, ER>(
+    okMatcher: (data: T) => TR,
+    errMatcher: (error: never) => ER,
+  ): TR;
+  tap(fn: (data: T) => void): OkResult<T>;
+  tapErr(fn: unknown): OkResult<T>;
+
+  biMap<S, F>(okFn: (data: T) => S, errFn: (error: never) => F): OkResult<S>;
+  biChain<TS, TF, ES, EF>(
+    okFn: (data: T) => Result<TS, TF>,
+    errFn: (error: never) => Result<ES, EF>,
+  ): Result<TS, TF>;
+  [Symbol.iterator](): Generator<never, T>;
+}
+
+export interface ErrResult<E> {
+  readonly error: E;
+  readonly isOk: false;
+  readonly isErr: true;
+  map(fn: unknown): ErrResult<E>;
+  mapErr<F>(fn: (error: E) => F): ErrResult<F>;
+  chain(next: (value: never) => Result<unknown, unknown>): ErrResult<E>;
+  chainErr<S, F>(next: (error: E) => Result<S, F>): Result<S, F>;
+  unwrap(): never;
+  unwrapOr<S>(fallback: S): S;
+  unwrapOrElse<S>(fallback: (error: E) => S): S;
+  unwrapErr(): E;
+  unwrapErrOr<F>(fallback: F): E;
+  unwrapErrOrElse(fallback: (value: never) => unknown): E;
+  unwrapOrThrow(): never;
+  unpack(): E;
+  match<TR, ER>(
+    okMatcher: (value: never) => TR,
+    errMatcher: (error: E) => ER,
+  ): ER;
+  tap(fn: (value: never) => unknown): ErrResult<E>;
+  tapErr(fn: (error: E) => void): ErrResult<E>;
+
+  biMap<S, F>(okFn: (value: never) => S, errFn: (error: E) => F): ErrResult<F>;
+  biChain<TS, TF, ES, EF>(
+    okFn: (value: never) => Result<TS, TF>,
+    errFn: (error: E) => Result<ES, EF>,
+  ): Result<ES, EF>;
+  [Symbol.iterator](): Generator<E, never>;
+}
+
+export type Result<T, E> = OkResult<T> | ErrResult<E>;
 
 export type NotResultOf<T> = T extends Result<any, any> ? never : T;
-export type ErrTypeOf<T> = T extends Err<infer E> ? E : never;
-export type OkTypeOf<T> = T extends Ok<infer R> ? R : never;
+export type ErrTypeOf<T> = T extends ErrResult<infer E> ? E : never;
+export type OkTypeOf<T> = T extends OkResult<infer R> ? R : never;
 
 export type AsyncResult<T, E> = Promise<Result<T, E>>;
 export type AsyncOk<T> = AsyncResult<T, never>;

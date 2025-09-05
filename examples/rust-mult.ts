@@ -3,9 +3,12 @@ import { type Result, ok, err, Do } from 'resultage';
 class ParseIntError extends Error {}
 
 function parseInteger(input: string): Result<number, ParseIntError> {
-  const int = parseInt(input, 10);
-  if (isNaN(int)) return err(new ParseIntError(`${input} is not an int`));
-  return ok(int);
+  const value = parseInt(input, 10);
+  if (isNaN(value)) return err(new ParseIntError(`${input} is not a number`));
+  if (!Number.isInteger(value)) {
+    return err(new ParseIntError(`${input} is not an integer`));
+  }
+  return ok(value);
 }
 
 const multiple = (
