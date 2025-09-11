@@ -1,4 +1,4 @@
-import { captureStackTrace } from './fn/captureStackTrace';
+import { captureStackTrace } from './fn/captureStackTrace.js';
 import { Result } from './types';
 
 export type ResultErrorCode =
