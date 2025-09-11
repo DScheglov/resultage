@@ -1,4 +1,4 @@
-import { ResultError } from './ResultError';
+import { ResultError } from './ResultError.js';
 import type { AsyncErr, ErrResult, Result } from './types';
 
 type ErrType<E> = ErrResult<E>;

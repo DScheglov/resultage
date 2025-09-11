@@ -446,6 +446,58 @@ describe('Result', () => {
   });
 
   describe('unwrapOrElse', () => {
+    it('correctly translates types', () => {
+      expect.assertions(2);
+      const result = err({ code: 'error', message: 'error' }) as Result<
+        number,
+        { code: string; message: string }
+      >;
+      const unwrapped = result.unwrapOrElse((error) => {
+        const check: Expect<
+          Equal<typeof error, { code: string; message: string }>
+        > = true;
+        expect(check).toBe(true);
+        return 0;
+      });
+
+      const check: Expect<Equal<typeof unwrapped, number>> = true;
+      expect(check).toBe(true);
+    });
+
+    it('correctly translates types (never)', () => {
+      expect.assertions(1);
+      const result = ok(1) as Result<number, { code: string; message: string }>;
+      const unwrapped = result.unwrapOrElse((error) => {
+        const check: Expect<
+          Equal<typeof error, { code: string; message: string }>
+        > = true;
+        expect(check).toBe(true);
+        return 0 as never;
+      });
+
+      const check: Expect<Equal<typeof unwrapped, number>> = true;
+      expect(check).toBe(true);
+    });
+
+    it('correctly translates types (function, never)', () => {
+      expect.assertions(1);
+      const fn = (
+        n: number,
+      ): Result<number, { code: string; message: string }> => ok(n);
+      const result = fn(1);
+
+      const unwrapped = result.unwrapOrElse((error) => {
+        const check: Expect<
+          Equal<typeof error, { code: string; message: string }>
+        > = true;
+        expect(check).toBe(true);
+        throw new Error('Error');
+      });
+
+      const check: Expect<Equal<typeof unwrapped, number>> = true;
+      expect(check).toBe(true);
+    });
+
     it('should unpack an Ok result', () => {
       expect(
         pipe(
