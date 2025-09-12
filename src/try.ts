@@ -1,0 +1,32 @@
+import { ErrResult, Result } from './types';
+import { isPromise } from './fn/is-promise';
+import { ok } from './Ok';
+import { err } from './Err';
+
+export function rTry<Args extends unknown[]>(
+  fn: (...args: Args) => never,
+  ...args: Args
+): ErrResult<unknown>;
+export function rTry<T, Args extends unknown[]>(
+  fn: () => Promise<T>,
+  ...args: Args
+): Promise<Result<T, unknown>>;
+export function rTry<T, Args extends unknown[]>(
+  fn: () => T,
+  ...args: Args
+): Result<T, unknown>;
+export function rTry<T>(promise: Promise<T>): Promise<Result<T, unknown>>;
+export function rTry<T>(value: T): Result<T, unknown>;
+export function rTry<T, Args extends unknown[]>(
+  fn: Promise<T> | ((...args: Args) => T | Promise<T>),
+  ...args: Args
+): any {
+  if (isPromise(fn)) return fn.then(ok, err);
+  if (typeof fn !== 'function') return ok(fn as T);
+  try {
+    const result = fn(...args);
+    return isPromise(result) ? result.then(ok, err) : ok(result);
+  } catch (error) {
+    return err(error);
+  }
+}

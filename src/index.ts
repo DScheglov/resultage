@@ -11,6 +11,7 @@ import type {
   ErrResult,
   ResultOf,
 } from './types';
+import { rTry } from './try.js';
 export * from './guards.js';
 export * from './conditional.js';
 export * from './do.js';
@@ -39,4 +40,5 @@ export const Result = {
   asyncOk,
   err,
   asyncErr,
+  try: rTry,
 };
