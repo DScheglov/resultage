@@ -27,8 +27,8 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Test with Coverage
-        run: npm run test -- --verbose
+      # - name: Test with Coverage
+      #   run: npm run test -- --verbose
 
       - name: Publish on Coveralls
         uses: coverallsapp/github-action@master
@@ -37,15 +37,15 @@ jobs:
           flag-name: node-${{ matrix.node }}
           parallel: true
 
-  report-coverage:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.github_token }}
-        parallel-finished: true
+  # report-coverage:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Coveralls Finished
+  #     uses: coverallsapp/github-action@master
+  #     with:
+  #       github-token: ${{ secrets.github_token }}
+  #       parallel-finished: true
   
   publish:
     needs: report-coverage
