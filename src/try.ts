@@ -1,7 +1,7 @@
-import { ErrResult, Result } from './types';
-import { isPromise } from './fn/is-promise';
-import { ok } from './Ok';
-import { err } from './Err';
+import { ErrResult, Result } from './types.js';
+import { isPromise } from './fn/is-promise.js';
+import { ok } from './Ok.js';
+import { err } from './Err.js';
 
 export function rTry<Args extends unknown[]>(
   fn: (...args: Args) => never,
