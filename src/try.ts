@@ -12,7 +12,7 @@ export function rTry<T, Args extends unknown[]>(
   ...args: Args
 ): Promise<Result<T, unknown>>;
 export function rTry<T, Args extends unknown[]>(
-  fn: () => T,
+  fn: (...args: Args) => T,
   ...args: Args
 ): Result<T, unknown>;
 export function rTry<T>(promise: Promise<T>): Promise<Result<T, unknown>>;
