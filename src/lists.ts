@@ -216,7 +216,7 @@ export const sequenceAsync = async <
   const results: any[] = [];
 
   for (const task of tasks) {
-    const res = await task(); 
+    const res = await task();
     if (res.isErr) return res;
     results.push(res.value);
   }

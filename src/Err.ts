@@ -7,12 +7,10 @@ class Err<E> implements ErrResult<E> {
   constructor(public readonly error: E) {}
 
   get isOk(): false {
-     
     return false;
   }
 
   get isErr(): true {
-     
     return true;
   }
 
@@ -51,7 +49,6 @@ class Err<E> implements ErrResult<E> {
   }
 
   unwrapOr<S>(fallback: S): S {
-     
     return fallback;
   }
 

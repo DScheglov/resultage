@@ -37,7 +37,6 @@ describe('Do::sync', () => {
 
         const a2 = 2 * a;
 
-         
         return [(-b + d) / a2, (-b - d) / a2] as [number, number];
       });
 
@@ -155,7 +154,6 @@ describe('Do::sync', () => {
       value: unknown,
     ): Result<Person, PersonValidationError> =>
       Do(function* () {
-         
         const object = yield* okIfObject(value).mapErr((error) =>
           validationError([], error),
         );

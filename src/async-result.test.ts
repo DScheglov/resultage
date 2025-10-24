@@ -403,7 +403,6 @@ describe('AsyncResult', () => {
         ),
       );
 
-       
       type Check = Expect<Equal<typeof value, 'INVALID_VALUE' | number>>;
       expect(value).toBe(42);
     });
@@ -417,7 +416,6 @@ describe('AsyncResult', () => {
         ),
       );
 
-       
       type Check = Expect<Equal<typeof value, 'INVALID_VALUE' | number>>;
       expect(value).toBe('INVALID_VALUE');
     });
@@ -430,7 +428,6 @@ describe('AsyncResult', () => {
     it('should unpack an AsyncOk', async () => {
       const value = await M.thenUnpack(fn(42));
 
-       
       type Check = Expect<Equal<typeof value, 'INVALID_VALUE' | number>>;
       expect(value).toBe(42);
     });
@@ -438,7 +435,6 @@ describe('AsyncResult', () => {
     it('should unpack an AsyncErr', async () => {
       const value = await M.thenUnpack(fn(-42));
 
-       
       type Check = Expect<Equal<typeof value, 'INVALID_VALUE' | number>>;
       expect(value).toBe('INVALID_VALUE');
     });
@@ -747,7 +743,6 @@ describe('AsyncResult', () => {
         M.thenApply(ok('foo')),
       );
 
-       
       const check: Expect<
         Equal<
           typeof result, //
@@ -769,7 +764,6 @@ describe('AsyncResult', () => {
         M.thenApply(ok('foo') as Result<'foo', 'ERR3'>),
       );
 
-       
       const check: Expect<
         Equal<
           typeof result, //
@@ -796,7 +790,6 @@ describe('AsyncResult', () => {
         M.thenApply(ok(1), ok('foo')),
       );
 
-       
       const check: Expect<
         Equal<
           typeof result, //
@@ -825,7 +818,6 @@ describe('AsyncResult', () => {
         M.thenApply('foo'),
       );
 
-       
       const check: Expect<
         Equal<
           typeof result, //
@@ -852,7 +844,6 @@ describe('AsyncResult', () => {
         M.thenApply(ok(1), ok('foo')),
       );
 
-       
       const check: Expect<
         Equal<
           typeof result, //
@@ -881,7 +872,6 @@ describe('AsyncResult', () => {
         M.thenApply(ok('foo')),
       );
 
-       
       const check: Expect<
         Equal<
           typeof result, //
@@ -910,7 +900,6 @@ describe('AsyncResult', () => {
         M.thenApply('foo'),
       );
 
-       
       const check: Expect<
         Equal<
           typeof result, //
@@ -937,7 +926,6 @@ describe('AsyncResult', () => {
         M.thenApply(ok(1), ok('foo')),
       );
 
-       
       const check: Expect<
         Equal<
           typeof result, //
@@ -964,7 +952,6 @@ describe('AsyncResult', () => {
         M.thenApply(1, 'foo'),
       );
 
-       
       const check: Expect<
         Equal<
           typeof result, //
