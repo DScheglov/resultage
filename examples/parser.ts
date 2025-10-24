@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/ban-types */
-import { Result, err, ok } from 'resultage';
+import { Result, err, ok } from '../src';
 import { Equal, Expect } from '@type-challenges/utils';
 
 type Person = {

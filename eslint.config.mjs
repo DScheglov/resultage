@@ -1,38 +1,45 @@
+import js from '@eslint/js';
 import globals from 'globals';
-import tsLint from 'typescript-eslint';
+import tseslint from 'typescript-eslint';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import prettierPlugin from 'eslint-plugin-prettier/recommended';
 
-export default tsLint.config(
+export default defineConfig([
   {
-    plugins: {
-      '@typescript-eslint': tsLint.plugin,
-    },
-  },
-  {
-    files: ['**/*.{ts,js,mjs}'],
-  },
-  {
-    ignores: ['dist', 'lib', 'esm', 'node_modules', 'coverage'],
-  },
-  {
+    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
+    plugins: { js },
+    extends: ['js/recommended'],
     languageOptions: {
-      globals: {
-        ...globals.es2025,
-      },
-      parserOptions: {
-        project: [
-          'tsconfig.json',
-          'tsconfig.eslint.json',
-          'tsconfig.test.json',
-        ],
-      },
+      globals: { ...globals.browser, ...globals.node },
     },
   },
-  ...tsLint.configs.recommended,
-  prettierPlugin,
+  globalIgnores([
+    'dist/**/*',
+    'esm/**/*',
+    'lib/**/*',
+    'coverage/**/*',
+    'dist/**/*',
+  ]),
+  tseslint.configs.recommended,
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+      'class-methods-use-this': 'off',
+      'require-yield': 'off',
+    },
+  },
+  {
+    files: ['**/*.test.{js,ts}', '**/__tests__/**/*.{js,ts}'],
+    rules: {
+      'no-empty': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+    },
+  },
+  prettierPlugin,
+  {
+    rules: {
       'prettier/prettier': [
         'error',
         {
@@ -46,4 +53,4 @@ export default tsLint.config(
       ],
     },
   },
-);
+]);

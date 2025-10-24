@@ -7,13 +7,11 @@ type OkType<T> = OkResult<T>;
 class Ok<T> implements OkResult<T> {
   constructor(public readonly value: T) {}
 
-  get isOk(): true {
-    // eslint-disable-line class-methods-use-this
+  get isOk(): true { 
     return true;
   }
 
   get isErr(): false {
-    // eslint-disable-line class-methods-use-this
     return false;
   }
 
@@ -65,7 +63,7 @@ class Ok<T> implements OkResult<T> {
   }
 
   unwrapErrOr<F>(fallback: F): F {
-    // eslint-disable-line class-methods-use-this
+     
     return fallback;
   }
 
@@ -95,7 +93,6 @@ class Ok<T> implements OkResult<T> {
   }
 
   *[Symbol.iterator](): Generator<never, T> {
-    // eslint-disable-line require-yield
     return this.value;
   }
 

@@ -191,7 +191,7 @@ export const sequence = <T extends readonly (() => Result<any, any>)[]>(
   const results: any[] = [];
 
   for (const task of tasks) {
-    const res = task(); // eslint-disable-line no-await-in-loop
+    const res = task();
     if (res.isErr) return res;
     results.push(res.value);
   }
@@ -216,7 +216,7 @@ export const sequenceAsync = async <
   const results: any[] = [];
 
   for (const task of tasks) {
-    const res = await task(); // eslint-disable-line no-await-in-loop
+    const res = await task(); 
     if (res.isErr) return res;
     results.push(res.value);
   }

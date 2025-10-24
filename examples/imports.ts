@@ -49,7 +49,7 @@ import {
   collect as Index_collect,
   partition as Index_partition,
   sequence as Index_sequence,
-} from 'resultage';
+} from '../src';
 
 import {
   assertNever as Fn_assertNever,
@@ -61,7 +61,7 @@ import {
   asConst as Fn_asConst,
   pipe as Fn_pipe,
   unreachable as Fn_unreachable,
-} from 'resultage/fn';
+} from '../src/fn';
 
 console.log({
   Index_thenMap,

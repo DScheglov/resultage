@@ -7,12 +7,12 @@ class Err<E> implements ErrResult<E> {
   constructor(public readonly error: E) {}
 
   get isOk(): false {
-    // eslint-disable-line class-methods-use-this
+     
     return false;
   }
 
   get isErr(): true {
-    // eslint-disable-line class-methods-use-this
+     
     return true;
   }
 
@@ -51,7 +51,7 @@ class Err<E> implements ErrResult<E> {
   }
 
   unwrapOr<S>(fallback: S): S {
-    // eslint-disable-line class-methods-use-this
+     
     return fallback;
   }
 
@@ -97,7 +97,6 @@ class Err<E> implements ErrResult<E> {
   }
 
   unwrapOrThrow(): never {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw this.error;
   }
 

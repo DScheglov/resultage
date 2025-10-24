@@ -1,4 +1,4 @@
-import { AsyncResult, Do, err, ok } from 'resultage';
+import { AsyncResult, Do, err, ok } from '../src';
 
 const ERR_REQUEST_FAILED = 'ERR_REQUEST_FAILED' as const;
 const ERR_UNSUCCESSFUL_RESPONSE = 'ERR_UNSUCCESSFUL_RESPONSE' as const;

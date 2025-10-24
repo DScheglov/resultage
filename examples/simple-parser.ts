@@ -1,4 +1,4 @@
-import { Result, ok, err, Do } from 'resultage';
+import { Result, ok, err, Do } from '../src';
 
 type JsonObject = Record<string, unknown>;
 
