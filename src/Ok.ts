@@ -7,7 +7,7 @@ type OkType<T> = OkResult<T>;
 class Ok<T> implements OkResult<T> {
   constructor(public readonly value: T) {}
 
-  get isOk(): true { 
+  get isOk(): true {
     return true;
   }
 
@@ -63,7 +63,6 @@ class Ok<T> implements OkResult<T> {
   }
 
   unwrapErrOr<F>(fallback: F): F {
-     
     return fallback;
   }
 

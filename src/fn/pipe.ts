@@ -1,6 +1,5 @@
- 
 /* eslint-disable no-case-declarations */
- 
+
 const pipe2 = <T, S>(value: T, fn: (value: T) => S): S => fn(value);
 
 export const pipe: {
@@ -145,7 +144,6 @@ export const pipe: {
     fn13: (value: L) => M,
     fn14: (value: M) => N,
   ): N;
-   
 } = (...fns: [any, ...Array<(value: any) => any>]) => {
   const count = fns.length;
 
