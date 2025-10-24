@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+ 
 /* eslint-disable no-case-declarations */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
+ 
 const pipe2 = <T, S>(value: T, fn: (value: T) => S): S => fn(value);
 
 export const pipe: {
@@ -145,7 +145,7 @@ export const pipe: {
     fn13: (value: L) => M,
     fn14: (value: M) => N,
   ): N;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+   
 } = (...fns: [any, ...Array<(value: any) => any>]) => {
   const count = fns.length;
 

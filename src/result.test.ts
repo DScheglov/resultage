@@ -81,7 +81,6 @@ describe('Result', () => {
       expect(check1).toBe(true);
 
       if (Guards.isOk(result)) {
-        // eslint-disable-next-line no-trailing-spaces
       } else {
         type CheckValue = Expect<Equal<typeof result.error, string>>;
         const checkValue: CheckValue = true;
@@ -113,7 +112,6 @@ describe('Result', () => {
       expect(check1).toBe(true);
 
       if (result.isOk) {
-        // eslint-disable-next-line no-trailing-spaces
       } else {
         type Check = Expect<Equal<typeof result.error, 'bar'>>;
         const check: Check = true;
@@ -187,7 +185,6 @@ describe('Result', () => {
       expect(check1).toBe(true);
 
       if (Guards.isErr(result)) {
-        // eslint-disable-next-line no-trailing-spaces
       } else {
         type Check = Expect<Equal<typeof result.value, string>>;
         const check: Check = true;
@@ -221,7 +218,6 @@ describe('Result', () => {
       expect(check1).toBe(true);
 
       if (result.isErr) {
-        // eslint-disable-next-line no-trailing-spaces
       } else {
         type Check = Expect<Equal<typeof result.value, string>>;
         const check: Check = true;
@@ -679,7 +675,6 @@ describe('Result', () => {
         okIf.expectExists(() => 'NOT_EXISTS' as const),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       type Check = Expect<Equal<typeof result, Result<1, 'NOT_EXISTS'>>>;
       expect(result).toEqual(ok(1));
     });
@@ -752,7 +747,6 @@ describe('Result', () => {
         okIf.expect(isHello, 'ERR_NOT_HELLO' as const),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       type Check = Expect<
         Equal<typeof result, Result<'hello', 'ERR_NOT_HELLO'>>
       >;

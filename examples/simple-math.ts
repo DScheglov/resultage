@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Result, ok, err } from 'resultage';
+import { Result, ok, err } from '../src';
 
 const div =
   (b: number) =>

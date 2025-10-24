@@ -1,4 +1,4 @@
-import { type Result, ok, err, Do } from 'resultage';
+import { type Result, ok, err, Do } from '../src';
 
 class ParseIntError extends Error {}
 

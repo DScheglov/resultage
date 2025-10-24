@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Result, ok, err, Do } from 'resultage';
+import { Result, ok, err, Do } from '../src';
 
 type Person = {
   name: string;

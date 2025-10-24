@@ -37,7 +37,7 @@ describe('Do::sync', () => {
 
         const a2 = 2 * a;
 
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+         
         return [(-b + d) / a2, (-b - d) / a2] as [number, number];
       });
 
@@ -126,7 +126,6 @@ describe('Do::sync', () => {
       value: unknown,
     ): Result<Person, PersonValidationError> =>
       Do(function* () {
-        // eslint-disable-line func-names
         const object: JsonObject = yield* okIfObject(value).mapErr((error) =>
           validationError([], error),
         );
@@ -156,7 +155,7 @@ describe('Do::sync', () => {
       value: unknown,
     ): Result<Person, PersonValidationError> =>
       Do(function* () {
-        // eslint-disable-line func-names
+         
         const object = yield* okIfObject(value).mapErr((error) =>
           validationError([], error),
         );

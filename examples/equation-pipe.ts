@@ -1,5 +1,4 @@
-/* eslint-disable max-len, object-curly-newline, func-names */
-import { Result, err, ok } from '../src/base';
+import { Result, err, ok } from '../src';
 import { map, mapErr } from '../src/sync-methods';
 import { assertNever, pipe, asConst } from '../src/fn';
 

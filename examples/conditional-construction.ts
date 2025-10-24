@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable max-len */
 import { Equal, Expect } from '@type-challenges/utils';
-import { expect, okIf, expectExists, AsyncResult } from '../src/base';
+import { expect, okIf, expectExists, AsyncResult } from '../src/';
 
 {
   const isNumber = (x: unknown): x is number => typeof x === 'number';

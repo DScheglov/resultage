@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, it, expect, jest } from '@jest/globals';
 import type { Equal, Expect } from '@type-challenges/utils';
 import { pipe } from './fn/pipe';
@@ -404,7 +403,7 @@ describe('AsyncResult', () => {
         ),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       type Check = Expect<Equal<typeof value, 'INVALID_VALUE' | number>>;
       expect(value).toBe(42);
     });
@@ -418,7 +417,7 @@ describe('AsyncResult', () => {
         ),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       type Check = Expect<Equal<typeof value, 'INVALID_VALUE' | number>>;
       expect(value).toBe('INVALID_VALUE');
     });
@@ -431,7 +430,7 @@ describe('AsyncResult', () => {
     it('should unpack an AsyncOk', async () => {
       const value = await M.thenUnpack(fn(42));
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       type Check = Expect<Equal<typeof value, 'INVALID_VALUE' | number>>;
       expect(value).toBe(42);
     });
@@ -439,7 +438,7 @@ describe('AsyncResult', () => {
     it('should unpack an AsyncErr', async () => {
       const value = await M.thenUnpack(fn(-42));
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       type Check = Expect<Equal<typeof value, 'INVALID_VALUE' | number>>;
       expect(value).toBe('INVALID_VALUE');
     });
@@ -748,7 +747,7 @@ describe('AsyncResult', () => {
         M.thenApply(ok('foo')),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       const check: Expect<
         Equal<
           typeof result, //
@@ -770,7 +769,7 @@ describe('AsyncResult', () => {
         M.thenApply(ok('foo') as Result<'foo', 'ERR3'>),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       const check: Expect<
         Equal<
           typeof result, //
@@ -797,7 +796,7 @@ describe('AsyncResult', () => {
         M.thenApply(ok(1), ok('foo')),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       const check: Expect<
         Equal<
           typeof result, //
@@ -826,7 +825,7 @@ describe('AsyncResult', () => {
         M.thenApply('foo'),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       const check: Expect<
         Equal<
           typeof result, //
@@ -853,7 +852,7 @@ describe('AsyncResult', () => {
         M.thenApply(ok(1), ok('foo')),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       const check: Expect<
         Equal<
           typeof result, //
@@ -882,7 +881,7 @@ describe('AsyncResult', () => {
         M.thenApply(ok('foo')),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       const check: Expect<
         Equal<
           typeof result, //
@@ -911,7 +910,7 @@ describe('AsyncResult', () => {
         M.thenApply('foo'),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       const check: Expect<
         Equal<
           typeof result, //
@@ -938,7 +937,7 @@ describe('AsyncResult', () => {
         M.thenApply(ok(1), ok('foo')),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       const check: Expect<
         Equal<
           typeof result, //
@@ -965,7 +964,7 @@ describe('AsyncResult', () => {
         M.thenApply(1, 'foo'),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       const check: Expect<
         Equal<
           typeof result, //

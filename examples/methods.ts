@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Equal, Expect } from '@type-challenges/utils';
-import { Result, ok, err } from 'resultage/base';
+import { Result, ok, err } from '../src';
 
 {
   const okResult = ok(42); // Result<number, never>
@@ -28,7 +29,7 @@ import { Result, ok, err } from 'resultage/base';
   const errResult: Result<number, 'ERR_NOT_FOUND'> = err('ERR_NOT_FOUND');
 
   const okMapped = okResult.map((x) => x + 1); // Ok(43)
-  const errMapped = errResult.map((x) => x + 1); // Err('ERR_NOT_FOUND')
+  const errMapped = errResult.map((x: number) => x + 1); // Err('ERR_NOT_FOUND')
 }
 
 {

@@ -1,4 +1,4 @@
-import { Result, ok, err } from 'resultage';
+import { Result, ok, err } from '../src';
 
 export type LinearEquationError = 'INFINITE_ROOTS' | 'NO_ROOTS';
 
