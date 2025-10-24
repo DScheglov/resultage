@@ -105,12 +105,8 @@ class Err<E> implements ErrResult<E> {
     return errFn(this.error);
   }
 
-  /**
-   * Applies a function to the contained value if Ok, or returns self if Err.
-   * For Err, this is a no-op to maintain consistent interface with Ok.
-   */
-  apply() {
-    return this;
+  asTuple(): [ok: false, error: E, value: undefined] {
+    return [false, this.error, undefined];
   }
 
   get [Symbol.toStringTag](): string {

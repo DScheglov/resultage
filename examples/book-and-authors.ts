@@ -1,4 +1,4 @@
-import { AsyncResult, Do, collect, err, ok } from 'resultage';
+import { AsyncResult, Do, collect, err, ok } from '../src';
 
 type Book = {
   id: string;

@@ -1,35 +1,3 @@
-export interface ResultInterface<T, E> {
-  map<S>(fn: (data: T) => S): Result<S, E>;
-  mapErr<F>(fn: (error: E) => F): Result<T, F>;
-  chain<S, F>(next: (data: T) => Result<S, F>): Result<S, F | E>;
-  chainErr<S, F>(next: (error: E) => Result<S, F>): Result<T | S, F>;
-  unwrap(): T;
-  unwrapOr<S>(fallback: S): T | S;
-  unwrapOrElse<S>(fallback: (error: E) => S): T | S;
-  unwrapErr(): E;
-  unwrapErrOr<F>(fallback: F): E | F;
-  unwrapErrOrElse<F>(fallback: (data: T) => F): E | F;
-  unwrapOrThrow(): T;
-  unpack(): T | E;
-  match<ER, TR>(
-    okMatcher: (data: T) => TR,
-    errMatcher: (error: E) => ER,
-  ): ER | TR;
-  tap(fn: (data: T) => void): Result<T, E>;
-  tapErr(fn: (error: E) => void): Result<T, E>;
-
-  biMap<S, F>(okFn: (data: T) => S, errFn: (error: E) => F): Result<S, F>;
-  biChain<TS, TF, ES, EF>(
-    okFn: (data: T) => Result<TS, TF>,
-    errFn: (error: E) => Result<ES, EF>,
-  ): Result<TS | ES, TF | EF>;
-  [Symbol.iterator](): Generator<E, T>;
-  apply<Args extends any[], R>(
-    this: ResultInterface<(...args: ResolveOks<Args>) => R, E>,
-    ...args: Args
-  ): Result<R, E | ErrTypeOf<Args[number]>>;
-}
-
 export interface OkResult<T> {
   readonly value: T;
   readonly isOk: true;
@@ -58,6 +26,7 @@ export interface OkResult<T> {
     okFn: (data: T) => Result<TS, TF>,
     errFn: (error: never) => Result<ES, EF>,
   ): Result<TS, TF>;
+  asTuple(): [ok: true, error: undefined, value: T];
   [Symbol.iterator](): Generator<never, T>;
 }
 
@@ -65,7 +34,7 @@ export interface ErrResult<E> {
   readonly error: E;
   readonly isOk: false;
   readonly isErr: true;
-  map(fn: unknown): ErrResult<E>;
+  map(fn: (date: never) => unknown): ErrResult<E>;
   mapErr<F>(fn: (error: E) => F): ErrResult<F>;
   chain(next: (value: never) => Result<unknown, unknown>): ErrResult<E>;
   chainErr<S, F>(next: (error: E) => Result<S, F>): Result<S, F>;
@@ -89,6 +58,7 @@ export interface ErrResult<E> {
     okFn: (value: never) => Result<TS, TF>,
     errFn: (error: E) => Result<ES, EF>,
   ): Result<ES, EF>;
+  asTuple(): [ok: false, error: E, value: undefined];
   [Symbol.iterator](): Generator<E, never>;
 }
 

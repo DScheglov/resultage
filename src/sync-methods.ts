@@ -76,3 +76,5 @@ export const biChain =
   ) =>
   (result: Result<T, E>): Result<TS | ES, TF | EF> =>
     result.biChain(okFn, errFn);
+
+export const asTuple = <T, E>(result: Result<T, E>) => result.asTuple();

@@ -918,4 +918,156 @@ describe('Result', () => {
       expect(err(1)).not.toEqual(err(2));
     });
   });
+
+  describe('asTuple', () => {
+    it('should return [true, undefined, value] for Ok', () => {
+      const [isOk, error, value] = ok('Ok').asTuple();
+
+      expect(isOk).toBeTruthy();
+      expect(error).toBeUndefined();
+      expect(value).toBe('Ok');
+    });
+
+    it('should return [false, "Error", undefined] for Error', () => {
+      const [isOk, error, value] = err('Error' as const).asTuple();
+
+      expect(isOk).toBeFalsy();
+      expect(error).toBe('Error');
+      expect(value).toBeUndefined();
+    });
+
+    it('should return result having discriminated union type for Result<T, E> - Ok', () => {
+      const result = ok('Ok' as const) as Result<'Ok', Error>;
+      const tuple = result.asTuple();
+
+      const check: Expect<
+        Equal<
+          typeof tuple,
+          | [ok: true, error: undefined, value: 'Ok']
+          | [ok: false, error: Error, value: undefined]
+        >
+      > = true;
+
+      expect(check).toBeTruthy();
+    });
+
+    it('should return result having discriminated union type for Result<T, E> - Err', () => {
+      const result = err(new Error('Error')) as Result<'Ok', Error>;
+      const tuple = result.asTuple();
+
+      const check: Expect<
+        Equal<
+          typeof tuple,
+          | [ok: true, error: undefined, value: 'Ok']
+          | [ok: false, error: Error, value: undefined]
+        >
+      > = true;
+
+      expect(check).toBeTruthy();
+    });
+
+    it('should allow discriminating the union type for Result<T, E> - Ok', () => {
+      expect.assertions(2);
+      const result = ok('Ok' as const) as Result<'Ok', Error>;
+      const [isOk, error, value] = result.asTuple();
+
+      if (isOk) {
+        const checkError: Expect<Equal<typeof error, undefined>> = true;
+        const checkValue: Expect<Equal<typeof value, 'Ok'>> = true;
+
+        expect(checkError).toBeTruthy();
+        expect(checkValue).toBeTruthy();
+      }
+    });
+
+    it('should allow discriminating the union type for Result<T, E> - Err', () => {
+      expect.assertions(2);
+      const result = err(new Error('Error')) as Result<'Ok', Error>;
+      const [isOk, error, value] = result.asTuple();
+
+      if (!isOk) {
+        const checkError: Expect<Equal<typeof error, Error>> = true;
+        const checkValue: Expect<Equal<typeof value, undefined>> = true;
+
+        expect(checkError).toBeTruthy();
+        expect(checkValue).toBeTruthy();
+      }
+    });
+
+    /// ---
+
+    it('should return [true, undefined, value] for Ok (method)', () => {
+      const [isOk, error, value] = R.asTuple(ok('Ok'));
+
+      expect(isOk).toBeTruthy();
+      expect(error).toBeUndefined();
+      expect(value).toBe('Ok');
+    });
+
+    it('should return [false, "Error", undefined] for Error', () => {
+      const [isOk, error, value] = R.asTuple(err('Error' as const));
+
+      expect(isOk).toBeFalsy();
+      expect(error).toBe('Error');
+      expect(value).toBeUndefined();
+    });
+
+    it('should return result having discriminated union type for Result<T, E> - Ok (method)', () => {
+      const result = ok('Ok' as const) as Result<'Ok', Error>;
+      const tuple = R.asTuple(result);
+
+      const check: Expect<
+        Equal<
+          typeof tuple,
+          | [ok: true, error: undefined, value: 'Ok']
+          | [ok: false, error: Error, value: undefined]
+        >
+      > = true;
+
+      expect(check).toBeTruthy();
+    });
+
+    it('should return result having discriminated union type for Result<T, E> - Err (method)', () => {
+      const result = err(new Error('Error')) as Result<'Ok', Error>;
+      const tuple = R.asTuple(result);
+
+      const check: Expect<
+        Equal<
+          typeof tuple,
+          | [ok: true, error: undefined, value: 'Ok']
+          | [ok: false, error: Error, value: undefined]
+        >
+      > = true;
+
+      expect(check).toBeTruthy();
+    });
+
+    it('should allow discriminating the union type for Result<T, E> - Ok (method)', () => {
+      expect.assertions(2);
+      const result = ok('Ok' as const) as Result<'Ok', Error>;
+      const [isOk, error, value] = R.asTuple(result);
+
+      if (isOk) {
+        const checkError: Expect<Equal<typeof error, undefined>> = true;
+        const checkValue: Expect<Equal<typeof value, 'Ok'>> = true;
+
+        expect(checkError).toBeTruthy();
+        expect(checkValue).toBeTruthy();
+      }
+    });
+
+    it('should allow discriminating the union type for Result<T, E> - Err (method)', () => {
+      expect.assertions(2);
+      const result = err(new Error('Error')) as Result<'Ok', Error>;
+      const [isOk, error, value] = R.asTuple(result);
+
+      if (!isOk) {
+        const checkError: Expect<Equal<typeof error, Error>> = true;
+        const checkValue: Expect<Equal<typeof value, undefined>> = true;
+
+        expect(checkError).toBeTruthy();
+        expect(checkValue).toBeTruthy();
+      }
+    });
+  });
 });

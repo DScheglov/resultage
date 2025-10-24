@@ -26,10 +26,10 @@ import { Result, ok, err } from '../src';
 
 {
   const okResult = ok(42);
-  const errResult: Result<number, 'ERR_NOT_FOUND'> = err('ERR_NOT_FOUND');
+  const errResult = err('ERR_NOT_FOUND') as Result<number, 'ERR_NOT_FOUND'>;
 
   const okMapped = okResult.map((x) => x + 1); // Ok(43)
-  const errMapped = errResult.map((x: number) => x + 1); // Err('ERR_NOT_FOUND')
+  const errMapped = errResult.map((x) => x + 1); // Err('ERR_NOT_FOUND')
 }
 
 {

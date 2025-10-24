@@ -1,6 +1,5 @@
-import { resolveOks } from './resolve-oks.js';
 import { ResultError } from './ResultError.js';
-import type { AsyncOk, ErrTypeOf, OkResult, ResolveOks, Result } from './types';
+import type { AsyncOk, OkResult, Result } from './types';
 
 type OkType<T> = OkResult<T>;
 
@@ -103,23 +102,8 @@ class Ok<T> implements OkResult<T> {
     return okFn(this.value);
   }
 
-  apply<Args extends any[], R = never>(
-    this: Ok<(...args: ResolveOks<Args>) => R>,
-    ...args: Args
-  ): Result<R, ErrTypeOf<Args[number]>> {
-    if (typeof this.value !== 'function') {
-      return ResultError.raise(
-        this,
-        'ERR_VALUE_IS_NOT_A_FUNC',
-        'Result.value is not a function',
-        Object.getOwnPropertyDescriptor(this.constructor.prototype, 'apply')!
-          .value,
-      );
-    }
-
-    const argValues = resolveOks(args);
-
-    return Array.isArray(argValues) ? ok(this.value(...argValues)) : argValues;
+  asTuple(): [ok: true, error: undefined, value: T] {
+    return [true, undefined, this.value];
   }
 
   get [Symbol.toStringTag](): string {

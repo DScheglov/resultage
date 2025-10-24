@@ -1,4 +1,4 @@
-import { Result, err, ok, Do } from 'resultage';
+import { Result, err, ok, Do } from '../src';
 
 const div = (a: number, b: number): Result<number, 'ERR_DIV_BY_ZERO'> =>
   b === 0 ? err('ERR_DIV_BY_ZERO') : ok(a / b);
