@@ -1,4 +1,4 @@
-# resultage [![npm version](https://img.shields.io/npm/v/resultage.svg?style=flat-square)](https://www.npmjs.com/package/resultage) [![npm downloads](https://img.shields.io/npm/dm/resultage.svg?style=flat-square)](https://www.npmjs.com/package/resultage) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/resultage/blob/master/LICENSE)
+# resultage [![npm version](https://img.shields.io/npm/v/resultage.svg?style=flat-square)](https://www.npmjs.com/package/resultage) [![npm downloads](https://img.shields.io/npm/dm/resultage.svg?style=flat-square)](https://www.npmjs.com/package/resultage) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/resultage/blob/master/LICENSE) [![codecov](https://codecov.io/github/DScheglov/resultage/graph/badge.svg?token=QBOQUV8WGF)](https://codecov.io/github/DScheglov/resultage)
 
 A clear way for handling success and failure in both synchronous and asynchronous operations.
 
