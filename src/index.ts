@@ -39,6 +39,8 @@ export const Result = {
   ok,
   asyncOk,
   err,
+  error: err,
   asyncErr,
+  asyncError: asyncErr,
   try: rTry,
 };
