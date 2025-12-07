@@ -22,6 +22,9 @@ export * from './async-methods.js';
 export { ok, asyncOk };
 export { err, asyncErr };
 
+export const error = err;
+export const asyncError = asyncErr;
+
 export type {
   OkTypeOf,
   ErrTypeOf,
