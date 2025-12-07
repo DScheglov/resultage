@@ -80,15 +80,19 @@ export const reduceErr = <T, S, E>(
  */
 export const collect = <R extends readonly Result<any, any>[]>(
   results: R,
-): Result<Collected<R>, ErrTypeOf<R[number]>> =>
-  reduce(
-    results,
-    (list, result) => {
-      list.push(result);
-      return list;
-    },
-    [] as Collected<R>,
-  );
+): Result<Collected<R>, ErrTypeOf<R[number]>> => {
+  const oks = [] as Collected<R> & any[];
+
+  for (const result of results) {
+    if (result.isOk) {
+      oks.push(result.value);
+    } else {
+      return result;
+    }
+  }
+
+  return ok(oks);
+};
 
 /**
  * Collects the error values from an array of `Result` objects.
@@ -99,15 +103,19 @@ export const collect = <R extends readonly Result<any, any>[]>(
  */
 export const collectErr = <R extends readonly Result<any, any>[]>(
   results: R,
-): Result<OkTypeOf<R[number]>, CollectedErr<R>> =>
-  reduceErr(
-    results,
-    (list, result) => {
-      list.push(result);
-      return list;
-    },
-    [] as CollectedErr<R>,
-  );
+): Result<OkTypeOf<R[number]>, CollectedErr<R>> => {
+  const errs = [] as CollectedErr<R> & any[];
+
+  for (const result of results) {
+    if (result.isOk) {
+      return result;
+    } else {
+      errs.push(result.unwrapErr());
+    }
+  }
+
+  return err(errs);
+};
 
 /**
  * Collects the results of multiple asynchronous operations into a single result.
@@ -173,6 +181,31 @@ export const separate = <R extends readonly Result<any, any>[]>(
   }
 
   return [ok(oks), err(errs)];
+};
+
+/**
+ * Collects a list of `Result` values into a single `Result`.
+ * - If all inputs are `Ok`, returns `Ok` with the array of unwrapped values.
+ * - If any inputs are `Err`, returns `Err` with the array of ALL error values.
+ *
+ * @param results An array of `Result` objects.
+ * @returns `Ok` of collected values or `Err` of all error values.
+ */
+export const collectAll = <R extends readonly Result<any, any>[]>(
+  results: R,
+): Result<Collected<R>, CollectedErr<R>> => {
+  const oks = [] as Collected<R> & any[];
+  const errs = [] as CollectedErr<R> & any[];
+
+  for (const result of results) {
+    if (result.isOk) {
+      oks.push(result.value);
+    } else {
+      errs.push(result.unwrapErr());
+    }
+  }
+
+  return errs.length === 0 ? ok(oks) : err(errs);
 };
 
 /**

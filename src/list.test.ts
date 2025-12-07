@@ -12,6 +12,7 @@ import {
   reduceErr,
   collectErr,
   separate,
+  collectAll,
 } from './lists';
 import { isErr, isOk } from './guards';
 import { AsyncResult, Result } from './types';
@@ -126,6 +127,50 @@ describe('result::lists', () => {
       const results = [err(1), err(2), err(3)] as const;
       const collected = collectErr(results);
       expect(collected).toEqual(err([1, 2, 3]));
+    });
+  });
+
+  describe('collectAll', () => {
+    it('returns Ok of all values when all are ok', () => {
+      const results = [ok(1), ok(2), ok(3)];
+      const collected = collectAll(results);
+      expect(collected).toEqual(ok([1, 2, 3]));
+    });
+
+    it('returns Err of ALL errors when any are err', () => {
+      const results = [ok(1), err('A'), err('B')];
+      const collected = collectAll(results);
+      expect(collected).toEqual(err(['A', 'B']));
+    });
+
+    it('works for tuples of oks', () => {
+      const results = [ok(1), ok('abc'), ok(3)] as const;
+      const collected = collectAll(results);
+      const check: Expect<
+        Equal<
+          typeof collected,
+          Result<[number, string, number], [never, never, never]>
+        >
+      > = true;
+      expect(check).toBe(true);
+      expect(collected).toEqual(ok([1, 'abc', 3]));
+    });
+
+    it('works for tuples with mixed errs', () => {
+      const sqrt = (x: number): Result<number, 'ERR_SQRT'> =>
+        x < 0 ? err('ERR_SQRT') : ok(Math.sqrt(x));
+
+      const results = [ok(1), sqrt(-4), err(9)] as const;
+      const collected = collectAll(results);
+
+      const check: Expect<
+        Equal<
+          typeof collected,
+          Result<[number, number, never], [never, 'ERR_SQRT', number]>
+        >
+      > = true;
+      expect(check).toBe(true);
+      expect(collected).toEqual(err(['ERR_SQRT', 9]));
     });
   });
 
