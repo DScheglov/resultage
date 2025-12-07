@@ -193,9 +193,12 @@ export const separate = <R extends readonly Result<any, any>[]>(
  */
 export const collectAll = <R extends readonly Result<any, any>[]>(
   results: R,
-): Result<Collected<R>, CollectedErr<R>> => {
+): Result<
+  Collected<R>,
+  [ErrTypeOf<R[number]>] extends [never] ? never : ErrTypeOf<R[number]>[]
+> => {
   const oks = [] as Collected<R> & any[];
-  const errs = [] as CollectedErr<R> & any[];
+  const errs = [] as any[];
 
   for (const result of results) {
     if (result.isOk) {
@@ -205,7 +208,7 @@ export const collectAll = <R extends readonly Result<any, any>[]>(
     }
   }
 
-  return errs.length === 0 ? ok(oks) : err(errs);
+  return errs.length === 0 ? ok(oks) : (err(errs) as any);
 };
 
 /**

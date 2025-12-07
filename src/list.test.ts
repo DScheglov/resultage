@@ -147,10 +147,7 @@ describe('result::lists', () => {
       const results = [ok(1), ok('abc'), ok(3)] as const;
       const collected = collectAll(results);
       const check: Expect<
-        Equal<
-          typeof collected,
-          Result<[number, string, number], [never, never, never]>
-        >
+        Equal<typeof collected, Result<[number, string, number], never>>
       > = true;
       expect(check).toBe(true);
       expect(collected).toEqual(ok([1, 'abc', 3]));
@@ -166,7 +163,7 @@ describe('result::lists', () => {
       const check: Expect<
         Equal<
           typeof collected,
-          Result<[number, number, never], [never, 'ERR_SQRT', number]>
+          Result<[number, number, never], ('ERR_SQRT' | number)[]>
         >
       > = true;
       expect(check).toBe(true);
