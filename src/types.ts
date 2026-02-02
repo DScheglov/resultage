@@ -2,6 +2,7 @@ export interface OkResult<T> {
   readonly value: T;
   readonly isOk: true;
   readonly isErr: false;
+  readonly isError: false;
   map<S>(fn: (data: T) => S): OkResult<S>;
   mapErr(fn: (error: never) => unknown): OkResult<T>;
   chain<S, F>(next: (data: T) => Result<S, F>): Result<S, F>;
@@ -34,7 +35,8 @@ export interface ErrResult<E> {
   readonly error: E;
   readonly isOk: false;
   readonly isErr: true;
-  map(fn: (date: never) => unknown): ErrResult<E>;
+  readonly isError: true;
+  map(fn: (data: never) => unknown): ErrResult<E>;
   mapErr<F>(fn: (error: E) => F): ErrResult<F>;
   chain(next: (value: never) => Result<unknown, unknown>): ErrResult<E>;
   chainErr<S, F>(next: (error: E) => Result<S, F>): Result<S, F>;

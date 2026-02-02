@@ -8,8 +8,10 @@ export const isResult = (value: unknown): value is Result<unknown, unknown> =>
 export const isOk = <T>(value: Result<T, unknown>): value is OkResult<T> =>
   value.isOk;
 
-export const isErr = <E>(value: Result<unknown, E>): value is ErrResult<E> =>
+export const isError = <E>(value: Result<unknown, E>): value is ErrResult<E> =>
   value.isErr;
+
+export const isErr = isError;
 
 export const ensureResult = <T, S, E>(
   value: T | Result<S, E>,

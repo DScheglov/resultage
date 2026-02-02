@@ -14,6 +14,10 @@ class Err<E> implements ErrResult<E> {
     return true;
   }
 
+  get isError(): true {
+    return true;
+  }
+
   get value(): never {
     return ResultError.raise(
       this,

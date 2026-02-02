@@ -226,6 +226,82 @@ describe('Result', () => {
     });
   });
 
+  describe('isError', () => {
+    it('should return true for an Err result', () => {
+      expect(Guards.isError(err('foo'))).toBe(true);
+    });
+
+    it('should return false for an Ok result', () => {
+      expect(Guards.isError(ok('foo'))).toBe(false);
+    });
+
+    it('should narrow type in if statement', () => {
+      expect.assertions(2); // ensure that both if and else branches are executed
+      const result = err('foo') as Result<string, 'foo'>;
+
+      type FirstCheck = Expect<Equal<typeof result, Result<string, 'foo'>>>;
+
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (Guards.isError(result)) {
+        type Check = Expect<Equal<typeof result.error, 'foo'>>;
+        const check: Check = true;
+        expect(check).toBe(true);
+      }
+    });
+
+    it('should narrow type in else branch of if statement', () => {
+      expect.assertions(2); // ensure that both if and else branches are executed
+      const result = ok('foo') as Result<string, 'foo'>;
+
+      type FirstCheck = Expect<Equal<typeof result, Result<string, 'foo'>>>;
+
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (Guards.isError(result)) {
+      } else {
+        type Check = Expect<Equal<typeof result.value, string>>;
+        const check: Check = true;
+        expect(check).toBe(true);
+      }
+    });
+
+    it('(as property) should narrow type in if statement', () => {
+      expect.assertions(2); // ensure that both if and else branches are executed
+      const result = err('foo') as Result<string, 'foo'>;
+
+      type FirstCheck = Expect<Equal<typeof result, Result<string, 'foo'>>>;
+
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (result.isError) {
+        type Check = Expect<Equal<typeof result.error, 'foo'>>;
+        const check: Check = true;
+        expect(check).toBe(true);
+      }
+    });
+
+    it('(as property) should narrow type in else branch of if statement', () => {
+      expect.assertions(2); // ensure that both if and else branches are executed
+      const result = ok('foo') as Result<string, 'foo'>;
+
+      type FirstCheck = Expect<Equal<typeof result, Result<string, 'foo'>>>;
+
+      const check1: FirstCheck = true;
+      expect(check1).toBe(true);
+
+      if (result.isError) {
+      } else {
+        type Check = Expect<Equal<typeof result.value, string>>;
+        const check: Check = true;
+        expect(check).toBe(true);
+      }
+    });
+  });
+
   describe('map', () => {
     it('should map an Ok result', () => {
       expect(

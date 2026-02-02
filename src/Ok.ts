@@ -14,6 +14,10 @@ class Ok<T> implements OkResult<T> {
     return false;
   }
 
+  get isError(): false {
+    return false;
+  }
+
   get error(): never {
     return ResultError.raise(
       this,
